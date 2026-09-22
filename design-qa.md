@@ -160,6 +160,9 @@ section bounds and visual proportions rather than raw pixel dimensions.
 
 - Top 5 card click opens the existing game detail surface.
 - The detail surface closes through `Tutup detail`.
+- The P4 header remains accessible at the viewport top while the lobby is
+  scrolled; the shell clips horizontal overflow without creating a competing
+  scroll context.
 - No application-origin runtime error was introduced. The current Chrome tab
   still reports the known Scribe extension-injected `data-scribe-recorder-ready`
   hydration mismatch; this is external to the P4 source tree.

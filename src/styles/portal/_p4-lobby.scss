@@ -13,6 +13,12 @@ body.p4-public-body,
   color: #11157a;
 }
 
+/* Keep the lobby shell from creating a second scroll context so the sticky
+   header remains attached to the viewport while horizontal overflow stays clipped. */
+.portal.p4-public-shell {
+  overflow-x: clip;
+}
+
 body.p4-public-body .portal-main-flush,
 .portal.p4-public-shell .portal-main-flush {
   background: transparent;
