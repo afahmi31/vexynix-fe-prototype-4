@@ -1,0 +1,64 @@
+# =============================================================================
+# game-web-client-facing — Docker Compose (staging / UAT)
+# =============================================================================
+# The player-facing Next.js app. Served on app.vexynix.com via the SAME Traefik
+# instance that already fronts the backend (webgame / pp-webgame). This compose
+# is a SEPARATE project from the backend's docker-compose.app.yml but joins the
+# same external network `application_default`, so Traefik (which watches every
+# container on that network) picks up the router labels below automatically.
+#
+# Routing model (11 §5, rewritten 2026-09-09 — the MANAGED-ZONE model):
+#   app.<any brand domain>/       -> this frontend (:3000)  [router: client,      prio 1]
+#   app.<any brand domain>/api/*  -> BFF web       (:8080)  [router: web-brands,  prio 100,
+#                                                            defined on the `web` service in
+#                                                            the backend compose]
+# The browser calls /api/* same-origin; Traefik routes it straight to the BFF —
+# the Next.js dev rewrite() is bypassed in prod. No CORS, no extra Node hop.
+#
+# ⭐ The host rule is a CATCH-ALL, not `app.vexynix.com`. Every brand's player site is
+# `app.<their domain>`, provisioned into `merchant_hostnames` through the console; the BFF
+# resolves Host -> tenant and answers a 404 holding page for a host that belongs to nobody.
+# `app.vexynix.com` is one of those rows now — our own site is a customer of the same path
+# (11 §0), which is the only way that path ever gets exercised properly.
+#
+# Bring up (build on the server, then start):
+#   docker compose -f deploy/docker-compose.client.yml up -d --build
+#
+# TLS: with a managed zone, CLOUDFLARE terminates TLS for the visitor and the origin
+# presents the zone's Cloudflare Origin CA certificate (auth's provisioning job issues one
+# per zone). Traefik's `le` resolver stays for the operator's own hosts and the unmanaged
+# fallback (11 §7) — it cannot answer DNS-01 for a customer zone anyway, because
+# CF_DNS_API_TOKEN is scoped to vexynix.com while the ACCOUNT-scoped token lives in auth
+# (AUTH_CF_API_TOKEN). Nothing here needs a per-brand DNS record by hand: the console
+# provisions `app.` and `admin.` on verification.
+
+networks:
+  application_default:
+    external: true
+
+services:
+  frontend:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    image: game-web-client:latest
+    container_name: game-web-client
+    restart: unless-stopped
+    # Runtime env injected into public/__ENV.js at container start by the
+    # entrypoint. Nothing is a secret here (BFF is reached same-origin), so this
+    # env file is non-sensitive — but keep it out of git anyway (see .gitignore).
+    env_file: ./client.env
+    networks:
+      - application_default
+    labels:
+      - "traefik.enable=true"
+      # Catch-all for EVERY brand's player host. Lower priority than the BFF's
+      # /api router (web-brands, prio 100) so /api/* is claimed by the BFF and
+      # everything else by Next.js; lower than the operator's explicit routers
+      # (webgame/platform/admin) so infrastructure hosts still win on their names.
+      - "traefik.http.routers.client.rule=HostRegexp(`^app\\..+$`)"
+      - "traefik.http.routers.client.priority=1"
+      - "traefik.http.routers.client.entrypoints=websecure"
+      - "traefik.http.routers.client.tls=true"
+      - "traefik.http.routers.client.tls.certresolver=le"
+      - "traefik.http.services.client.loadbalancer.server.port=3000"

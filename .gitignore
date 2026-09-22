@@ -1,0 +1,250 @@
+# =============================================================================
+# 1. DEPENDENCIES
+# =============================================================================
+node_modules/
+.node_modules-stale-*/
+jspm_packages/
+web_modules/
+.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+
+
+# =============================================================================
+# 2. BUILD OUTPUTS
+# =============================================================================
+dist/
+dist-ssr/
+build/
+build/Release/
+out/
+.next/
+.next-dev/
+.next-stale-*/
+.next-build-backup-*/
+.next-preflight-backup/
+.next-before-v10-build/
+.nuxt/
+.output/
+.vercel/
+.netlify/
+.svelte-kit/
+
+
+# =============================================================================
+# 3. LOGS
+# =============================================================================
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+pnpm-debug.log*
+.pnpm-debug.log*
+
+
+# =============================================================================
+# 4. COVERAGE & TESTING
+# =============================================================================
+coverage/
+*.lcov
+.nyc_output/
+lib-cov/
+tests/e2e/test-results/
+tests/e2e/playwright-report/
+tests/release-smoke/test-results/
+.playwright-cli/
+output/playwright/
+
+
+# =============================================================================
+# 5. IDE & EDITOR
+# =============================================================================
+# JetBrains (WebStorm, IntelliJ)
+.idea/
+*.iws
+*.iml
+*.ipr
+.idea_modules/
+cmake-build-*/
+
+# Visual Studio Code
+.vscode/
+*.vsix
+.history/
+.ionide
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# Vim
+*.swp
+*.swo
+*~
+
+# Emacs
+*\~
+\#*\#
+.#*
+*.elc
+
+
+# =============================================================================
+# 6. OS GENERATED FILES
+# =============================================================================
+# macOS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Icon?
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+Desktop.ini
+$RECYCLE.BIN/
+*.lnk
+
+# Linux
+*~
+.directory
+
+# KDE
+.Trash-*
+
+# NFS
+.nfs*
+
+
+# =============================================================================
+# 7. ENVIRONMENT & SECRETS
+# =============================================================================
+.env
+.env.*
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Keep example env files tracked
+!.env.local.example
+!.env.*.example
+
+# Secrets
+*.pem
+*.key
+*.cert
+*.p12
+*.pfx
+*.seed
+*.pid
+*.pid.lock
+
+
+# =============================================================================
+# 8. TYPESCRIPT
+# =============================================================================
+*.tsbuildinfo
+tsconfig.tsbuildinfo
+next-env.d.ts
+
+
+# =============================================================================
+# 9. PACKAGE MANAGER SPECIFIC
+# =============================================================================
+# npm
+.npm
+package-lock.json
+
+# Yarn
+.yarn-integrity
+yarn.lock
+.yarn/cache
+.yarn/unplugged
+.yarn/build-state.yml
+.yarn/install-state.gz
+
+# Bun
+bun.lock
+bun.lockb
+
+
+# =============================================================================
+# 10. FRAMEWORK SPECIFIC (Next.js)
+# =============================================================================
+/public/build/
+.eslintcache
+.stylelintcache
+
+# =============================================================================
+# 11. Agent/AI tool folders
+# =============================================================================
+.openclaude/
+.claude/
+.opencode/
+.commandcode/
+.agent/
+.agents/
+.codex/
+.qwen/
+.zcode/
+
+# =============================================================================
+# 12. DEVELOPMENT PATTERNS
+# =============================================================================
+# Development directories
+__dev/
+/dev/
+
+# Development files
+*-dev
+dev-*.*
+!src/lib/dev-payments.ts
+*-dev.*
+
+# Versioned files (development copies)
+**/*-v[0-9].*
+**/*-v[0-9][0-9].*
+**/*-v[0-9][0-9][0-9].*
+**/*.v[0-9]
+**/*.v[0-9][0-9]
+
+
+# =============================================================================
+# 13. MISC
+# =============================================================================
+*.tgz
+*.local
+bower_components/
+.lock-wscript
+.rpt2_cache/
+.rts2_cache_cjs/
+.rts2_cache_es/
+.rts2_cache_umd/
+
+
+# =============================================================================
+# 14. PROJECT-SPECIFIC
+# =============================================================================
+# Deploy runtime env (real values live only on the server; keep the example)
+/deploy/client.env
+!/deploy/client.env.example
+
+# Runtime env stub (generated by docker-entrypoint.sh in prod)
+public/__ENV.js
+
+/docs/
+/design/
+.ai-context

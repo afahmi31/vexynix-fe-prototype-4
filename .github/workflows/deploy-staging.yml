@@ -1,0 +1,93 @@
+# =============================================================================
+# Deploy game-web-client-facing to staging (217.15.164.215) — server-side build.
+# =============================================================================
+# Flow: SSH to the server -> git fetch + checkout the exact SHA -> docker compose
+# build + up (frontend only) -> health check through Cloudflare -> Traefik.
+# All build happens ON the server; no image is transferred.
+#
+# REQUIRED GitHub Secrets (Settings -> Secrets and variables -> Actions):
+#   STAGING_SSH_KEY      ed25519 private key; matching pubkey in ~vex/.ssh/authorized_keys.
+#   STAGING_KNOWN_HOSTS  Output of `ssh-keyscan -H 217.15.164.215` (no TOFU / MITM).
+#
+# The server has this repo cloned at ~/webgame-deploy/game-web-client-facing with
+# deploy/client.env (runtime env) kept out of git via .git/info/exclude so a
+# checkout never clobbers it. Git auth uses the ephemeral GITHUB_TOKEN — no
+# persistent credential is stored on the server.
+#
+# TRIGGERS: manual workflow_dispatch only. Automatic staging deploys are disabled
+# for this Vercel-oriented prototype preview.
+
+name: Deploy Staging
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-client-staging
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Build + Deploy frontend to staging
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      # Needed because a later step pipes scripts/deploy-server.sh over SSH; the
+      # file is read from the runner's checkout, so the code must be present.
+      - uses: actions/checkout@v4
+        with:
+          # On pull_request events github.sha is the ephemeral merge commit, which
+          # the server's `git fetch <sha>` may not resolve. Use the PR head SHA.
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+
+      - name: Install SSH key + known hosts
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.STAGING_SSH_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          echo "${{ secrets.STAGING_KNOWN_HOSTS }}" > ~/.ssh/known_hosts
+          chmod 644 ~/.ssh/known_hosts
+
+      - name: Git fetch + docker build + recreate frontend
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DEPLOY_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          ssh vex@217.15.164.215 "GH_TOKEN='${GH_TOKEN}' DEPLOY_SHA='${DEPLOY_SHA}' bash -s" < scripts/deploy-server.sh
+
+      - name: Health check (through Cloudflare -> Traefik)
+        run: |
+          sleep 5
+          echo "=== container status ==="
+          ssh vex@217.15.164.215 \
+            'docker ps --filter name=game-web-client --format "table {{.Names}}\t{{.Status}}"'
+          echo "=== external endpoints ==="
+          # Retry a few times: first deploy may still be issuing the LE cert.
+          ok=0
+          for i in 1 2 3 4 5 6; do
+            code=$(curl -sS -o /dev/null -w "%{http_code}" https://app.vexynix.com/health || echo 000)
+            echo "attempt $i: app.vexynix.com/health -> HTTP $code"
+            if [ "$code" = "200" ]; then ok=1; break; fi
+            sleep 10
+          done
+          [ "$ok" = "1" ] || { echo "::error::app.vexynix.com/health never returned 200"; exit 1; }
+          # API path must reach the BFF (any non-000 HTTP proves the route resolves).
+          api=$(curl -sS -o /dev/null -w "%{http_code}" https://app.vexynix.com/api/games/catalog || echo 000)
+          echo "app.vexynix.com/api/games/catalog -> HTTP $api (routing to BFF)"
+          [ "$api" != "000" ] || { echo "::error::/api did not route to the BFF"; exit 1; }
+
+      - name: Rollback hint on failure
+        if: failure()
+        run: |
+          echo "::error::Deploy failed. Rollback:"
+          echo "::error::  ssh vex@217.15.164.215"
+          echo "::error::  cd ~/webgame-deploy/game-web-client-facing && git checkout <previous-good-sha>"
+          echo "::error::  docker compose -f deploy/docker-compose.client.yml up -d --build frontend"
+
+      - name: Remove SSH key
+        if: always()
+        run: rm -f ~/.ssh/id_ed25519

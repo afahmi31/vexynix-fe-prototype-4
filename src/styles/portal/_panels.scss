@@ -1,0 +1,433 @@
+/*!
+ * Portal panels — simplified card/panel component for deposit, withdraw,
+ * account, and other interior pages. Replaces Color Admin's Panel component.
+ *
+ * All values are hardcoded hex — no Color Admin CSS variables.
+ */
+
+// ===== Panel container =====
+.portal-panel {
+  background: linear-gradient(180deg, #1d1d27 0%, #181820 100%);
+  border-radius: 0.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+  margin-bottom: 1rem;
+  overflow: hidden;
+}
+
+.portal-panel-header {
+  padding: 0.875rem 1.25rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  font-weight: 800;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.02);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  i {
+    color: var(--portal-accent-start);
+    font-size: 0.95rem;
+  }
+}
+
+.portal-panel-body {
+  padding: 1.25rem;
+}
+
+// ===== Form controls =====
+.portal,
+.portal-panel {
+  .form-control,
+  .form-select {
+    background: #16161d;
+    border: 1px solid #2a2a33;
+    color: #e0e0e0;
+
+    &:focus {
+      background: #16161d;
+      border-color: var(--portal-accent-start);
+      color: #e0e0e0;
+      box-shadow: 0 0 0 0.25rem rgba(var(--portal-accent-rgb), 0.15);
+    }
+
+    &:disabled,
+    &[readonly] {
+      background: #0b0b0f;
+      opacity: 0.65;
+    }
+  }
+
+  .form-control::placeholder {
+    color: rgba(255, 255, 255, 0.3);
+  }
+
+  .input-group-text {
+    background: #181820;
+    border: 1px solid #2a2a33;
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  .form-label {
+    color: rgba(255, 255, 255, 0.75);
+    font-weight: 600;
+  }
+
+  .form-text {
+    color: rgba(255, 255, 255, 0.4);
+  }
+}
+
+// ===== Tables =====
+.portal,
+.portal-panel {
+  .table {
+    color: inherit;
+
+    > :not(caption) > * > * {
+      color: inherit;
+    }
+
+    thead th {
+      border-color: #2a2a33;
+      color: rgba(255, 255, 255, 0.6);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    tbody {
+      border-color: #2a2a33;
+    }
+
+    tbody td {
+      border-color: rgba(255, 255, 255, 0.07);
+    }
+  }
+}
+
+// Mobile: stack label/value rows instead of squeezing two columns.
+@media (max-width: 575.98px) {
+  .portal-panel .table tr {
+    display: block;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    th,
+    td {
+      display: block;
+      width: auto !important; // beat the inline width:40% label columns
+      border-bottom: none;
+    }
+
+    th {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: rgba(255, 255, 255, 0.45);
+      padding-bottom: 0.125rem;
+    }
+
+    td {
+      padding-top: 0;
+    }
+  }
+}
+
+// ===== Alerts =====
+.portal,
+.portal-panel {
+  .alert {
+    border-radius: 0.5rem;
+    border: 1px solid #2a2a33;
+
+    &.alert-info {
+      background: rgba(49, 156, 214, 0.12);
+      border-color: rgba(49, 156, 214, 0.35);
+      color: #7ec8e3;
+    }
+
+    &.alert-success {
+      background: rgba(74, 222, 128, 0.12);
+      border-color: rgba(74, 222, 128, 0.35);
+      color: #4ade80;
+    }
+
+    &.alert-warning {
+      background: rgba(var(--portal-accent-rgb), 0.12);
+      border-color: rgba(var(--portal-accent-rgb), 0.35);
+      color: var(--portal-accent-start);
+    }
+
+    &.alert-danger {
+      background: rgba(255, 75, 75, 0.12);
+      border-color: rgba(255, 75, 75, 0.35);
+      color: #ff7878;
+    }
+  }
+}
+
+// ===== Dropdown menus =====
+.portal,
+.portal-panel {
+  .dropdown-menu {
+    background: #181820;
+    border: 1px solid #2a2a33;
+    border-radius: 0.5rem;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+
+    .dropdown-item {
+      color: rgba(255, 255, 255, 0.8);
+
+      &:hover,
+      &:focus {
+        background: rgba(var(--portal-accent-rgb), 0.1);
+        color: var(--portal-accent-start);
+      }
+
+      &.active {
+        background: rgba(var(--portal-accent-rgb), 0.15);
+        color: var(--portal-accent-start);
+      }
+    }
+
+    .dropdown-divider {
+      border-color: #2a2a33;
+    }
+
+    .dropdown-header {
+      color: rgba(255, 255, 255, 0.4);
+    }
+  }
+}
+
+// ===== Spinners =====
+.portal,
+.portal-panel {
+  .spinner-border.text-theme {
+    color: var(--portal-accent-start) !important;
+  }
+}
+
+// ===== Buttons inside portal =====
+.portal,
+.portal-panel {
+  .btn-outline-theme {
+    border-color: var(--portal-accent-start);
+    color: var(--portal-accent-start);
+
+    &:hover,
+    &:active {
+      background: linear-gradient(135deg, var(--portal-accent-start), var(--portal-accent-end));
+      color: var(--portal-accent-text);
+      border-color: var(--portal-accent-end);
+    }
+  }
+}
+
+// ===== Page title =====
+// Billboard-style heading: heavy white text with a gold accent bar.
+.portal-page-title {
+  font-size: 1.75rem;
+  font-weight: 900;
+  color: #fff;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0;
+  border-bottom: none;
+  position: relative;
+  padding-left: 0.875rem;
+
+  &::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.3rem;
+    bottom: 0.3rem;
+    width: 4px;
+    border-radius: 2px;
+    background: linear-gradient(180deg, var(--portal-accent-start), var(--portal-accent-end));
+  }
+}
+
+// ===== Deposit quick-amount chips =====
+.deposit-quick-amounts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.deposit-quick-chip {
+  flex: 1;
+  min-width: 5.5rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.5rem;
+  border: 1px solid #2a2a33;
+  background: #16161d;
+  color: #e0e0e0;
+  font-weight: 700;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+
+  &:hover {
+    border-color: var(--portal-accent-start);
+    color: var(--portal-accent-start);
+  }
+
+  &.active {
+    background: linear-gradient(135deg, var(--portal-accent-start), var(--portal-accent-end));
+    border-color: var(--portal-accent-start);
+    color: var(--portal-accent-text);
+  }
+}
+
+// ===== Deposit method cards =====
+.deposit-method-cards {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+}
+
+.deposit-method-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 1rem 0.75rem;
+  border-radius: 0.75rem;
+  border: 1px solid #2a2a33;
+  background: #16161d;
+  color: #e0e0e0;
+  cursor: pointer;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    border-color: rgba(var(--portal-accent-rgb), 0.5);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+  }
+
+  &.active {
+    border-color: var(--portal-accent-start);
+    background: rgba(var(--portal-accent-rgb), 0.08);
+  }
+
+  /* An instrument the platform catalogues but cannot serve right now stays VISIBLE and
+     inert, carrying the server's reason in place of its usual description (05A Q5). Dimmed
+     rather than hidden: the player learns it exists and why it is off, instead of wondering
+     where it went. `not-allowed` + no hover lift so it never reads as merely unselected. */
+  &:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+
+    &:hover {
+      border-color: #2d2952;
+    }
+
+    .deposit-method-desc {
+      color: #ffb3b3;
+    }
+  }
+
+  .deposit-method-icon {
+    font-size: 1.75rem;
+    color: var(--portal-accent-start);
+    margin-bottom: 0.25rem;
+  }
+
+  .deposit-method-name {
+    font-weight: 700;
+    font-size: 0.9rem;
+  }
+
+  .deposit-method-desc {
+    font-size: 0.7rem;
+    color: rgba(255, 255, 255, 0.5);
+    text-align: center;
+  }
+}
+
+// ===== Dev-only sandbox payment panel =====
+// Deliberately looks like scaffolding, not product — it never reaches a
+// production build (see lib/dev-payments.ts).
+.dev-simulate {
+  border: 1px dashed rgba(var(--portal-accent-rgb), 0.4);
+  border-radius: 0.5rem;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1rem;
+  background: rgba(var(--portal-accent-rgb), 0.04);
+
+  .dev-simulate-title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 700;
+    font-size: 0.85rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .dev-simulate-badge {
+    background: var(--portal-accent-start);
+    color: var(--portal-accent-text);
+    border-radius: 0.25rem;
+    padding: 0 0.375rem;
+    font-size: 0.65rem;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+  }
+
+  .dev-simulate-text {
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.6);
+    margin-bottom: 0.5rem;
+  }
+
+  .dev-simulate-error {
+    font-size: 0.8rem;
+    color: #ff6b6b;
+    margin-bottom: 0.5rem;
+  }
+}
+
+// ===== Modal z-index fix =====
+// The project places .modal-backdrop INSIDE the .modal div (not as a sibling
+// like Bootstrap expects), so the backdrop's z-index (1050) covers the dialog.
+// Lift the dialog above the backdrop so the form stays clickable.
+.portal .modal-dialog {
+  position: relative;
+  z-index: 1080;
+}
+
+// ===== Modal surface =====
+// Bootstrap's dark-theme defaults resolve the modal background to the page
+// background with a near-invisible shadow — the dialog blends into the page.
+// Give it a clearly elevated surface instead.
+.portal {
+  .modal-content {
+    background: linear-gradient(180deg, #1f1f2a 0%, #181820 100%);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 0.75rem;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.7);
+  }
+
+  .modal-header,
+  .modal-footer {
+    border-color: rgba(255, 255, 255, 0.08);
+  }
+
+  .modal-backdrop.show {
+    opacity: 0.75;
+  }
+
+  // Bootstrap's close X is dark-on-light; flip it for the dark surface.
+  .btn-close {
+    filter: invert(1) grayscale(100%) brightness(200%);
+  }
+}

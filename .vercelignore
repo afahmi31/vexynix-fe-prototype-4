@@ -1,0 +1,17 @@
+node_modules
+.git
+.vercel
+.next
+.next-dev
+.next-stale-*
+coverage
+tests
+playwright.config.ts
+vitest.config.ts
+.playwright-cli/
+output/playwright/
+.next-before-v10-build/
+docs
+deploy
+.env*
+*.log

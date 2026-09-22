@@ -1,0 +1,316 @@
+/*!
+ * Template: Neon Arcade (data-portal-template="neon")
+ *
+ * Cyberpunk night-club skin — magenta/cyan neon over a deep indigo void, a
+ * perspective grid horizon, scanlined hero and arcade display type.
+ * Restyles the shared lobby DOM only; no markup is template-specific.
+ */
+
+:root[data-portal-template='neon'] {
+  // Default accent — a tenant preset overrides this via ThemeApplier.
+  --portal-accent-start: #ff2ea6;
+  --portal-accent-end: #00e5ff;
+  --portal-accent-rgb: 255, 46, 166;
+  --portal-accent-text: #0a0016;
+
+  --bs-body-bg: #05030f;
+  --portal-bg-dark: #05030f;
+  --portal-card-bg: #100a26;
+  --portal-border-color: #2b1d55;
+
+  --tpl-cyan: #00e5ff;
+  --tpl-magenta: #ff2ea6;
+  --tpl-violet: #7c3aed;
+  --tpl-surface: rgba(18, 10, 42, 0.82);
+  --tpl-line: rgba(0, 229, 255, 0.28);
+  --tpl-radius: 0.35rem;
+
+  // Arcade display face (next/font, declared in app/layout.tsx).
+  --portal-font-display: var(--font-orbitron), 'Open Sans', sans-serif;
+}
+
+[data-portal-template='neon'] {
+  // ===== Background: void + neon bloom + grid horizon =====
+  body {
+    background:
+      radial-gradient(120% 80% at 12% -10%, rgba(255, 46, 166, 0.26), transparent 58%),
+      radial-gradient(120% 80% at 92% 0%, rgba(0, 229, 255, 0.2), transparent 55%),
+      linear-gradient(180deg, #05030f 0%, #08051a 55%, #05030f 100%);
+    background-attachment: fixed;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    left: -50%;
+    right: -50%;
+    bottom: -22vh;
+    height: 62vh;
+    z-index: -1;
+    pointer-events: none;
+    opacity: 0.6;
+    background-image:
+      linear-gradient(rgba(0, 229, 255, 0.22) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 46, 166, 0.16) 1px, transparent 1px);
+    background-size: 64px 64px;
+    transform: perspective(320px) rotateX(66deg);
+    -webkit-mask-image: linear-gradient(to top, #000 0%, transparent 85%);
+    mask-image: linear-gradient(to top, #000 0%, transparent 85%);
+  }
+
+  // ===== Header =====
+  .portal-header,
+  body:not(.billboard-active) .portal-header--overlay,
+  .portal-header--overlay.is-scrolled {
+    background: rgba(6, 3, 18, 0.88);
+    border-bottom-color: var(--tpl-line);
+    box-shadow: 0 1px 26px rgba(0, 229, 255, 0.16);
+  }
+
+  .portal-header--overlay:not(.is-scrolled) {
+    box-shadow: none;
+  }
+
+  .portal-header-brand-text {
+    font-family: var(--portal-font-display, inherit);
+    letter-spacing: 0.04em;
+    filter: drop-shadow(0 0 12px rgba(var(--portal-accent-rgb), 0.55));
+  }
+
+  // ===== Billboard =====
+  .billboard {
+    background: #05030f;
+  }
+
+  .billboard-backdrop img {
+    filter: blur(26px) saturate(1.9) brightness(0.45);
+  }
+
+  .billboard-shade {
+    background:
+      linear-gradient(77deg, rgba(5, 3, 15, 0.92) 0%, rgba(5, 3, 15, 0.5) 45%, transparent 74%),
+      linear-gradient(180deg, rgba(124, 58, 237, 0.3), transparent 55%);
+  }
+
+  .billboard-bottom-fade {
+    background: linear-gradient(to top, #05030f 0%, rgba(5, 3, 15, 0.72) 42%, transparent 100%);
+  }
+
+  // Scanlines over the whole hero — the arcade CRT tell.
+  .billboard::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    pointer-events: none;
+    background: repeating-linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.05) 0 1px,
+      transparent 1px 4px
+    );
+  }
+
+  .billboard-title {
+    font-family: var(--portal-font-display, inherit);
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    text-shadow:
+      0 0 18px rgba(255, 46, 166, 0.6),
+      0 0 46px rgba(0, 229, 255, 0.32),
+      0 2px 12px rgba(0, 0, 0, 0.8);
+  }
+
+  .billboard-vendor {
+    color: var(--tpl-cyan);
+    text-shadow: 0 0 14px rgba(0, 229, 255, 0.5);
+  }
+
+  .billboard-badge,
+  .game-card-badge-cat {
+    border-radius: var(--tpl-radius);
+  }
+
+  .billboard-chip {
+    border: 1px solid var(--tpl-line);
+    background: rgba(0, 229, 255, 0.08);
+    border-radius: var(--tpl-radius);
+  }
+
+  .billboard-info {
+    background: rgba(124, 58, 237, 0.32);
+    border: 1px solid rgba(124, 58, 237, 0.6);
+    border-radius: var(--tpl-radius);
+
+    &:hover {
+      background: rgba(124, 58, 237, 0.5);
+      box-shadow: 0 0 22px rgba(124, 58, 237, 0.5);
+    }
+  }
+
+  // ===== Neon action surfaces =====
+  .billboard-play,
+  .btn-theme,
+  .portal-header-deposit-btn,
+  .promo-banner-cta {
+    border-radius: var(--tpl-radius);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .billboard-play,
+  .btn-theme,
+  .portal-header-deposit-btn {
+    background: linear-gradient(120deg, var(--tpl-magenta), var(--tpl-violet), var(--tpl-cyan));
+    color: #0a0016;
+    box-shadow:
+      0 0 18px rgba(255, 46, 166, 0.45),
+      0 0 38px rgba(0, 229, 255, 0.28);
+
+    &:hover {
+      color: #0a0016;
+      box-shadow:
+        0 0 26px rgba(255, 46, 166, 0.65),
+        0 0 60px rgba(0, 229, 255, 0.4);
+    }
+  }
+
+  .portal-header-login-btn {
+    border-color: var(--tpl-line);
+    border-radius: var(--tpl-radius);
+
+    &:hover {
+      color: var(--tpl-cyan);
+      border-color: var(--tpl-cyan);
+      box-shadow: 0 0 16px rgba(0, 229, 255, 0.35);
+    }
+  }
+
+  // ===== Category pills & search =====
+  .game-category-tabs .game-category-pill {
+    border-radius: var(--tpl-radius);
+    border: 1px solid var(--tpl-line);
+    background: var(--tpl-surface);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-size: 0.78rem;
+
+    &:hover {
+      color: var(--tpl-cyan);
+      border-color: var(--tpl-cyan);
+      box-shadow: 0 0 16px rgba(0, 229, 255, 0.3);
+    }
+
+    &.active {
+      background: linear-gradient(120deg, var(--tpl-magenta), var(--tpl-violet));
+      border-color: var(--tpl-magenta);
+      color: #fff;
+      box-shadow: 0 0 22px rgba(255, 46, 166, 0.5);
+    }
+  }
+
+  .game-filter-bar .game-search-wrapper .form-control {
+    border-radius: var(--tpl-radius);
+    background: var(--tpl-surface);
+    border-color: var(--tpl-line);
+    color: #e8e6ff;
+
+    &:focus {
+      border-color: var(--tpl-cyan);
+      box-shadow: 0 0 0 3px rgba(0, 229, 255, 0.18);
+    }
+  }
+
+  // ===== Rows =====
+  .nf-row-head h2,
+  .nf-row-head h3 {
+    font-family: var(--portal-font-display, inherit);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 1rem;
+    text-shadow: 0 0 16px rgba(var(--portal-accent-rgb), 0.4);
+  }
+
+  .nf-row-head .nf-row-count {
+    background: var(--tpl-surface);
+    border-color: var(--tpl-line);
+    border-radius: var(--tpl-radius);
+  }
+
+  .nf-row-chevron {
+    background: rgba(5, 3, 15, 0.62);
+    color: var(--tpl-cyan);
+
+    &:hover {
+      background: rgba(5, 3, 15, 0.85);
+      text-shadow: 0 0 16px rgba(0, 229, 255, 0.8);
+    }
+  }
+
+  // ===== Cards =====
+  .game-card {
+    border-radius: var(--tpl-radius);
+    box-shadow: 0 0 0 1px rgba(124, 58, 237, 0.4);
+  }
+
+  .game-card .game-card-image img {
+    filter: saturate(1.15) contrast(1.06);
+  }
+
+  .game-card:hover,
+  .nf-row-track .game-card:hover,
+  .top10-item .game-card:hover {
+    box-shadow:
+      0 0 0 1px var(--tpl-cyan),
+      0 0 22px rgba(0, 229, 255, 0.45),
+      0 0 48px rgba(255, 46, 166, 0.28),
+      0 14px 40px rgba(0, 0, 0, 0.6);
+  }
+
+  .game-card .game-card-play-btn {
+    background: linear-gradient(120deg, var(--tpl-magenta), var(--tpl-cyan));
+    color: #0a0016;
+    box-shadow:
+      0 0 0 2px rgba(0, 229, 255, 0.55),
+      0 0 26px rgba(255, 46, 166, 0.6);
+  }
+
+  .game-card .game-card-overlay {
+    background: linear-gradient(180deg, rgba(124, 58, 237, 0.45), rgba(5, 3, 15, 0.82));
+  }
+
+  .game-card .game-card-vendor {
+    color: rgba(0, 229, 255, 0.75);
+  }
+
+  // ===== Top 10 =====
+  .top10-rank {
+    color: transparent;
+    -webkit-text-stroke: 3px var(--tpl-cyan);
+    filter: drop-shadow(0 0 14px rgba(0, 229, 255, 0.55));
+  }
+
+  // ===== Promo banner =====
+  .promo-banner {
+    border-radius: var(--tpl-radius);
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    box-shadow: 0 0 26px rgba(255, 46, 166, 0.22);
+
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+      background-size: 28px 28px;
+      opacity: 0.35;
+    }
+  }
+
+  .promo-banner-title {
+    font-family: var(--portal-font-display, inherit);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+}

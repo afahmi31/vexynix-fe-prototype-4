@@ -1,0 +1,653 @@
+/*!
+ * Game Portal — player-facing game lobby styling.
+ * Inspired by Indonesian slot portal aesthetics (nusan905 style):
+ * rich gradients, glowing hover effects, RTP badges, category pills.
+ *
+ * All values are hardcoded hex — no Color Admin CSS variables.
+ */
+
+// ===== Stats Strip =====
+.game-stats-strip {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+
+  .game-stat-item {
+    flex: 1;
+    min-width: 120px;
+    background: #181820;
+    border: 1px solid #2a2a33;
+    border-radius: 0.75rem;
+    padding: 0.875rem 1rem;
+    text-align: center;
+
+    .game-stat-value {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: var(--portal-accent-start);
+    }
+
+    .game-stat-label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      opacity: 0.65;
+    }
+  }
+}
+
+// ===== Category Tabs =====
+.game-category-tabs {
+  display: flex;
+  gap: 0.5rem;
+  overflow-x: auto;
+  padding-bottom: 0.5rem;
+  margin-bottom: 1.25rem;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+
+  &::-webkit-scrollbar {
+    height: 4px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: rgba(128, 128, 128, 0.3);
+    border-radius: 2px;
+  }
+
+  .game-category-pill {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.5rem 1.125rem;
+    border-radius: 2rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    border: 2px solid #2a2a33;
+    background: #181820;
+    color: #e0e0e0;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+
+    i {
+      font-size: 0.95rem;
+    }
+
+    &:hover {
+      border-color: var(--portal-accent-start);
+      color: var(--portal-accent-start);
+    }
+
+    &.active {
+      background: var(--portal-accent-start);
+      border-color: var(--portal-accent-start);
+      color: var(--portal-accent-text);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    }
+  }
+}
+
+// ===== Filter Bar =====
+.game-filter-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+  flex-wrap: wrap;
+
+  .game-vendor-chips {
+    display: flex;
+    gap: 0.375rem;
+    flex-wrap: wrap;
+  }
+
+  .game-vendor-chip {
+    padding: 0.25rem 0.75rem;
+    border-radius: 0.375rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    border: 1px solid #2a2a33;
+    background: transparent;
+    color: #e0e0e0;
+    cursor: pointer;
+    transition: all 0.15s ease;
+
+    &:hover {
+      border-color: var(--portal-accent-start);
+    }
+
+    &.active {
+      background: var(--portal-accent-start);
+      border-color: var(--portal-accent-start);
+      color: var(--portal-accent-text);
+    }
+  }
+
+  .game-search-wrapper {
+    flex: 1;
+    min-width: 200px;
+    position: relative;
+
+    i {
+      position: absolute;
+      left: 0.875rem;
+      top: 50%;
+      transform: translateY(-50%);
+      opacity: 0.45;
+      font-size: 0.9rem;
+    }
+
+    .form-control {
+      padding-left: 2.5rem;
+      border-radius: 2rem;
+    }
+  }
+}
+
+// ===== Game Grid =====
+.game-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.5rem;
+
+  .game-card {
+    min-width: 0;
+    aspect-ratio: 4 / 5;
+  }
+
+  @media (min-width: 576px) {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 0.625rem;
+  }
+  @media (min-width: 992px) {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 0.875rem;
+
+    .game-card {
+      aspect-ratio: 16 / 10;
+    }
+  }
+  @media (min-width: 1400px) {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+}
+
+// ===== Game Card =====
+.game-card {
+  position: relative;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  cursor: pointer;
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+  // Lobby tiles use a stable landscape frame at every viewport width.
+  aspect-ratio: 16 / 10;
+
+  &:hover {
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+    z-index: 2;
+
+    .game-card-overlay {
+      opacity: 1;
+    }
+  }
+
+  .game-card-image {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    font-weight: 900;
+    color: rgba(255, 255, 255, 0.9);
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  // Category-specific gradient backgrounds
+  &.game-card-slot .game-card-image {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  }
+  &.game-card-live .game-card-image {
+    background: linear-gradient(135deg, #f5576c 0%, #f093fb 100%);
+  }
+  &.game-card-table .game-card-image {
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+  }
+  &.game-card-fish .game-card-image {
+    background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+  }
+  &.game-card-lottery .game-card-image {
+    background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+  }
+  &.game-card-sports .game-card-image {
+    background: linear-gradient(135deg, #30cfd0 0%, #330867 100%);
+  }
+  &.game-card-arcade .game-card-image {
+    background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+  }
+  &.game-card-default .game-card-image {
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #d946ef 100%);
+  }
+
+  // Badge row at top
+  .game-card-badges {
+    position: absolute;
+    top: 0.5rem;
+    left: 0.5rem;
+    right: 0.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    z-index: 3;
+    pointer-events: none;
+  }
+
+  .game-card-badge-cat {
+    padding: 0.2rem 0.5rem;
+    border-radius: 0.375rem;
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    backdrop-filter: blur(4px);
+    background: rgba(0, 0, 0, 0.4);
+    color: #fff;
+  }
+
+  .game-card-badge-tags {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    align-items: flex-end;
+  }
+
+  .game-card-tag {
+    padding: 0.15rem 0.4rem;
+    border-radius: 0.375rem;
+    font-size: 0.6rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+
+    &.tag-hot {
+      background: linear-gradient(135deg, #ff4b4b, #ff6b6b);
+      color: #fff;
+      box-shadow: 0 2px 6px rgba(255, 75, 75, 0.4);
+    }
+    &.tag-new {
+      background: linear-gradient(135deg, #00d4ff, #00a8ff);
+      color: #fff;
+      box-shadow: 0 2px 6px rgba(0, 168, 255, 0.4);
+    }
+    &.tag-popular {
+      background: linear-gradient(135deg, var(--portal-accent-start), var(--portal-accent-end));
+      color: var(--portal-accent-text);
+      box-shadow: 0 2px 6px rgba(var(--portal-accent-rgb), 0.4);
+    }
+    // Free play. Deliberately the calmest badge on the card: it marks a try-before-you-deposit
+    // affordance, not a promotion, and must not out-shout Hot/New.
+    &.tag-demo {
+      background: rgba(255, 255, 255, 0.16);
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      backdrop-filter: blur(2px);
+    }
+    &.tag-top10 {
+      background: linear-gradient(135deg, #e11d48, #fb7185);
+      color: #fff;
+      box-shadow: 0 2px 6px rgba(225, 29, 72, 0.4);
+    }
+    &.tag-editorial {
+      background: rgba(255, 255, 255, 0.2);
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      backdrop-filter: blur(2px);
+    }
+  }
+
+  // Hover overlay with Play button
+  .game-card-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(2px);
+    opacity: 0;
+    transition: opacity 0.25s ease;
+    z-index: 4;
+  }
+
+  .game-card-play-btn {
+    width: 3.5rem;
+    height: 3.5rem;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--portal-accent-start), var(--portal-accent-end));
+    color: var(--portal-accent-text);
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+    box-shadow: 0 4px 15px rgba(var(--portal-accent-rgb), 0.4);
+
+    &:hover {
+      transform: scale(1.1);
+    }
+
+    &.loading {
+      opacity: 0.7;
+      cursor: not-allowed;
+    }
+  }
+
+  // Secondary action under the play button. An outline pill rather than a second filled
+  // button, so the real-money launch stays the primary call on the card.
+  .game-card-demo-btn {
+    padding: 0.2rem 0.7rem;
+    border-radius: 999px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    color: #fff;
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.55);
+    cursor: pointer;
+    transition:
+      background 0.2s ease,
+      border-color 0.2s ease;
+
+    &:hover:not(:disabled) {
+      background: rgba(255, 255, 255, 0.15);
+      border-color: #fff;
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+
+  .game-card-detail-btn {
+    padding: 0.2rem 0.7rem;
+    border-radius: 999px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.2px;
+    color: #fff;
+    background: rgba(0, 0, 0, 0.22);
+    border: 1px solid rgba(255, 255, 255, 0.55);
+    cursor: pointer;
+    transition:
+      background 0.2s ease,
+      border-color 0.2s ease;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.15);
+      border-color: #fff;
+    }
+  }
+
+  .game-card-rtp {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #4ade80;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
+  }
+
+  // Name/vendor pinned to the bottom of the hover overlay — visible in row
+  // context where the always-on bottom info bar is hidden (Netflix style).
+  .game-card-overlay-info {
+    position: absolute;
+    bottom: 0.5rem;
+    left: 0.5rem;
+    right: 0.5rem;
+    text-align: center;
+  }
+
+  // Bottom info bar (always visible)
+  .game-card-info {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 0.5rem 0.625rem;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.85) 0%, rgba(0, 0, 0, 0) 100%);
+    z-index: 3;
+    pointer-events: none;
+  }
+
+  .game-card-name {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #fff;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.2;
+  }
+
+  .game-card-vendor {
+    font-size: 0.65rem;
+    color: rgba(255, 255, 255, 0.6);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+}
+
+@media (hover: none), (pointer: coarse) {
+  .game-card .game-card-overlay,
+  .game-card:hover .game-card-overlay {
+    opacity: 0;
+    pointer-events: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+
+  .game-card .game-card-badge-cat,
+  .game-card .game-card-tag.tag-demo,
+  .game-card .game-card-tag.tag-editorial {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+}
+
+// ===== Section Title =====
+.game-section-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  margin-top: 0.5rem;
+
+  h2,
+  h3,
+  h4 {
+    margin: 0;
+    font-weight: 700;
+    font-size: 1.1rem;
+  }
+
+  .game-section-icon {
+    font-size: 1.15rem;
+    color: var(--portal-accent-start);
+  }
+
+  .game-section-count {
+    font-size: 0.75rem;
+    padding: 0.15rem 0.5rem;
+    border-radius: 0.375rem;
+    background: #16161d;
+    color: #e0e0e0;
+    opacity: 0.7;
+  }
+
+  .game-section-line {
+    flex: 1;
+    height: 1px;
+    background: #2a2a33;
+    margin-left: 0.5rem;
+  }
+}
+
+// ===== Skeleton grid for game portal =====
+.game-grid-skeleton {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.5rem;
+
+  @media (min-width: 576px) {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 0.625rem;
+  }
+  @media (min-width: 992px) {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 0.875rem;
+  }
+  @media (min-width: 1400px) {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+
+  .game-card-skeleton {
+    aspect-ratio: 4 / 5;
+    border-radius: 0.75rem;
+  }
+
+  @media (min-width: 992px) {
+    .game-card-skeleton {
+      aspect-ratio: 16 / 10;
+    }
+  }
+}
+
+// ===== Responsive adjustments =====
+@media (max-width: 575.98px) {
+  .game-stats-strip {
+    .game-stat-item {
+      min-width: 90px;
+      padding: 0.625rem 0.5rem;
+
+      .game-stat-value {
+        font-size: 1.1rem;
+      }
+    }
+  }
+}
+
+// ===== Promo Banner =====
+.promo-banner {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.9rem 1.25rem;
+  min-height: 176px;
+  border-radius: 0.5rem;
+  margin-bottom: 2rem;
+  overflow: hidden;
+  position: relative;
+  isolation: isolate;
+}
+
+.promo-banner-art {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 72% center;
+  opacity: 0.88;
+  pointer-events: none;
+  transform: scale(1.01);
+}
+
+.promo-banner-overlay {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  pointer-events: none;
+}
+
+.promo-banner-content {
+  display: flex;
+  flex: 1;
+  max-width: min(100%, 36rem);
+  flex-direction: column;
+  position: relative;
+  z-index: 2;
+}
+
+.promo-banner-title {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #fff;
+  margin-bottom: 0.25rem;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+}
+
+.promo-banner-desc {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.8);
+  line-height: 1.4;
+}
+
+.promo-banner-cta {
+  align-self: flex-start;
+  position: relative;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.85rem;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  margin-top: 0.75rem;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.3);
+    color: #fff;
+    transform: translateY(-1px);
+  }
+}
+
+@media (max-width: 575.98px) {
+  .promo-banner {
+    flex-direction: column;
+    text-align: center;
+    gap: 0.75rem;
+
+    .promo-banner-content {
+      align-items: center;
+      max-width: 100%;
+    }
+
+    .promo-banner-cta {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+}

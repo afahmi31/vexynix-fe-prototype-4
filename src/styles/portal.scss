@@ -1,0 +1,71 @@
+/*!
+ * Portal SCSS — player-facing game portal layout.
+ * Pure Bootstrap 5.3 only — NO Color Admin template dependency.
+ */
+
+// ===== Override Bootstrap variables BEFORE importing =====
+$prefix: "bs-";
+$primary: #ffd700;
+$body-bg: #0b0b0f;
+$body-color: #e0e0e0;
+$border-color: #2a2a33;
+$border-radius: 0.375rem;
+$border-radius-sm: 0.25rem;
+$border-radius-lg: 0.5rem;
+$form-control-bg: #16161d;
+$input-border-color: #2a2a33;
+$card-bg: #181820;
+$card-border-color: #2a2a33;
+$dropdown-bg: #181820;
+$dropdown-border-color: #2a2a33;
+$dropdown-link-color: rgba(255, 255, 255, 0.8);
+$dropdown-link-hover-bg: rgba(255, 215, 0, 0.1);
+$modal-bg: #181820;
+$modal-border-color: #2a2a33;
+
+// ===== Bootstrap core (selective component imports) =====
+@import "node_modules/bootstrap/scss/functions";
+@import "node_modules/bootstrap/scss/variables";
+@import "node_modules/bootstrap/scss/maps";
+@import "node_modules/bootstrap/scss/mixins";
+@import "node_modules/bootstrap/scss/root";
+@import "node_modules/bootstrap/scss/reboot";
+@import "node_modules/bootstrap/scss/type";
+@import "node_modules/bootstrap/scss/containers";
+@import "node_modules/bootstrap/scss/grid";
+@import "node_modules/bootstrap/scss/tables";
+@import "node_modules/bootstrap/scss/forms";
+@import "node_modules/bootstrap/scss/buttons";
+@import "node_modules/bootstrap/scss/transitions";
+@import "node_modules/bootstrap/scss/dropdown";
+@import "node_modules/bootstrap/scss/button-group";
+@import "node_modules/bootstrap/scss/nav";
+@import "node_modules/bootstrap/scss/navbar";
+@import "node_modules/bootstrap/scss/card";
+@import "node_modules/bootstrap/scss/accordion";
+@import "node_modules/bootstrap/scss/alert";
+@import "node_modules/bootstrap/scss/badge";
+@import "node_modules/bootstrap/scss/breadcrumb";
+@import "node_modules/bootstrap/scss/pagination";
+@import "node_modules/bootstrap/scss/spinners";
+@import "node_modules/bootstrap/scss/close";
+@import "node_modules/bootstrap/scss/modal";
+@import "node_modules/bootstrap/scss/utilities";
+@import "node_modules/bootstrap/scss/utilities/api";
+
+// ===== Portal styles =====
+@import "portal/base";
+@import "portal/header";
+@import "portal/footer";
+@import "portal/game-card";
+@import "portal/netflix";
+@import "portal/panels";
+@import "portal/auth";
+
+// ===== Visual templates (data-portal-template skins) =====
+// Imported last so a template can override any portal partial above it.
+@import "portal/templates/neon";
+@import "portal/templates/luxe";
+@import "portal/templates/aurora";
+@import "portal/templates/switcher";
+@import "portal/p4-lobby";
