@@ -39,7 +39,8 @@ export function P4GameCard({
     >
       {rank ? (
         <span className="p4-game-card-rank" aria-hidden="true">
-          {rank}
+          {rank === 1 ? <i className="fa-solid fa-crown" /> : null}
+          <span>{rank}</span>
         </span>
       ) : null}
       <div className="p4-game-card-art">

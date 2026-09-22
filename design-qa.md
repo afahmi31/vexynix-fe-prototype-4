@@ -25,17 +25,17 @@ section bounds and visual proportions rather than raw pixel dimensions.
 ## Fidelity review
 
 - Fonts and typography: section heading hierarchy and compact supporting copy
-  are preserved; ranked cards now use the reference's provider-only footer
-  label instead of duplicating the artwork title.
+  are preserved; ranked cards now use a two-line bottom band for the game title
+  and provider label.
 - Spacing and layout rhythm: five cards remain in rank order, the ranked card
   ratio changes from 0.62 to 0.70, and the card spacing remains responsive.
-- Colors and visual tokens: each rank uses a separate pastel vertical gradient
-  and the rank text is layered over the card edge as shown in the reference.
+- Colors and visual tokens: each rank uses a separate pastel tile gradient, with
+  a violet emphasis for rank one that remains within the existing theme.
 - Image quality and asset fidelity: existing local game artwork remains in use;
   no placeholder, CSS drawing, or new generated asset was introduced.
 - Copy and content: `Top 5 Minggu Ini`, `Game yang paling sering dimainkan.`,
-  provider labels, and the display-only `HACKSAW GAMING` label match the target
-  treatment. The underlying mock catalog contract remains unchanged.
+  game names, provider labels, and the display-only `HACKSAW GAMING` label match
+  the target treatment. The underlying mock catalog contract remains unchanged.
 
 ## Comparison history
 
@@ -59,6 +59,19 @@ section bounds and visual proportions rather than raw pixel dimensions.
 - Post-fix browser evidence shows all five numerals, card artwork, provider
   labels, and the Top 5 heading in the same state. Tablet and mobile checks
   show no horizontal page overflow.
+
+### Top 5 redesign — Pastel Rank Tiles
+
+- Replaced the oversized overlapping numerals with compact pastel ranking tiles
+  attached to the upper-left of each card; rank one includes the existing
+  Font Awesome crown icon as a decorative winner cue.
+- Added the small ranking mark beside the section heading and restored the game
+  title above its provider label inside the dark-indigo bottom band.
+- Synchronized rank-tile hover and keyboard-focus motion with the card artwork:
+  both lift slightly and zoom together instead of leaving a static tile behind.
+- Browser evidence at the desktop lobby viewport shows all five cards, rank
+  tiles, title/provider bands, and the adjacent `Pilihan Teratas` section in
+  the same theme. The existing card-detail interaction remains functional.
 
 ### Pilihan Teratas rail
 
@@ -139,6 +152,9 @@ section bounds and visual proportions rather than raw pixel dimensions.
 - Reworked the provider-card artwork treatment so the theme-colored opaque veil
   stays on the left 7–10% of the artwork area and fades to transparent toward
   the right; the game image remains clear instead of being masked away.
+- Increased the responsive spacing between the `Provider Pilihan` heading,
+  provider cards, selected-provider title, and provider game grid so the section
+  reads as separate visual layers without changing its existing theme.
 
 ## Interaction and runtime checks
 

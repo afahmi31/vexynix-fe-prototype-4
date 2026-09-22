@@ -600,9 +600,14 @@ function P4TopFiveSection({
 }) {
   return (
     <section className="p4-top-five" aria-labelledby="p4-top-five-title">
-      <div className="p4-section-heading">
-        <h2 id="p4-top-five-title">Top 5 Minggu Ini</h2>
-        <p>Game yang paling sering dimainkan.</p>
+      <div className="p4-section-heading p4-top-five-heading">
+        <span className="p4-top-five-mark" aria-hidden="true">
+          <i className="fa-solid fa-ranking-star" />
+        </span>
+        <div>
+          <h2 id="p4-top-five-title">Top 5 Minggu Ini</h2>
+          <p>Game yang paling sering dimainkan.</p>
+        </div>
       </div>
       <div className="p4-top-five-grid">
         {games.map((game, index) => (
