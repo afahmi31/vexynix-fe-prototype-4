@@ -452,6 +452,11 @@ export default function P4LobbyPage() {
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
+  const handleLeaderboardCta = () => {
+    setActivityTab("leaderboard");
+    window.requestAnimationFrame(() => scrollTo("p4-activity-title"));
+  };
+
   const handleHeroLaunch = () => {
     if (!heroGame || actionDisabled) return;
     if (heroGame.demo_supported) void launchDemo(heroGame.id);
@@ -577,6 +582,8 @@ export default function P4LobbyPage() {
               onSelectGame={setDetailGame}
               onViewAll={() => router.push("/lobby?category=all#p4-catalog")}
             />
+
+            <P4LeaderboardCta onViewRanking={handleLeaderboardCta} />
           </div>
         </>
       )}
@@ -638,6 +645,33 @@ function P4CtaSection({
           </button>
         </div>
       </article>
+    </section>
+  );
+}
+
+function P4LeaderboardCta({ onViewRanking }: { onViewRanking: () => void }) {
+  return (
+    <section className="p4-leaderboard-cta" aria-label="Papan peringkat">
+      <div className="p4-leaderboard-cta-art" aria-hidden="true">
+        <Image
+          src="/assets/prototype-4/cta/leaderboard-banner.png"
+          alt=""
+          fill
+          sizes="(max-width: 900px) 100vw, 1580px"
+        />
+      </div>
+      <div className="p4-leaderboard-cta-copy">
+        <span className="p4-leaderboard-cta-icon" aria-hidden="true">
+          <i className="fa-solid fa-trophy" />
+        </span>
+        <div>
+          <h2>Papan Peringkat</h2>
+          <p>Lihat pilihan game yang sedang ramai minggu ini.</p>
+        </div>
+      </div>
+      <button type="button" className="p4-button p4-button--dark" onClick={onViewRanking}>
+        Lihat Peringkat
+      </button>
     </section>
   );
 }

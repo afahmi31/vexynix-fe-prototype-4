@@ -923,6 +923,7 @@ body.p4-public-body .portal-main-flush > .p4-lobby,
   align-self: stretch;
   contain: size;
   min-height: 0;
+  scroll-margin-top: 5rem;
   padding: 0.85rem 0.95rem;
   border: 1px solid rgba(255, 255, 255, 0.7);
   border-radius: 1rem;
@@ -1182,6 +1183,81 @@ body.p4-public-body .portal-main-flush > .p4-lobby,
   color: #4a3c83;
   font-size: clamp(2.6rem, 5vw, 4.4rem);
   opacity: 0.86;
+}
+
+.p4-leaderboard-cta {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: clamp(0.9rem, 2vw, 1.6rem);
+  min-height: clamp(5.1rem, 6vw, 6.35rem);
+  margin-top: clamp(1.25rem, 2vw, 1.9rem);
+  padding: clamp(0.8rem, 1.25vw, 1.15rem) clamp(0.95rem, 1.8vw, 1.5rem);
+  overflow: hidden;
+  border: 1px solid rgba(145, 122, 224, 0.22);
+  border-radius: clamp(0.7rem, 1vw, 1rem);
+  background: #f5dfeb;
+  box-shadow: 0 0.65rem 1.4rem rgba(104, 84, 185, 0.1);
+  isolation: isolate;
+}
+
+.p4-leaderboard-cta-art {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+}
+
+.p4-leaderboard-cta-art img {
+  object-fit: cover;
+  object-position: center;
+}
+
+.p4-leaderboard-cta-copy {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: clamp(0.65rem, 1vw, 0.9rem);
+}
+
+.p4-leaderboard-cta-icon {
+  display: grid;
+  flex: 0 0 auto;
+  width: clamp(2.35rem, 3.5vw, 3.15rem);
+  height: clamp(2.35rem, 3.5vw, 3.15rem);
+  place-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.72);
+  border-radius: 0.8rem;
+  background: rgba(255, 255, 255, 0.5);
+  box-shadow: 0 0.35rem 0.8rem rgba(104, 84, 185, 0.1);
+  color: #e58e4b;
+  font-size: clamp(1.25rem, 2vw, 1.75rem);
+}
+
+.p4-leaderboard-cta h2 {
+  margin: 0;
+  color: #201c86;
+  font-size: clamp(1rem, 1.55vw, 1.35rem);
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  line-height: 1.12;
+}
+
+.p4-leaderboard-cta p {
+  margin: 0.22rem 0 0;
+  color: #4a4a9c;
+  font-size: clamp(0.68rem, 0.85vw, 0.78rem);
+  line-height: 1.35;
+}
+
+.p4-leaderboard-cta > .p4-button {
+  position: relative;
+  z-index: 1;
+  flex: 0 0 auto;
+  min-height: 2.1rem;
+  padding-inline: 1rem;
 }
 
 /* Design: section provider diberi area "cloudy" periwinkle lembut —
@@ -1710,6 +1786,207 @@ body.p4-public-body .portal-main-flush > .p4-lobby,
   text-align: right;
 }
 
+/* Desktop rhythm: keep the page's main blocks on one spacing scale and give
+   headings, supporting copy, and card labels enough room to breathe. */
+@media (min-width: 1101px) {
+  body.p4-public-body,
+  .portal.p4-public-shell {
+    --p4-desktop-section-gap: clamp(1.25rem, 1.8vw, 1.75rem);
+  }
+
+  body.p4-public-body .portal-main-flush,
+  .portal.p4-public-shell .portal-main-flush {
+    padding-bottom: var(--p4-desktop-section-gap);
+  }
+
+  .p4-header-inner {
+    min-height: 3.2rem;
+  }
+
+  .p4-header-brand {
+    font-size: clamp(1.25rem, 1.7vw, 1.6rem);
+  }
+
+  .p4-header-nav {
+    gap: clamp(0.3rem, 0.9vw, 0.9rem);
+  }
+
+  .p4-header-nav a {
+    min-height: 2.2rem;
+    padding-inline: 0.86rem;
+    font-size: clamp(0.82rem, 0.72vw, 0.9rem);
+  }
+
+  .p4-header-search,
+  .p4-header-login,
+  .p4-header-register {
+    min-height: 2.2rem;
+    padding-inline: 0.9rem;
+    font-size: clamp(0.8rem, 0.68vw, 0.86rem);
+  }
+
+  .p4-footer-brand {
+    font-size: clamp(1.3rem, 1.9vw, 1.8rem);
+  }
+
+  .p4-footer-brand-block p {
+    margin-top: 0.4rem;
+    font-size: clamp(0.8rem, 0.72vw, 0.9rem);
+  }
+
+  .p4-footer-links {
+    gap: clamp(1.5rem, 2vw, 2.5rem);
+  }
+
+  .p4-footer-links h2 {
+    margin-bottom: 0.5rem;
+    font-size: clamp(0.84rem, 0.7vw, 0.92rem);
+  }
+
+  .p4-footer-links a {
+    margin-bottom: 0.35rem;
+    font-size: clamp(0.82rem, 0.7vw, 0.92rem);
+    line-height: 1.5;
+  }
+
+  .p4-footer-socials {
+    gap: 0.85rem;
+  }
+
+  .p4-footer-socials a {
+    font-size: 1.12rem;
+  }
+
+  .p4-footer-bottom {
+    font-size: clamp(0.8rem, 0.64vw, 0.86rem);
+  }
+
+  .p4-hero {
+    margin-bottom: var(--p4-desktop-section-gap);
+  }
+
+  .p4-top-feature-grid {
+    gap: clamp(1rem, 1.8vw, 1.35rem);
+    margin-bottom: var(--p4-desktop-section-gap);
+    padding-bottom: 0;
+  }
+
+  .p4-featured {
+    padding-bottom: 0;
+    padding-left: clamp(1.2rem, 1.8vw, 1.6rem);
+  }
+
+  .p4-featured::before {
+    bottom: 0;
+  }
+
+  .p4-section-heading {
+    margin-bottom: 0.68rem;
+  }
+
+  .p4-section-heading h2,
+  .p4-activity-heading h2,
+  .p4-catalog h1 {
+    font-size: clamp(1.12rem, 1.65vw, 1.5rem);
+  }
+
+  .p4-action-card h2 {
+    font-size: clamp(1.2rem, 1.8vw, 1.55rem);
+  }
+
+  .p4-section-heading p,
+  .p4-action-card p,
+  .p4-catalog-heading p,
+  .p4-provider-copy small {
+    margin-top: 0.28rem;
+    font-size: clamp(0.75rem, 0.9vw, 0.88rem);
+    line-height: 1.45;
+  }
+
+  .p4-text-link {
+    font-size: clamp(0.7rem, 0.82vw, 0.78rem);
+  }
+
+  .p4-top-five-heading {
+    gap: 0.75rem;
+    margin-bottom: 0.7rem;
+  }
+
+  .p4-top-five-grid {
+    gap: clamp(0.7rem, 1.35vw, 1.15rem);
+    padding-top: 0.55rem;
+  }
+
+  .p4-top-five .p4-game-card--ranked .p4-game-card-copy small {
+    font-size: clamp(0.56rem, 0.68vw, 0.66rem);
+  }
+
+  .p4-game-card-copy strong {
+    font-size: clamp(0.68rem, 0.82vw, 0.78rem);
+  }
+
+  .p4-game-card-copy small {
+    font-size: clamp(0.58rem, 0.68vw, 0.66rem);
+  }
+
+  .p4-activity-band {
+    margin: 0 0 var(--p4-desktop-section-gap);
+  }
+
+  .p4-trending {
+    gap: clamp(1.2rem, 1.8vw, 1.6rem);
+  }
+
+  .p4-activity-card {
+    padding: 1rem 1.1rem;
+  }
+
+  .p4-activity-heading {
+    padding-bottom: 0.65rem;
+  }
+
+  .p4-activity-tabs {
+    margin: 0.7rem 0 0.5rem;
+  }
+
+  .p4-activity-tabs button {
+    min-height: 1.85rem;
+    font-size: 0.68rem;
+  }
+
+  .p4-activity-row {
+    min-height: 1.9rem;
+    padding: 0.3rem 0.4rem;
+    font-size: 0.66rem;
+  }
+
+  .p4-activity-row strong {
+    font-size: 0.68rem;
+  }
+
+  .p4-cta-grid {
+    gap: clamp(1rem, 1.6vw, 1.4rem);
+    margin-bottom: var(--p4-desktop-section-gap);
+  }
+
+  .p4-provider-section {
+    margin-top: 0;
+    padding: clamp(1rem, 1.8vw, 1.5rem);
+  }
+
+  .p4-provider-section > .p4-section-heading {
+    margin-bottom: clamp(0.9rem, 1.4vw, 1.15rem);
+  }
+
+  .p4-provider-games {
+    margin-top: clamp(1.5rem, 2.4vw, 2.25rem);
+  }
+
+  .p4-provider-games-heading {
+    margin-bottom: clamp(1rem, 1.35vw, 1.25rem);
+  }
+}
+
 @media (max-width: 1100px) {
   /* Lebar container dasar (100% - 5.75rem) dipertahankan hingga tablet —
      design memakai gutter ±46px pada viewport ~970px. */
@@ -1783,6 +2060,10 @@ body.p4-public-body .portal-main-flush > .p4-lobby,
     contain: none;
     max-height: 20rem;
     overflow: hidden;
+  }
+
+  .p4-leaderboard-cta {
+    margin-top: 1.2rem;
   }
 
   .p4-footer-inner {
@@ -1899,6 +2180,22 @@ body.p4-public-body .portal-main-flush > .p4-lobby,
   .p4-activity-card {
     max-height: 19rem;
     padding: 0.7rem 0.75rem;
+  }
+
+  .p4-leaderboard-cta {
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 0.75rem 1rem;
+    min-height: 6.15rem;
+    padding: 0.8rem 0.85rem;
+  }
+
+  .p4-leaderboard-cta-copy {
+    flex: 1 1 12rem;
+  }
+
+  .p4-leaderboard-cta > .p4-button {
+    margin-left: calc(clamp(2.35rem, 3.5vw, 3.15rem) + 0.65rem);
   }
 
   .p4-activity-heading {
