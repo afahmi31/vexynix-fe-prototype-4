@@ -230,14 +230,14 @@ body.p4-public-body .portal-main-flush > .p4-lobby,
 .p4-hero-meta {
   margin: 0.3rem 0 0.22rem;
   color: rgba(255, 255, 255, 0.92);
-  font-size: clamp(0.66rem, 0.95vw, 0.82rem);
+  font-size: clamp(0.7rem, 0.95vw, 0.82rem);
   font-weight: 600;
 }
 
 .p4-hero-description {
   margin: 0;
   color: rgba(255, 255, 255, 0.86);
-  font-size: clamp(0.7rem, 1vw, 0.88rem);
+  font-size: clamp(0.76rem, 1vw, 0.88rem);
 }
 
 .p4-hero-actions,
@@ -317,9 +317,8 @@ body.p4-public-body .portal-main-flush > .p4-lobby,
   right: 1rem;
   bottom: 0.7rem;
   display: flex;
-  gap: 0.4rem;
+  gap: 0.5rem;
   align-items: center;
-  gap: 8px;
 }
 
 .p4-hero-dots button {
@@ -471,7 +470,7 @@ body.p4-public-body .portal-main-flush > .p4-lobby,
 .p4-provider-copy small {
   margin: 0.2rem 0 0;
   color: #3f48a0;
-  font-size: clamp(0.65rem, 0.85vw, 0.78rem);
+  font-size: clamp(0.7rem, 0.85vw, 0.78rem);
   line-height: 1.4;
 }
 
@@ -495,6 +494,8 @@ body.p4-public-body .portal-main-flush > .p4-lobby,
   text-decoration: underline;
 }
 
+/* Desktop & tablet: grid 5 kolom yang memenuhi lebar area. Di mobile
+   (≤760px) berubah menjadi slider tiga kartu — lihat blok media di bawah. */
 .p4-top-five-grid {
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));
@@ -559,7 +560,7 @@ body.p4-public-body .portal-main-flush > .p4-lobby,
 }
 
 .p4-top-five .p4-game-card--ranked .p4-game-card-copy small {
-  font-size: clamp(0.48rem, 0.6vw, 0.58rem);
+  font-size: clamp(0.56rem, 0.6vw, 0.62rem);
 }
 
 .p4-game-card {
@@ -643,13 +644,13 @@ body.p4-public-body .portal-main-flush > .p4-lobby,
 }
 
 .p4-game-card-copy strong {
-  font-size: clamp(0.62rem, 0.78vw, 0.72rem);
+  font-size: clamp(0.66rem, 0.78vw, 0.72rem);
   font-weight: 800;
 }
 
 .p4-game-card-copy small {
   color: rgba(255, 255, 255, 0.8);
-  font-size: clamp(0.5rem, 0.62vw, 0.6rem);
+  font-size: clamp(0.54rem, 0.62vw, 0.6rem);
 }
 
 /* Design: large ranking numerals with pastel vertical gradients, top-aligned,
@@ -885,7 +886,7 @@ body.p4-public-body .portal-main-flush > .p4-lobby,
 }
 
 .p4-rail--landscape {
-  grid-auto-columns: clamp(7rem, 12.4vw, 11.75rem);
+  grid-auto-columns: clamp(7.5rem, 12.4vw, 11.75rem);
 }
 
 /* Design: kartu Sedang Ramai hampir kotak (≈0.91) — lebih tinggi dari landscape biasa. */
@@ -1710,10 +1711,8 @@ body.p4-public-body .portal-main-flush > .p4-lobby,
   /* Lebar container dasar (100% - 5.75rem) dipertahankan hingga tablet —
      design memakai gutter ±46px pada viewport ~970px. */
 
-  .p4-activity-band {
-    grid-template-columns: minmax(0, 1.72fr) minmax(19.5rem, 0.62fr);
-  }
-
+  /* Grid game turun ke 4 kolom agar kartu tetap pada ukuran ideal
+     (setara kartu desktop ±230px), tidak menyusut jadi thumbnail. */
   .p4-provider-games-grid,
   .p4-catalog-grid {
     grid-template-columns: repeat(6, minmax(0, 1fr));
@@ -1721,6 +1720,83 @@ body.p4-public-body .portal-main-flush > .p4-lobby,
 
   .p4-footer {
     padding-inline: 1.5rem;
+  }
+}
+
+@media (max-width: 900px) {
+  /* Tablet portrait — area dua kolom disusun ulang menjadi satu kolom agar
+     kartu game mendapat ruang ideal, tidak mengempis di jalur samping. */
+  .p4-header-inner,
+  .p4-hero,
+  .p4-primary-sections,
+  .p4-catalog {
+    width: min(100% - 3rem, 1580px);
+  }
+
+  .p4-hero {
+    aspect-ratio: 2.05 / 1;
+  }
+
+  .p4-top-feature-grid,
+  .p4-cta-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .p4-featured {
+    padding: 1.1rem 0 0.6rem;
+  }
+
+  .p4-featured::before {
+    top: 0;
+    right: 0;
+    bottom: auto;
+    left: 0;
+    width: auto;
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(125, 116, 214, 0.16) 12%,
+      rgba(125, 116, 214, 0.3) 50%,
+      rgba(125, 116, 214, 0.16) 88%,
+      transparent
+    );
+  }
+
+  /* Tanpa kolom pasangan, poster rail berhenti mengikuti tinggi Top 5
+     dan memakai proporsinya sendiri. */
+  .p4-rail--featured .p4-game-card-art {
+    height: auto;
+    aspect-ratio: 0.62;
+  }
+
+  .p4-activity-band {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.3rem;
+    margin: 1.15rem 0 1.4rem;
+  }
+
+  .p4-activity-card {
+    contain: none;
+    max-height: 20rem;
+    overflow: hidden;
+  }
+
+  .p4-footer-inner {
+    grid-template-columns: 1fr;
+    gap: 1.4rem;
+  }
+
+  .p4-footer-socials {
+    justify-content: flex-start;
+  }
+
+  .p4-footer-side {
+    justify-items: start;
+  }
+
+  .p4-footer-bottom {
+    text-align: left;
   }
 }
 
@@ -1781,47 +1857,70 @@ body.p4-public-body .portal-main-flush > .p4-lobby,
     font-size: clamp(2.3rem, 12vw, 4rem);
   }
 
-  .p4-top-feature-grid,
-  .p4-cta-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .p4-featured {
-    padding: 1rem 0 0.6rem;
-  }
-
-  .p4-featured::before {
-    top: 0;
-    right: 0;
-    bottom: auto;
-    left: 0;
-    width: auto;
-    height: 1px;
-    background: linear-gradient(
-      90deg,
-      transparent,
-      rgba(125, 116, 214, 0.16) 12%,
-      rgba(125, 116, 214, 0.3) 50%,
-      rgba(125, 116, 214, 0.16) 88%,
-      transparent
-    );
-  }
-
+  /* Top 5 menjadi slider hanya di mobile: tepat tiga kartu terlihat,
+     sisanya digeser (snap per kartu). Tablet tetap grid 5 kolom penuh. */
   .p4-top-five-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 0.8rem;
+    grid-template-columns: none;
+    grid-auto-flow: column;
+    grid-auto-columns: calc((100% - 1.1rem) / 3);
+    gap: 0.55rem;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 0.4rem 0.1rem 0.55rem;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
   }
 
-  .p4-game-card--ranked .p4-game-card-rank {
-    left: -0.55rem;
+  .p4-top-five-grid::-webkit-scrollbar {
+    display: none;
   }
 
-  .p4-activity-band {
-    grid-template-columns: minmax(0, 1fr);
+  .p4-top-five-grid .p4-game-card {
+    scroll-snap-align: start;
+  }
+
+  /* Poster rail sedikit lebih lebar di mobile agar judul terbaca. */
+  .p4-rail--featured {
+    grid-auto-columns: clamp(6.1rem, 27%, 8.2rem);
+  }
+
+  /* Ritme antar-section lebih longgar di layar kecil. */
+  .p4-trending {
+    gap: 1.25rem;
   }
 
   .p4-activity-card {
-    contain: none;
+    max-height: 19rem;
+    padding: 0.7rem 0.75rem;
+  }
+
+  .p4-activity-heading {
+    padding-bottom: 0.4rem;
+  }
+
+  .p4-activity-tabs {
+    margin: 0.45rem 0 0.25rem;
+  }
+
+  .p4-activity-tabs button {
+    min-height: 1.5rem;
+    padding-block: 0.18rem;
+  }
+
+  .p4-activity-row {
+    min-height: 1.55rem;
+    padding-block: 0.18rem;
+  }
+
+  .p4-activity-icon {
+    width: 1.15rem;
+    height: 1.15rem;
+  }
+
+  /* Layar sentuh men-scroll rail secara native — panah overlay hanya
+     menutupi sudut kartu, jadi disembunyikan. */
+  .p4-rail-arrow {
+    display: none;
   }
 
   .p4-provider-grid {
@@ -1831,16 +1930,12 @@ body.p4-public-body .portal-main-flush > .p4-lobby,
   .p4-provider-card,
   .p4-provider-card.is-featured {
     grid-column: span 1;
-  }
-
-  .p4-provider-card,
-  .p4-provider-card.is-featured {
     min-height: 5rem;
   }
 
   .p4-provider-games-grid,
   .p4-catalog-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
   .p4-catalog-heading {
@@ -1852,26 +1947,35 @@ body.p4-public-body .portal-main-flush > .p4-lobby,
     width: 100%;
   }
 
-  .p4-footer-inner {
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
-  }
-
   .p4-footer-links {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+}
 
-  .p4-footer-socials {
-    justify-content: flex-start;
+@media (max-width: 560px) {
+  /* Dialog detail: poster di atas, konten di bawah — berdampingan hanya
+     menyisakan kolom sempit yang tidak nyaman dibaca. */
+  .p4-game-dialog {
+    grid-template-columns: minmax(0, 1fr);
+    max-height: calc(100dvh - 2rem);
+    overflow-y: auto;
   }
 
-  .p4-footer-side {
-    justify-items: start;
+  .p4-game-dialog-art {
+    min-height: 0;
+    aspect-ratio: 1.55;
   }
 
-  .p4-footer-bottom {
-    margin-top: 1.4rem;
-    text-align: left;
+  .p4-game-dialog-content {
+    padding: 1.1rem 1.25rem 1.4rem;
+  }
+
+  .p4-game-dialog-content p {
+    font-size: 0.76rem;
+  }
+
+  .p4-dialog-actions .p4-button {
+    flex: 1 1 auto;
   }
 }
 
@@ -1903,7 +2007,7 @@ body.p4-public-body .portal-main-flush > .p4-lobby,
   }
 
   .p4-hero {
-    min-height: 18rem;
+    min-height: 16.5rem;
     border-radius: 0.55rem;
   }
 
@@ -1913,38 +2017,47 @@ body.p4-public-body .portal-main-flush > .p4-lobby,
   }
 
   .p4-button {
-    min-height: 2.15rem;
-    padding-inline: 0.75rem;
-    font-size: 0.68rem;
+    min-height: 2.5rem;
+    padding-inline: 0.85rem;
+    font-size: 0.72rem;
   }
 
-  .p4-section-heading--inline,
-  .p4-activity-heading {
+  /* Judul tetap di kiri dan "Lihat Semua" di kanan — satu baris, tidak bertumpuk. */
+  .p4-section-heading--inline {
     align-items: flex-end;
-    flex-direction: column;
-    gap: 0.35rem;
+    gap: 0.6rem;
   }
 
   .p4-activity-heading {
-    flex-direction: row;
     align-items: center;
+    gap: 0.5rem;
   }
 
   .p4-activity-heading span {
     font-size: 0.6rem;
   }
 
+  .p4-activity-card {
+    max-height: 18rem;
+  }
+
   .p4-activity-tabs button {
-    font-size: 0.55rem;
+    font-size: 0.58rem;
+  }
+
+  /* Empat kolom tidak muat terbaca di 375px — kolom Waktu disembunyikan,
+     tiga kolom tersisa diberi ruang dan ukuran huruf yang layak. */
+  .p4-activity-row > span:nth-child(3) {
+    display: none;
   }
 
   .p4-activity-row {
-    grid-template-columns: minmax(5.5rem, 1.3fr) minmax(3.6rem, 0.8fr) minmax(4.1rem, 0.8fr) auto;
-    font-size: 0.55rem;
+    grid-template-columns: minmax(0, 1.5fr) minmax(3.4rem, 0.8fr) auto;
+    font-size: 0.62rem;
   }
 
   .p4-activity-row strong {
-    font-size: 0.56rem;
+    font-size: 0.64rem;
   }
 
   .p4-action-card {
@@ -1959,22 +2072,6 @@ body.p4-public-body .portal-main-flush > .p4-lobby,
 
   .p4-provider-games-heading {
     white-space: normal;
-  }
-
-  .p4-game-dialog {
-    grid-template-columns: 7.5rem minmax(0, 1fr);
-  }
-
-  .p4-game-dialog-art {
-    min-height: 16rem;
-  }
-
-  .p4-game-dialog-content {
-    padding: 1rem;
-  }
-
-  .p4-game-dialog-content p {
-    font-size: 0.72rem;
   }
 }
 

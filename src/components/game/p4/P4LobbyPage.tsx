@@ -598,6 +598,8 @@ function P4TopFiveSection({
   vendorName: (id: string) => string;
   onSelect: (game: Game) => void;
 }) {
+  const { railRef, canScrollPrev, canScrollNext, scrollRail } = useP4HorizontalRail(games.length);
+
   return (
     <section className="p4-top-five" aria-labelledby="p4-top-five-title">
       <div className="p4-section-heading p4-top-five-heading">
@@ -609,17 +611,43 @@ function P4TopFiveSection({
           <p>Game yang paling sering dimainkan.</p>
         </div>
       </div>
-      <div className="p4-top-five-grid">
-        {games.map((game, index) => (
-          <P4GameCard
-            key={game.id}
-            game={game}
-            rank={index + 1}
-            variant="ranked"
-            vendorName={TOP_FIVE_VENDOR_OVERRIDES[game.id] ?? vendorName(game.vendor_id)}
-            onSelect={onSelect}
-          />
-        ))}
+      <div
+        className={`p4-rail-wrap${canScrollPrev ? " has-previous" : ""}${
+          canScrollNext ? " has-next" : ""
+        }`}
+      >
+        {canScrollPrev ? (
+          <button
+            type="button"
+            className="p4-rail-arrow p4-rail-prev"
+            aria-label="Lihat peringkat sebelumnya"
+            onClick={() => scrollRail("previous")}
+          >
+            <i className="fa-solid fa-chevron-left" aria-hidden="true" />
+          </button>
+        ) : null}
+        <div ref={railRef} className="p4-top-five-grid" tabIndex={0} aria-label="Top 5 minggu ini">
+          {games.map((game, index) => (
+            <P4GameCard
+              key={game.id}
+              game={game}
+              rank={index + 1}
+              variant="ranked"
+              vendorName={TOP_FIVE_VENDOR_OVERRIDES[game.id] ?? vendorName(game.vendor_id)}
+              onSelect={onSelect}
+            />
+          ))}
+        </div>
+        {canScrollNext ? (
+          <button
+            type="button"
+            className="p4-rail-arrow p4-rail-next"
+            aria-label="Lihat peringkat berikutnya"
+            onClick={() => scrollRail("next")}
+          >
+            <i className="fa-solid fa-chevron-right" aria-hidden="true" />
+          </button>
+        ) : null}
       </div>
     </section>
   );
