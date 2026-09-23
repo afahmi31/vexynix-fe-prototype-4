@@ -1629,43 +1629,15 @@ body.p4-public-body .portal-main-flush > .p4-lobby,
   text-transform: capitalize;
 }
 
-/* Design: footer ramping — satu baris konten, copyright di bawah socials,
-   wave perungu ~35px terlihat di atas footer gelap. */
+/* Design: footer ramping — satu baris konten, copyright di bawah socials. */
 .p4-footer {
   position: relative;
   flex-shrink: 0;
   margin-top: 0;
   padding: 1.6rem max(2.9rem, calc((100% - 1580px) / 2)) 1.1rem;
   overflow: hidden;
-  background: #262b5e;
+  background: linear-gradient(180deg, #303673 0%, #292e69 38%, #252852 100%);
   color: rgba(255, 255, 255, 0.78);
-}
-
-.p4-footer::before {
-  position: absolute;
-  top: -0.6rem;
-  right: 0;
-  left: 0;
-  height: 2.9rem;
-  background: #5d4fb0;
-  clip-path: polygon(
-    0 47%,
-    7% 57%,
-    14% 32%,
-    22% 58%,
-    30% 27%,
-    39% 54%,
-    48% 21%,
-    57% 57%,
-    66% 30%,
-    76% 62%,
-    85% 27%,
-    93% 54%,
-    100% 36%,
-    100% 100%,
-    0 100%
-  );
-  content: "";
 }
 
 .p4-footer-inner {
@@ -1832,6 +1804,10 @@ body.p4-public-body .portal-main-flush > .p4-lobby,
 }
 
 @media (max-width: 760px) {
+  .p4-header {
+    padding-top: max(0.4rem, env(safe-area-inset-top));
+  }
+
   .p4-header-inner,
   .p4-hero,
   .p4-primary-sections,
