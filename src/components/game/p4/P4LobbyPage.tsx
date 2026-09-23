@@ -14,6 +14,11 @@ import { P4GameCard } from "@/components/game/p4/P4GameCard";
 
 const HERO_BACKDROP = "/assets/prototype-4/hero/neon-racer-sunset.png";
 
+const CTA_ARTWORK = {
+  discover: "/assets/prototype-4/cta/discover-games.png",
+  random: "/assets/prototype-4/cta/random-game.png",
+} as const;
+
 const HERO_SLIDES = [
   {
     gameId: "neon-racer",
@@ -549,6 +554,16 @@ export default function P4LobbyPage() {
               />
             </section>
 
+            <P4CtaSection
+              onExplore={() => router.push("/lobby?category=all#p4-catalog")}
+              onRandomPick={() => {
+                if (!activeGames.length) return;
+                const randomIndex = Math.floor(Math.random() * activeGames.length);
+                const game = activeGames[randomIndex];
+                if (game) setDetailGame(game);
+              }}
+            />
+
             <P4ProviderSection
               providers={providerFeatures}
               selectedProvider={selectedProvider}
@@ -586,6 +601,44 @@ export default function P4LobbyPage() {
         />
       ) : null}
     </div>
+  );
+}
+
+function P4CtaSection({
+  onExplore,
+  onRandomPick,
+}: {
+  onExplore: () => void;
+  onRandomPick: () => void;
+}) {
+  return (
+    <section id="p4-cta" className="p4-cta-grid" aria-label="Pilihan permainan">
+      <article className="p4-action-card p4-action-card--discover">
+        <div className="p4-action-card-art" aria-hidden="true">
+          <Image src={CTA_ARTWORK.discover} alt="" fill sizes="(max-width: 900px) 100vw, 50vw" />
+        </div>
+        <div className="p4-action-card-copy">
+          <h2>Temukan game baru hari ini</h2>
+          <p>Jelajahi pilihan game yang dibuat untuk menemani waktumu.</p>
+          <button type="button" className="p4-button p4-button--secondary" onClick={onExplore}>
+            Jelajahi Game
+          </button>
+        </div>
+      </article>
+
+      <article className="p4-action-card p4-action-card--random">
+        <div className="p4-action-card-art" aria-hidden="true">
+          <Image src={CTA_ARTWORK.random} alt="" fill sizes="(max-width: 900px) 100vw, 50vw" />
+        </div>
+        <div className="p4-action-card-copy">
+          <h2>Putar Pilihan</h2>
+          <p>Belum tahu mau pilih yang mana? Kami pilihkan satu untukmu.</p>
+          <button type="button" className="p4-button p4-button--secondary" onClick={onRandomPick}>
+            Pilih Satu Game
+          </button>
+        </div>
+      </article>
+    </section>
   );
 }
 

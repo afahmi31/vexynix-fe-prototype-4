@@ -1121,25 +1121,60 @@ body.p4-public-body .portal-main-flush > .p4-lobby,
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: clamp(0.8rem, 1.5vw, 1.3rem);
-  margin: 0 0 1rem;
+  margin: 0 0 clamp(1rem, 1.6vw, 1.35rem);
 }
 
 .p4-action-card {
+  position: relative;
   display: flex;
   align-items: center;
-  gap: 1rem;
-  min-height: 8rem;
-  padding: clamp(1rem, 2vw, 1.5rem);
+  min-height: clamp(9.5rem, 12vw, 11.5rem);
+  padding: clamp(1rem, 1.8vw, 1.45rem);
   overflow: hidden;
-  border-radius: 0.75rem;
+  border: 1px solid rgba(147, 141, 226, 0.22);
+  border-radius: 0.85rem;
+  isolation: isolate;
 }
 
-.p4-action-card--rose {
-  background: linear-gradient(120deg, #ffdfe4 4%, #fff4f1 56%, #f9cedc);
+.p4-action-card-art {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
 }
 
-.p4-action-card--lilac {
-  background: linear-gradient(120deg, #eee6ff 4%, #faf3ff 56%, #d8d2ff);
+.p4-action-card-art img {
+  object-fit: cover;
+  object-position: center;
+}
+
+.p4-action-card-copy {
+  position: relative;
+  z-index: 2;
+  max-width: 62%;
+}
+
+.p4-action-card h2 {
+  color: #171a99;
+  font-size: clamp(1.05rem, 1.8vw, 1.55rem);
+  line-height: 1.05;
+}
+
+.p4-action-card p {
+  max-width: 26rem;
+  margin: 0.35rem 0 0;
+  color: #34368f;
+  font-size: clamp(0.68rem, 0.9vw, 0.82rem);
+  line-height: 1.35;
+}
+
+.p4-action-card .p4-button {
+  min-height: 2rem;
+  margin-top: 0.6rem;
+  padding-inline: 0.85rem;
+  border-color: #463a74;
+  background: #463a74;
+  color: #fff;
+  font-size: 0.68rem;
 }
 
 .p4-action-card-icon {
@@ -1147,10 +1182,6 @@ body.p4-public-body .portal-main-flush > .p4-lobby,
   color: #4a3c83;
   font-size: clamp(2.6rem, 5vw, 4.4rem);
   opacity: 0.86;
-}
-
-.p4-action-card p {
-  max-width: 26rem;
 }
 
 /* Design: section provider diberi area "cloudy" periwinkle lembut —
@@ -2061,9 +2092,13 @@ body.p4-public-body .portal-main-flush > .p4-lobby,
   }
 
   .p4-action-card {
-    min-height: 7.3rem;
+    min-height: 10.25rem;
     gap: 0.7rem;
     padding: 0.9rem;
+  }
+
+  .p4-action-card-copy {
+    max-width: 74%;
   }
 
   .p4-action-card-icon {

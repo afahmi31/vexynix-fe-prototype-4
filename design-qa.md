@@ -4,6 +4,7 @@
 
 - Target crop: `C:\Users\user\AppData\Local\Temp\codex-clipboard-eee7ae92-b384-451b-9a5f-cc4873785640.png`
 - Featured target crop: `C:\Users\user\AppData\Local\Temp\codex-clipboard-dfbe7d12-aaaf-4fd5-bf6c-496d4b4055bd.png`
+- CTA target crop: `C:\Users\user\AppData\Local\Temp\codex-clipboard-e32db656-aa71-44e8-98b8-e847253dffbe.png`
 - Baseline comparison: `C:\Users\user\AppData\Local\Temp\codex-clipboard-faf9a28d-91fc-41d1-8004-3d1ad730f037.png`
 - Page-context reference: `D:\xproject\oches\fe-prototype-4\design\design-prototype-3.png`
 - Target crop pixels: 919 x 344
@@ -32,7 +33,8 @@ section bounds and visual proportions rather than raw pixel dimensions.
 - Colors and visual tokens: each rank uses a separate pastel tile gradient, with
   a violet emphasis for rank one that remains within the existing theme.
 - Image quality and asset fidelity: existing local game artwork remains in use;
-  no placeholder, CSS drawing, or new generated asset was introduced.
+  the CTA backgrounds use two lightweight local generated illustrations rather
+  than placeholders or CSS drawings.
 - Copy and content: `Top 5 Minggu Ini`, `Game yang paling sering dimainkan.`,
   game names, provider labels, and the display-only `HACKSAW GAMING` label match
   the target treatment. The underlying mock catalog contract remains unchanged.
@@ -156,10 +158,21 @@ section bounds and visual proportions rather than raw pixel dimensions.
   provider cards, selected-provider title, and provider game grid so the section
   reads as separate visual layers without changing its existing theme.
 
+### Lobby CTA cards
+
+- Added two wide CTA cards directly before `Provider Pilihan`, matching the
+  supplied pastel composition: `Temukan game baru hari ini` and `Putar Pilihan`.
+- Added local artwork for the compass landscape and crowned fruit slot machine;
+  the copy and buttons remain HTML so they stay accessible and responsive.
+- Kept the cards stacked at the tablet breakpoint and preserved a readable
+  compact height on small mobile screens.
+
 ## Interaction and runtime checks
 
 - Top 5 card click opens the existing game detail surface.
 - The detail surface closes through `Tutup detail`.
+- `Jelajahi Game` navigates to the existing all-games catalog.
+- `Pilih Satu Game` opens the existing detail surface for one random active game.
 - The P4 header remains accessible at the viewport top while the lobby is
   scrolled; the shell clips horizontal overflow without creating a competing
   scroll context.
