@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import type { Game } from "@/types/api";
-import type { Prototype3GamePresentation } from "@/types/prototype-3";
+import type { P4GamePresentation } from "@/types/p4";
 
 const SLIDE_MS = 7000;
 
@@ -45,7 +45,7 @@ interface BillboardProps {
   vendorName: (id: string) => string;
   onLaunch: (id: string) => void;
   onInfo: (game: Game) => void;
-  presentationFor?: (game: Game) => Prototype3GamePresentation | undefined;
+  presentationFor?: (game: Game) => P4GamePresentation | undefined;
   launching: boolean;
   disabled: boolean;
 }

@@ -48,7 +48,7 @@
 ## Findings
 
 - No actionable P0, P1, or P2 findings remain.
-- P3 accepted polish: generated hero/CTA imagery is directionally matched to the mockup rather than pixel-identical to the source illustration. This is within the user's explicit permission to generate missing assets and keeps the layout/content contract intact.
+- Accepted polish: generated hero/CTA imagery is directionally matched to the mockup rather than pixel-identical to the source illustration. This is within the user's explicit permission to generate missing assets and keeps the layout/content contract intact.
 
 ## Implementation checklist
 
@@ -109,7 +109,7 @@ final result: passed
 
 ### Comparison and interaction checks
 
-- The legacy dark header, `Preview lokal P3` label, dark console row, and `Classic Cinema` template dock are no longer shown on the game-play route.
+- The legacy dark header, local preview label, dark console row, and `Classic Cinema` template dock are no longer shown on the game-play route.
 - The P4 header and footer are shared with the lobby, including the lavender canvas, indigo typography, pink mode badge, white glass surfaces, and purple primary action.
 - The game image remains the visual anchor; title and metadata stay readable over a left-to-bottom dark gradient.
 - `Putar Sekali` was clicked in the live browser and the displayed round count changed from `0` to `1`.
@@ -245,7 +245,7 @@ No actionable P0, P1, or P2 findings remain after the final pass.
 
 ### Comparison history
 
-1. Initial implementation review — P2: the provider component rendered the complete provider catalog instead of the six cards shown by the selected design, which added extra rows and exposed mock assets that were not part of the target. Fix: render `providerGames.slice(0, 6)` in `P4ProviderSection`. Post-fix desktop, tablet, and mobile captures show exactly six cards.
+1. Initial implementation review — fixed: the provider component rendered the complete provider catalog instead of the six cards shown by the selected design, which added extra rows and exposed mock assets that were not part of the target. Fix: render `providerGames.slice(0, 6)` in `P4ProviderSection`. Post-fix desktop, tablet, and mobile captures show exactly six cards.
 2. Final review — no P0/P1/P2 findings. The provider selector, selected state, game count, responsive columns, copy, imagery, and spacing were rechecked after the fix.
 
 ## Required fidelity surfaces
@@ -253,7 +253,7 @@ No actionable P0, P1, or P2 findings remain after the final pass.
 - Fonts and typography: heading hierarchy, italic provider label, compact selector labels, and game metadata remain readable at all three tested widths; no text collision or unexpected wrapping was observed in the provider section.
 - Spacing and layout rhythm: five selector cards are evenly distributed on desktop, collapse to three columns on tablet and two columns on mobile, and the game grid uses three columns on desktop/tablet and two columns on mobile. Final checks reported no horizontal overflow (`body.scrollWidth === innerWidth`).
 - Colors and visual tokens: the selected provider uses the warm coral outline, pale peach surface, orange mark, and active dot from the target direction; inactive cards retain the quiet lavender/white P4 palette.
-- Image quality and asset fidelity: the six displayed game cards use the existing P4/P3 mock game imagery and landscape crop; no new placeholder imagery or CSS image substitute was introduced.
+- Image quality and asset fidelity: the six displayed game cards use the existing P4 mock game imagery and landscape crop; no new placeholder imagery or CSS image substitute was introduced.
 - Copy and content: the target-facing copy remains `Provider Pilihan`, `Pilih provider favorit untuk melihat koleksi gamenya.`, provider names, and the existing `Lihat Semua` action.
 - Icons: existing Font Awesome provider marks are used consistently and remain visible at the tested breakpoints.
 - States and interactions: provider selector buttons are semantic buttons with `aria-pressed`; clicking Evolution changed the selected state, heading, and six displayed games to Evolution data. Existing game-card click behavior and the top `Lihat Semua` action remain available.
@@ -280,7 +280,7 @@ No actionable P0, P1, or P2 findings remain after the final pass.
 
 ## Follow-up Polish
 
-No P3 follow-up is required for this option build. Exact pixel-scale tuning can be revisited only if a final target export with the same page canvas and density is provided.
+No follow-up is required for this option build. Exact pixel-scale tuning can be revisited only if a final target export with the same page canvas and density is provided.
 
 final result: passed
 
@@ -296,7 +296,6 @@ The preceding P4 lobby QA record is retained below; the latest provider Option 3
 - Featured target crop: `C:\Users\user\AppData\Local\Temp\codex-clipboard-dfbe7d12-aaaf-4fd5-bf6c-496d4b4055bd.png`
 - CTA target crop: `C:\Users\user\AppData\Local\Temp\codex-clipboard-e32db656-aa71-44e8-98b8-e847253dffbe.png`
 - Baseline comparison: `C:\Users\user\AppData\Local\Temp\codex-clipboard-faf9a28d-91fc-41d1-8004-3d1ad730f037.png`
-- Page-context reference: `D:\xproject\oches\fe-prototype-4\design\design-prototype-3.png`
 - Target crop pixels: 919 x 344
 
 ## Implementation evidence
@@ -493,3 +492,23 @@ final result: passed
 The Provider Option 3 QA report at the top supersedes the retained prior lobby record.
 
 final result: passed
+
+---
+
+## P4 namespace cleanup
+
+- Migrated active lobby mock data, presentation types, and runtime asset paths
+  from legacy prototype naming into the P4 namespace.
+- Removed the unused Prototype 2 mock source and 25 orphaned image assets.
+- Verified tracked source and asset paths contain no Prototype 1, Prototype 2,
+  or Prototype 3 references.
+- Verified the local lobby, game-play route, catalog endpoint, and P4 image
+  assets return HTTP 200. Legacy Prototype 3 asset paths now return HTTP 404.
+- TypeScript, ESLint, scoped Prettier, and Vitest checks passed. Vitest:
+  23 files and 269 tests.
+
+The production build remains blocked by a pre-existing Windows `EPERM` while
+scanning the generated `.next\\standalone` directory. The source compilation
+step succeeds before that generated-output failure.
+
+final result: passed with generated build-cache limitation

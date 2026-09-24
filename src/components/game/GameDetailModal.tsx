@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import type { Game } from "@/types/api";
-import type { Prototype3GamePresentation } from "@/types/prototype-3";
+import type { P4GamePresentation } from "@/types/p4";
 
 function formatIDR(value: number): string {
   return new Intl.NumberFormat("id-ID", {
@@ -38,7 +38,7 @@ export function GameDetailModal({
 }: {
   game: Game;
   vendorName: string;
-  presentation?: Prototype3GamePresentation;
+  presentation?: P4GamePresentation;
   relatedGames: Game[];
   onClose: () => void;
   onLaunch: (id: string) => void;

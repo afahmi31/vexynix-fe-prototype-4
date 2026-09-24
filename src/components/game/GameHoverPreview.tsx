@@ -11,12 +11,12 @@ import {
 import { createPortal } from "react-dom";
 import Image from "next/image";
 import type { Game } from "@/types/api";
-import type { Prototype3GameBadge } from "@/types/prototype-3";
+import type { P4GameBadge } from "@/types/p4";
 
 interface GameHoverPreviewProps {
   game: Game;
   vendorName?: string;
-  badges?: Prototype3GameBadge[];
+  badges?: P4GameBadge[];
   anchor: HTMLElement;
   isOpen: boolean;
   demoFirst?: boolean;

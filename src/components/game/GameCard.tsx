@@ -1,7 +1,7 @@
 "use client";
 
 import type { Game } from "@/types/api";
-import type { Prototype3GameBadge } from "@/types/prototype-3";
+import type { P4GameBadge } from "@/types/p4";
 import Image from "next/image";
 import { useEffect, useRef } from "react";
 
@@ -15,7 +15,7 @@ interface GameCardProps {
    */
   onLaunchDemo?: (id: string) => void;
   onInfo?: (game: Game) => void;
-  badges?: Prototype3GameBadge[];
+  badges?: P4GameBadge[];
   top10Rank?: number;
   /**
    * Makes FREE PLAY the card's primary action — the whole tile and the round button open the

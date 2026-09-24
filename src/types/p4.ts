@@ -1,40 +1,40 @@
 import type { Game } from "@/types/api";
 
-export type Prototype3BadgeKind = "new" | "top10" | "popular" | "demo" | "editorial";
+export type P4BadgeKind = "new" | "top10" | "popular" | "demo" | "editorial";
 
-export type Prototype3BadgeTone = "accent" | "success" | "warning" | "neutral";
+export type P4BadgeTone = "accent" | "success" | "warning" | "neutral";
 
-export interface Prototype3GameBadge {
-  kind: Prototype3BadgeKind;
+export interface P4GameBadge {
+  kind: P4BadgeKind;
   label: string;
-  tone: Prototype3BadgeTone;
+  tone: P4BadgeTone;
   rank?: number;
   source: "catalog" | "mock-editorial";
 }
 
-export interface Prototype3GamePresentation {
+export interface P4GamePresentation {
   game_id: string;
   poster_url?: string;
   backdrop_url?: string;
   tagline?: string;
   synopsis?: string;
-  badges?: Prototype3GameBadge[];
+  badges?: P4GameBadge[];
   related_game_ids?: string[];
 }
 
-export type Prototype3ShelfType = "top10" | "demo" | "category" | "vendor" | "editorial";
+export type P4ShelfType = "top10" | "demo" | "category" | "vendor" | "editorial";
 
-export interface Prototype3Shelf {
+export interface P4Shelf {
   id: string;
   title: string;
   icon: string;
-  type: Prototype3ShelfType;
+  type: P4ShelfType;
   category?: string;
   vendor_id?: string;
   limit: number;
 }
 
-export interface Prototype3Promo {
+export interface P4Promo {
   id: string;
   eyebrow: string;
   title: string;
@@ -45,7 +45,7 @@ export interface Prototype3Promo {
   image_url?: string;
 }
 
-export interface Prototype3FeatureConfig {
+export interface P4FeatureConfig {
   id: "spinner" | "lucky-pick";
   title: string;
   description: string;
@@ -54,7 +54,7 @@ export interface Prototype3FeatureConfig {
   enabled: boolean;
 }
 
-export interface Prototype3Theme {
+export interface P4Theme {
   name: string;
   background: string;
   surface: string;
@@ -62,25 +62,25 @@ export interface Prototype3Theme {
   accent_soft: string;
 }
 
-export interface Prototype3LobbyConfig {
+export interface P4LobbyConfig {
   hero_game_ids: string[];
-  shelves: Prototype3Shelf[];
-  promos: Prototype3Promo[];
+  shelves: P4Shelf[];
+  promos: P4Promo[];
   features: {
-    spinner: Prototype3FeatureConfig;
-    lucky_pick: Prototype3FeatureConfig;
+    spinner: P4FeatureConfig;
+    lucky_pick: P4FeatureConfig;
   };
-  theme: Prototype3Theme;
+  theme: P4Theme;
 }
 
-export interface Prototype3MockData {
+export interface P4MockData {
   games: Game[];
-  presentations: Record<string, Prototype3GamePresentation>;
+  presentations: Record<string, P4GamePresentation>;
   vendors: Array<{
     id: string;
     name: string;
     status: string;
     enabled: boolean;
   }>;
-  lobby: Prototype3LobbyConfig;
+  lobby: P4LobbyConfig;
 }

@@ -2,8 +2,8 @@
 
 import { useEffect, useRef, useState } from "react";
 import type { Game } from "@/types/api";
-import type { Prototype3GamePresentation } from "@/types/prototype-3";
-import { MOCK_P3_TOP10_RANKS } from "@/mocks/prototype-3";
+import type { P4GamePresentation } from "@/types/p4";
+import { MOCK_P4_TOP10_RANKS } from "@/mocks/p4";
 import { GameCard } from "@/components/game/GameCard";
 import { GameHoverPreview } from "@/components/game/GameHoverPreview";
 
@@ -16,7 +16,7 @@ interface LobbyRailProps {
   onLaunch: (id: string) => void;
   onLaunchDemo: (id: string) => void;
   onInfo: (game: Game) => void;
-  presentationFor: (game: Game) => Prototype3GamePresentation | undefined;
+  presentationFor: (game: Game) => P4GamePresentation | undefined;
   demoFirst?: boolean;
   limit?: number;
   launching: string | null;
@@ -174,7 +174,7 @@ interface HoverPreviewLayerProps {
   onLaunch: (id: string) => void;
   onLaunchDemo: (id: string) => void;
   onInfo: (game: Game) => void;
-  presentationFor: (game: Game) => Prototype3GamePresentation | undefined;
+  presentationFor: (game: Game) => P4GamePresentation | undefined;
   demoFirst?: boolean;
   launching: string | null;
   disabled: boolean;
@@ -297,7 +297,7 @@ interface GameGridProps {
   onLaunch: (id: string) => void;
   onLaunchDemo: (id: string) => void;
   onInfo: (game: Game) => void;
-  presentationFor: (game: Game) => Prototype3GamePresentation | undefined;
+  presentationFor: (game: Game) => P4GamePresentation | undefined;
   launching: string | null;
   disabled: boolean;
 }
@@ -391,7 +391,7 @@ export function Top10Row({
       <div className="nf-row-body">
         <div className="top10-track" ref={scrollRef}>
           {games.slice(0, 10).map((game, index) => {
-            const rank = MOCK_P3_TOP10_RANKS[game.id] ?? index + 1;
+            const rank = MOCK_P4_TOP10_RANKS[game.id] ?? index + 1;
             const isDoubleDigitRank = rank >= 10;
 
             return (
@@ -466,18 +466,18 @@ export function TrendingGrid({
         <div className="nf-row-track" ref={scrollRef}>
           {games.slice(0, 10).map((game) => (
             <div key={game.id} className="nf-row-item">
-            <GameCard
-              game={game}
-              vendorName={vendorName(game.vendor_id)}
-              onLaunch={onLaunch}
-              onLaunchDemo={onLaunchDemo}
-              onInfo={onInfo}
-              badges={presentationFor(game)?.badges}
-              launching={launching === game.id}
-              disabled={launching !== null || disabled}
-              onHoverPreviewEnter={(anchor) => hoverPreview.openPreview(game, anchor)}
-              onHoverPreviewLeave={hoverPreview.closePreview}
-            />
+              <GameCard
+                game={game}
+                vendorName={vendorName(game.vendor_id)}
+                onLaunch={onLaunch}
+                onLaunchDemo={onLaunchDemo}
+                onInfo={onInfo}
+                badges={presentationFor(game)?.badges}
+                launching={launching === game.id}
+                disabled={launching !== null || disabled}
+                onHoverPreviewEnter={(anchor) => hoverPreview.openPreview(game, anchor)}
+                onHoverPreviewLeave={hoverPreview.closePreview}
+              />
             </div>
           ))}
         </div>

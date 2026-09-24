@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { MOCK_CATALOG } from "@/mocks/prototype-3";
+import { MOCK_CATALOG } from "@/mocks/p4";
 
 export async function POST(request: NextRequest) {
   let body: { game_id?: string; demo?: boolean };

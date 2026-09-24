@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import type { Game } from "@/types/api";
-import type { Prototype3FeatureConfig } from "@/types/prototype-3";
+import type { P4FeatureConfig } from "@/types/p4";
 
 export function LobbyFeatureRail({
   spinner,
@@ -10,8 +10,8 @@ export function LobbyFeatureRail({
   games,
   onInfo,
 }: {
-  spinner: Prototype3FeatureConfig;
-  luckyPick: Prototype3FeatureConfig;
+  spinner: P4FeatureConfig;
+  luckyPick: P4FeatureConfig;
   games: Game[];
   onInfo: (game: Game) => void;
 }) {

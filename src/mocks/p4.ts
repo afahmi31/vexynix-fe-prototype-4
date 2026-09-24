@@ -1,10 +1,5 @@
 import type { Game, Vendor } from "@/types/api";
-import type {
-  Prototype3GameBadge,
-  Prototype3GamePresentation,
-  Prototype3LobbyConfig,
-  Prototype3MockData,
-} from "@/types/prototype-3";
+import type { P4GameBadge, P4GamePresentation, P4LobbyConfig, P4MockData } from "@/types/p4";
 
 interface GameSeed {
   id: string;
@@ -85,7 +80,7 @@ const GAME_SEEDS: GameSeed[] = [
     game_code: "pgsoft/solar-riches",
     name: "Solar Riches",
     category: "slot",
-    image_url: "/assets/prototype-3/posters/solar-riches-poster.png",
+    image_url: "/assets/p4/posters/solar-riches-poster.png",
     rtp: 0.962,
     is_popular: true,
     is_featured: true,
@@ -99,7 +94,7 @@ const GAME_SEEDS: GameSeed[] = [
     game_code: "pragmaticplay/neon-racer",
     name: "Neon Racer",
     category: "arcade",
-    image_url: "/assets/prototype-3/posters/neon-racer-poster.png",
+    image_url: "/assets/p4/posters/neon-racer-poster.png",
     rtp: 0.965,
     is_popular: true,
     is_featured: true,
@@ -113,7 +108,7 @@ const GAME_SEEDS: GameSeed[] = [
     game_code: "evolution/velvet-roulette",
     name: "Velvet Roulette",
     category: "live",
-    image_url: "/assets/prototype-3/posters/velvet-roulette-poster.png",
+    image_url: "/assets/p4/posters/velvet-roulette-poster.png",
     rtp: 0.973,
     is_popular: true,
     is_featured: true,
@@ -126,7 +121,7 @@ const GAME_SEEDS: GameSeed[] = [
     game_code: "evolution/lightning-roulette",
     name: "Lightning Roulette",
     category: "live",
-    image_url: "/assets/prototype-3/posters/velvet-roulette-poster.png",
+    image_url: "/assets/p4/posters/velvet-roulette-poster.png",
     rtp: 0.973,
     is_featured: true,
     demo_supported: false,
@@ -138,7 +133,7 @@ const GAME_SEEDS: GameSeed[] = [
     game_code: "naga/deep-sea-odyssey",
     name: "Deep Sea Odyssey",
     category: "fish",
-    image_url: "/assets/prototype-3/posters/deep-sea-odyssey-poster.png",
+    image_url: "/assets/p4/posters/deep-sea-odyssey-poster.png",
     rtp: 0.961,
     is_popular: true,
     is_featured: true,
@@ -1129,7 +1124,7 @@ export const MOCK_VENDORS: Vendor[] = Object.entries(VENDOR_NAMES).map(([id, nam
   enabled: true,
 }));
 
-export const MOCK_P3_TOP10_RANKS: Record<string, number> = {
+export const MOCK_P4_TOP10_RANKS: Record<string, number> = {
   "solar-riches": 1,
   "neon-racer": 2,
   "deep-sea-odyssey": 3,
@@ -1142,28 +1137,28 @@ export const MOCK_P3_TOP10_RANKS: Record<string, number> = {
   "velvet-roulette": 10,
 };
 
-const HERO_ART: Record<string, Pick<Prototype3GamePresentation, "backdrop_url" | "tagline">> = {
+const HERO_ART: Record<string, Pick<P4GamePresentation, "backdrop_url" | "tagline">> = {
   "solar-riches": {
-    backdrop_url: "/assets/prototype-3/heroes/solar-riches-backdrop.png",
+    backdrop_url: "/assets/p4/heroes/solar-riches-backdrop.png",
     tagline: "Temukan cahaya keberuntungan di balik kuil emas.",
   },
   "neon-racer": {
-    backdrop_url: "/assets/prototype-3/heroes/neon-racer-backdrop.png",
+    backdrop_url: "/assets/p4/heroes/neon-racer-backdrop.png",
     tagline: "Kejar ritme kota dan taklukkan setiap tikungan.",
   },
   "velvet-roulette": {
-    backdrop_url: "/assets/prototype-3/heroes/velvet-roulette-backdrop.png",
+    backdrop_url: "/assets/p4/heroes/velvet-roulette-backdrop.png",
     tagline: "Nikmati suasana meja malam yang elegan.",
   },
   "deep-sea-odyssey": {
-    backdrop_url: "/assets/prototype-3/heroes/deep-sea-odyssey-backdrop.png",
+    backdrop_url: "/assets/p4/heroes/deep-sea-odyssey-backdrop.png",
     tagline: "Mulai petualanganmu di kedalaman yang penuh warna.",
   },
 };
 
-function badgeList(game: Game): Prototype3GameBadge[] {
-  const badges: Prototype3GameBadge[] = [];
-  const rank = MOCK_P3_TOP10_RANKS[game.id];
+function badgeList(game: Game): P4GameBadge[] {
+  const badges: P4GameBadge[] = [];
+  const rank = MOCK_P4_TOP10_RANKS[game.id];
 
   if (rank) {
     badges.push({
@@ -1210,26 +1205,27 @@ function badgeList(game: Game): Prototype3GameBadge[] {
   return badges;
 }
 
-export const MOCK_P3_PRESENTATIONS: Record<string, Prototype3GamePresentation> =
-  MOCK_CATALOG.reduce<Record<string, Prototype3GamePresentation>>((presentations, game) => {
-    const heroArt = HERO_ART[game.id];
-    presentations[game.id] = {
-      game_id: game.id,
-      poster_url: game.image_url,
-      tagline: heroArt?.tagline,
-      synopsis: game.description,
-      badges: badgeList(game),
-      related_game_ids: MOCK_CATALOG.filter(
-        (candidate) => candidate.id !== game.id && candidate.category === game.category
-      )
-        .slice(0, 6)
-        .map((candidate) => candidate.id),
-      ...(heroArt?.backdrop_url ? { backdrop_url: heroArt.backdrop_url } : {}),
-    };
-    return presentations;
-  }, {});
+export const MOCK_P4_PRESENTATIONS: Record<string, P4GamePresentation> = MOCK_CATALOG.reduce<
+  Record<string, P4GamePresentation>
+>((presentations, game) => {
+  const heroArt = HERO_ART[game.id];
+  presentations[game.id] = {
+    game_id: game.id,
+    poster_url: game.image_url,
+    tagline: heroArt?.tagline,
+    synopsis: game.description,
+    badges: badgeList(game),
+    related_game_ids: MOCK_CATALOG.filter(
+      (candidate) => candidate.id !== game.id && candidate.category === game.category
+    )
+      .slice(0, 6)
+      .map((candidate) => candidate.id),
+    ...(heroArt?.backdrop_url ? { backdrop_url: heroArt.backdrop_url } : {}),
+  };
+  return presentations;
+}, {});
 
-export const MOCK_P3_LOBBY: Prototype3LobbyConfig = {
+export const MOCK_P4_LOBBY: P4LobbyConfig = {
   hero_game_ids: ["solar-riches", "neon-racer", "velvet-roulette", "deep-sea-odyssey"],
   shelves: [
     {
@@ -1313,7 +1309,7 @@ export const MOCK_P3_LOBBY: Prototype3LobbyConfig = {
       cta_label: "Daftar Sekarang",
       cta_action: "register",
       tone: "rose",
-      image_url: "/assets/prototype-3/cta/promo-vault.png",
+      image_url: "/assets/p4/cta/promo-vault.png",
     },
     {
       id: "weekly-cashback",
@@ -1324,7 +1320,7 @@ export const MOCK_P3_LOBBY: Prototype3LobbyConfig = {
       cta_label: "Isi Saldo & Main",
       cta_action: "deposit",
       tone: "cyan",
-      image_url: "/assets/prototype-3/cta/promo-vault.png",
+      image_url: "/assets/p4/cta/promo-vault.png",
     },
   ],
   features: {
@@ -1333,7 +1329,7 @@ export const MOCK_P3_LOBBY: Prototype3LobbyConfig = {
       title: "Putar Keberuntungan",
       description: "Putar sekali untuk menemukan pilihan game demo yang cocok untukmu.",
       action_label: "Putar & Pilihkan",
-      image_url: "/assets/prototype-3/cta/lucky-pick-wheel.png",
+      image_url: "/assets/p4/cta/lucky-pick-wheel.png",
       enabled: true,
     },
     lucky_pick: {
@@ -1341,7 +1337,7 @@ export const MOCK_P3_LOBBY: Prototype3LobbyConfig = {
       title: "Lucky Pick",
       description: "Belum tahu mau pilih game yang mana? Kami pilihkan satu untukmu.",
       action_label: "Pilihkan Satu Game",
-      image_url: "/assets/prototype-3/cta/lucky-pick-wheel.png",
+      image_url: "/assets/p4/cta/lucky-pick-wheel.png",
       enabled: true,
     },
   },
@@ -1354,9 +1350,9 @@ export const MOCK_P3_LOBBY: Prototype3LobbyConfig = {
   },
 };
 
-export const MOCK_P3_DATA: Prototype3MockData = {
+export const MOCK_P4_DATA: P4MockData = {
   games: MOCK_CATALOG,
-  presentations: MOCK_P3_PRESENTATIONS,
+  presentations: MOCK_P4_PRESENTATIONS,
   vendors: MOCK_VENDORS,
-  lobby: MOCK_P3_LOBBY,
+  lobby: MOCK_P4_LOBBY,
 };

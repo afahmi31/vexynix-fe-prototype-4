@@ -7,7 +7,7 @@ import { useCatalog, useVendors } from "@/hooks/useCatalog";
 import { useLaunchGame } from "@/hooks/useLaunchGame";
 import { useActionDisabled } from "@/hooks/useTransactionLock";
 import { useAuthModalStore } from "@/stores/auth-modal";
-import { MOCK_CATALOG, MOCK_VENDORS } from "@/mocks/prototype-3";
+import { MOCK_CATALOG, MOCK_VENDORS } from "@/mocks/p4";
 import type { Game, Vendor } from "@/types/api";
 import { NEXT_PARAM, safeNextPath } from "@/lib/auth-redirect";
 import { P4GameCard } from "@/components/game/p4/P4GameCard";
@@ -33,21 +33,21 @@ const HERO_SLIDES = [
   {
     gameId: "solar-riches",
     title: "Solar Riches",
-    backdrop: "/assets/prototype-3/heroes/solar-riches-backdrop.png",
+    backdrop: "/assets/p4/heroes/solar-riches-backdrop.png",
     meta: "Slot  ·  PG Soft  ·  Gratis Demo",
     description: "Temukan kuil emas dan nikmati putaran bertema matahari.",
   },
   {
     gameId: "velvet-roulette",
     title: "Velvet Roulette",
-    backdrop: "/assets/prototype-3/heroes/velvet-roulette-backdrop.png",
+    backdrop: "/assets/p4/heroes/velvet-roulette-backdrop.png",
     meta: "Live Casino  ·  Evolution  ·  Live Play",
     description: "Nikmati suasana meja malam yang elegan.",
   },
   {
     gameId: "deep-sea-odyssey",
     title: "Deep Sea Odyssey",
-    backdrop: "/assets/prototype-3/heroes/deep-sea-odyssey-backdrop.png",
+    backdrop: "/assets/p4/heroes/deep-sea-odyssey-backdrop.png",
     meta: "Tembak Ikan  ·  Naga Games  ·  Gratis Demo",
     description: "Mulai petualangan di kedalaman yang penuh warna.",
   },

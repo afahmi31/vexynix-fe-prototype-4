@@ -3,14 +3,14 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useParams, useSearchParams } from "next/navigation";
-import { MOCK_CATALOG, MOCK_P3_PRESENTATIONS, MOCK_VENDORS } from "@/mocks/prototype-3";
+import { MOCK_CATALOG, MOCK_P4_PRESENTATIONS, MOCK_VENDORS } from "@/mocks/p4";
 
 export default function MockGamePage() {
   const params = useParams<{ id: string }>();
   const searchParams = useSearchParams();
   const [rounds, setRounds] = useState(0);
   const game = MOCK_CATALOG.find((item) => item.id === params.id);
-  const presentation = game ? MOCK_P3_PRESENTATIONS[game.id] : undefined;
+  const presentation = game ? MOCK_P4_PRESENTATIONS[game.id] : undefined;
   const vendor = game
     ? (MOCK_VENDORS.find((item) => item.id === game.vendor_id)?.name ?? game.vendor_id)
     : "";

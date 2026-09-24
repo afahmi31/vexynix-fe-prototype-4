@@ -3,21 +3,9 @@
  * TS/JS identifiers remain camelCase; only transport types mirror the wire.
  */
 
-export type Role =
-  | "player"
-  | "merchant_admin"
-  | "staff"
-  | "owner"
-  | "finance"
-  | "auditor"
-  | string;
+export type Role = "player" | "merchant_admin" | "staff" | "owner" | "finance" | "auditor" | string;
 
-export type AccountStatus =
-  | "pending"
-  | "active"
-  | "suspended"
-  | "closed"
-  | string;
+export type AccountStatus = "pending" | "active" | "suspended" | "closed" | string;
 
 export interface RegisterReq {
   username: string;
@@ -181,15 +169,9 @@ export interface DepositStatusRes extends DepositRes {
   manual_ticket?: ManualTicket;
 }
 
-export type DepositStatus =
-  | "PENDING"
-  | "SUBMITTED"
-  | "PAID"
-  | "FAILED"
-  | "EXPIRED"
-  | "CANCELLED";
+export type DepositStatus = "PENDING" | "SUBMITTED" | "PAID" | "FAILED" | "EXPIRED" | "CANCELLED";
 
-// --- P3: Games catalog & launch ---
+// --- P4: Games catalog & launch ---
 // Verified live (2026-08-09): GET /api/games/catalog →
 // {games:[{id,vendor_id,game_code,name,category,min_bet,max_bet,status}]}
 
@@ -534,12 +516,7 @@ export interface AddDestinationRes {
   usable_after: string;
 }
 
-export type WithdrawalStatus =
-  | "PENDING_APPROVAL"
-  | "AML_HOLD"
-  | "PAYING"
-  | "PAID"
-  | "REFUNDED";
+export type WithdrawalStatus = "PENDING_APPROVAL" | "AML_HOLD" | "PAYING" | "PAID" | "REFUNDED";
 
 export interface CreateWithdrawalReq {
   user_id: number;
