@@ -15,9 +15,9 @@ export default function P4Footer() {
         <div className="p4-footer-links">
           <div>
             <h2>Permainan</h2>
-            <Link href="/lobby?category=all#p4-catalog">Semua Game</Link>
-            <Link href="/lobby?category=slot#p4-catalog">Slot</Link>
-            <Link href="/lobby?category=live#p4-catalog">Live Casino</Link>
+            <Link href="/lobby?category=all">Semua Game</Link>
+            <Link href="/lobby?category=slot">Slot</Link>
+            <Link href="/lobby?category=live">Live Casino</Link>
             <Link href="/lobby#p4-providers">Provider</Link>
           </div>
           <div>

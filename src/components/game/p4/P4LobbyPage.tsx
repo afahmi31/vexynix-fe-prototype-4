@@ -1157,11 +1157,11 @@ function P4CatalogView({
         </div>
         <label className="p4-catalog-search">
           <i className="fa-solid fa-magnifying-glass" aria-hidden="true" />
-          <span className="visually-hidden">Cari game</span>
           <input
             value={search}
             onChange={(event) => onSearch(event.target.value)}
             placeholder="Cari game..."
+            aria-label="Cari game"
             type="search"
           />
         </label>
