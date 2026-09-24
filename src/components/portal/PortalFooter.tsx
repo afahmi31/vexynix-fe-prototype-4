@@ -10,7 +10,7 @@ export default function PortalFooter() {
   const pathname = usePathname();
   const brandLabel = brand.label || "VEXYNIX";
 
-  if (pathname === "/lobby") return <P4Footer />;
+  if (pathname === "/lobby" || pathname.startsWith("/mock-game/")) return <P4Footer />;
 
   return (
     <footer className="portal-footer">

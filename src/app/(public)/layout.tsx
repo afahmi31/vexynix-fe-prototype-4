@@ -20,10 +20,11 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
 
   // Auth screens are full-bleed — they skip the 1400px centered shell so their
   // background covers the whole viewport instead of leaving gutters. The lobby
-  // is full-bleed too so the Netflix billboard can run edge to edge.
+  // and P4 game-play surface are full-bleed too so their themed canvas can run
+  // edge to edge.
   const isAuthRoute = pathname === "/login" || pathname === "/register";
-  const isP4Lobby = pathname === "/lobby";
-  const isFlushRoute = isAuthRoute || pathname === "/lobby";
+  const isP4Surface = pathname === "/lobby" || pathname.startsWith("/mock-game/");
+  const isFlushRoute = isAuthRoute || isP4Surface;
 
   useEffect(() => {
     hydrate();
@@ -48,7 +49,7 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
   }, [clear, openLogin, pathname, isAuthRoute]);
 
   return (
-    <div className={`portal${isP4Lobby ? " p4-public-shell" : ""}`}>
+    <div className={`portal${isP4Surface ? " p4-public-shell" : ""}`}>
       <PortalHeader />
       <main className={isFlushRoute ? "portal-main portal-main-flush" : "portal-main"}>
         {children}

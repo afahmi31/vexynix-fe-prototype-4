@@ -40,7 +40,9 @@ export default function TemplateSwitcher() {
   const brandTemplate = useBrandStore((s) => s.brand.theme?.template);
   const previewEnabled = usePortalTemplateStore((s) => s.previewEnabled);
 
-  if (pathname === "/lobby" || (!IS_DEV && !previewEnabled)) return null;
+  if (pathname === "/lobby" || pathname.startsWith("/mock-game/") || (!IS_DEV && !previewEnabled)) {
+    return null;
+  }
 
   // Same resolution ThemeApplier uses, so the dock always names what is on screen.
   const activeTemplate = resolveTemplateKey(templateOverride ?? brandTemplate);
@@ -57,10 +59,7 @@ export default function TemplateSwitcher() {
               className={`tpl-dock-option ${activeTemplate === key ? "active" : ""}`}
               onClick={() => setTemplateOverride(key)}
             >
-              <span
-                className="tpl-dock-swatch"
-                style={{ background: TEMPLATE_SWATCH[key] }}
-              />
+              <span className="tpl-dock-swatch" style={{ background: TEMPLATE_SWATCH[key] }} />
               <span>
                 <span className="tpl-dock-label">{tpl.label}</span>
                 <span className="tpl-dock-tagline d-block">{tpl.tagline}</span>

@@ -32,9 +32,10 @@ export default function PortalHeader() {
 
   const isLoggedIn = !!token;
 
-  // The lobby keeps a compact solid header above the floating hero.
+  // The public lobby and game-play pages share the P4 discovery header.
+  const isP4Surface = pathname === "/lobby" || pathname.startsWith("/mock-game/");
   const isLobby = pathname === "/lobby";
-  const showNav = isLoggedIn && !isLobby;
+  const showNav = isLoggedIn && !isP4Surface;
   const isVexynix = brand.label.trim().toUpperCase() === "VEXYNIX";
   const [scrolled, setScrolled] = useState(false);
 
@@ -49,7 +50,7 @@ export default function PortalHeader() {
     return () => window.removeEventListener("scroll", onScroll);
   }, [isLobby]);
 
-  if (isLobby) {
+  if (isP4Surface) {
     return (
       <Suspense fallback={null}>
         <P4Header />

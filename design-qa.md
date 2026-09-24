@@ -93,6 +93,55 @@ final result: passed
 
 final result: passed
 
+## Post-comment revision — P4 game-play redesign
+
+### Source visual truth
+
+- User request: redesign `http://localhost:3004/mock-game/mahjong-ways-2?mode=demo` so the game-play page follows the current Prototype 4 public theme instead of the legacy dark game screen.
+- Existing Mahjong Ways 2 artwork was reused from the project catalog; no new raster asset was required.
+
+### Rendered implementation evidence
+
+- Local route: `http://localhost:3004/mock-game/mahjong-ways-2?mode=demo`
+- Desktop CSS viewport: `1440 x 900`; the hero uses a wide artwork panel beside the play panel within a centered `1180px` content frame.
+- Tablet CSS viewport: `820 x 1180`; the hero collapses to a single column and the three supporting information cards remain in one row.
+- Mobile CSS viewport: `412 x 915`; the hero and play panel stack, supporting cards stack vertically, and `document.documentElement.scrollWidth` matches the viewport width.
+
+### Comparison and interaction checks
+
+- The legacy dark header, `Preview lokal P3` label, dark console row, and `Classic Cinema` template dock are no longer shown on the game-play route.
+- The P4 header and footer are shared with the lobby, including the lavender canvas, indigo typography, pink mode badge, white glass surfaces, and purple primary action.
+- The game image remains the visual anchor; title and metadata stay readable over a left-to-bottom dark gradient.
+- `Putar Sekali` was clicked in the live browser and the displayed round count changed from `0` to `1`.
+- `Kembali ke Lobby` and `Jelajahi game lainnya` remain available as real links.
+
+### Verification
+
+- TypeScript: `node_modules/.bin/tsc.cmd --noEmit` passed.
+- Prettier: passed for the changed TSX and SCSS files.
+- Browser QA: desktop, tablet, and mobile layout measurements completed; no horizontal overflow observed.
+- ESLint: blocked by the existing environment because `eslint-plugin-react-hooks` is missing from `node_modules`; no code lint result is claimed.
+
+### Final result
+
+passed
+
+## Post-comment revision — game-play mobile/tablet control spacing
+
+- Added an explicit `1rem` gap between the balance/round stat cards and the `Putar Sekali` button below the `900px` breakpoint.
+- Browser verification at `412 x 915` and `820 x 1180` measured a `16px` gap in both layouts with no horizontal overflow.
+
+final result: passed
+
+## Post-comment revision — catalog filter typography and panel width
+
+- Widened the desktop catalog filter column to `248px` so the sidebar no longer reads as a narrow strip beside the five-column game grid.
+- Increased the filter heading, group labels, category pills, provider/sort options, counts, and reset action to the same readable scale used by the P4 navigation and footer.
+- Browser verification at `1920px`: filter panel width measured `248px`; heading `17.28px`, group label `12.8px`, provider option `12.16px`, and category pill `11.52px`.
+- Browser verification at `412px`: the filter remains a centered modal with a `567px` sheet height and no horizontal overflow.
+
+final result: passed
+
 ---
 
 ## Historical QA records
