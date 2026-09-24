@@ -173,6 +173,7 @@ const ACTIVITY_SETS = {
 type ActivityTab = keyof typeof ACTIVITY_SETS;
 
 const PROVIDER_GAME_LIMIT = 18;
+const CATALOG_PAGE_SIZE = 25;
 
 function activeGamesFrom(data: { games?: Game[] } | undefined): Game[] {
   const source = data?.games?.length ? data.games : MOCK_CATALOG;
@@ -260,6 +261,7 @@ export default function P4LobbyPage() {
   const [selectedProvider, setSelectedProvider] = useState("pragmaticplay");
   const [activityTab, setActivityTab] = useState<ActivityTab>("latest");
   const [catalogSearch, setCatalogSearch] = useState("");
+  const [catalogPage, setCatalogPage] = useState(1);
   const [heroSlideIndex, setHeroSlideIndex] = useState(0);
   const topFeatureGridRef = useRef<HTMLElement>(null);
 
@@ -447,9 +449,35 @@ export default function P4LobbyPage() {
       .filter((game) => category === "all" || game.category.toLowerCase().includes(category))
       .filter((game) => !query || game.name.toLowerCase().includes(query));
   }, [activeGames, catalogSearch, category]);
+  const catalogPageCount = Math.max(1, Math.ceil(filteredCatalog.length / CATALOG_PAGE_SIZE));
+  const visibleCatalogPage = Math.min(catalogPage, catalogPageCount);
+  const paginatedCatalog = useMemo(
+    () =>
+      filteredCatalog.slice(
+        (visibleCatalogPage - 1) * CATALOG_PAGE_SIZE,
+        visibleCatalogPage * CATALOG_PAGE_SIZE
+      ),
+    [filteredCatalog, visibleCatalogPage]
+  );
+
+  useEffect(() => {
+    setCatalogPage(1);
+  }, [category, catalogSearch]);
+
+  useEffect(() => {
+    setCatalogPage((currentPage) => Math.min(currentPage, catalogPageCount));
+  }, [catalogPageCount]);
 
   const scrollTo = (id: string) => {
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
+  const handleCatalogPageChange = (nextPage: number) => {
+    const page = Math.max(1, Math.min(nextPage, catalogPageCount));
+    setCatalogPage(page);
+    window.requestAnimationFrame(() => {
+      document.getElementById("p4-catalog")?.scrollIntoView({ behavior: "auto", block: "start" });
+    });
   };
 
   const handleLeaderboardCta = () => {
@@ -468,10 +496,14 @@ export default function P4LobbyPage() {
       {isCatalogView ? (
         <P4CatalogView
           categoryLabel={categoryLabel}
-          games={filteredCatalog}
+          games={paginatedCatalog}
+          totalGameCount={filteredCatalog.length}
+          page={visibleCatalogPage}
+          pageCount={catalogPageCount}
           search={catalogSearch}
           vendorName={vendorName}
           onSearch={setCatalogSearch}
+          onPageChange={handleCatalogPageChange}
           onSelect={setDetailGame}
         />
       ) : (
@@ -1096,16 +1128,24 @@ function P4ProviderSection({
 function P4CatalogView({
   categoryLabel,
   games,
+  totalGameCount,
+  page,
+  pageCount,
   search,
   vendorName,
   onSearch,
+  onPageChange,
   onSelect,
 }: {
   categoryLabel: string;
   games: Game[];
+  totalGameCount: number;
+  page: number;
+  pageCount: number;
   search: string;
   vendorName: (id: string) => string;
   onSearch: (value: string) => void;
+  onPageChange: (page: number) => void;
   onSelect: (game: Game) => void;
 }) {
   return (
@@ -1113,7 +1153,7 @@ function P4CatalogView({
       <div className="p4-catalog-heading">
         <div>
           <h1 id="p4-catalog-title">{categoryLabel}</h1>
-          <p>{games.length} game tersedia untuk kamu.</p>
+          <p>{totalGameCount} game tersedia untuk kamu.</p>
         </div>
         <label className="p4-catalog-search">
           <i className="fa-solid fa-magnifying-glass" aria-hidden="true" />
@@ -1127,21 +1167,79 @@ function P4CatalogView({
         </label>
       </div>
       {games.length ? (
-        <div className="p4-catalog-grid">
-          {games.map((game) => (
-            <P4GameCard
-              key={game.id}
-              game={game}
-              variant="landscape"
-              vendorName={vendorName(game.vendor_id)}
-              onSelect={onSelect}
-            />
-          ))}
-        </div>
+        <>
+          <div className="p4-catalog-grid">
+            {games.map((game) => (
+              <P4GameCard
+                key={game.id}
+                game={game}
+                variant="landscape"
+                vendorName={vendorName(game.vendor_id)}
+                onSelect={onSelect}
+              />
+            ))}
+          </div>
+          <P4CatalogPagination page={page} pageCount={pageCount} onPageChange={onPageChange} />
+        </>
       ) : (
         <div className="p4-empty-state">Belum ada game yang sesuai dengan pencarianmu.</div>
       )}
     </section>
+  );
+}
+
+function P4CatalogPagination({
+  page,
+  pageCount,
+  onPageChange,
+}: {
+  page: number;
+  pageCount: number;
+  onPageChange: (page: number) => void;
+}) {
+  if (pageCount <= 1) return null;
+
+  return (
+    <nav className="p4-pagination" aria-label="Navigasi halaman game">
+      <button
+        type="button"
+        className="p4-pagination-button p4-pagination-button--arrow"
+        aria-label="Halaman sebelumnya"
+        disabled={page === 1}
+        onClick={() => onPageChange(page - 1)}
+      >
+        <i className="fa-solid fa-chevron-left" aria-hidden="true" />
+      </button>
+      <div className="p4-pagination-pages">
+        {Array.from({ length: pageCount }, (_, index) => {
+          const pageNumber = index + 1;
+          return (
+            <button
+              type="button"
+              key={pageNumber}
+              className={`p4-pagination-button${pageNumber === page ? " is-active" : ""}`}
+              aria-label={`Buka halaman ${pageNumber}`}
+              aria-current={pageNumber === page ? "page" : undefined}
+              onClick={() => onPageChange(pageNumber)}
+            >
+              {pageNumber}
+            </button>
+          );
+        })}
+      </div>
+      <button
+        type="button"
+        className="p4-pagination-button p4-pagination-button--arrow"
+        aria-label="Halaman berikutnya"
+        disabled={page === pageCount}
+        onClick={() => onPageChange(page + 1)}
+      >
+        <i className="fa-solid fa-chevron-right" aria-hidden="true" />
+      </button>
+      <span className="p4-pagination-summary" aria-live="polite">
+        Halaman {page} dari {pageCount}
+      </span>
+    </nav>
   );
 }
 

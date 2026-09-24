@@ -1581,6 +1581,72 @@ body.p4-public-body .portal-main-flush > .p4-lobby,
   row-gap: 1rem;
 }
 
+.p4-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  margin-top: clamp(1.25rem, 2vw, 1.8rem);
+}
+
+.p4-pagination-pages {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.p4-pagination-button {
+  display: inline-grid;
+  min-width: 2.25rem;
+  height: 2.25rem;
+  padding: 0 0.55rem;
+  place-items: center;
+  border: 1px solid rgba(62, 69, 171, 0.18);
+  border-radius: 0.55rem;
+  background: rgba(255, 255, 255, 0.76);
+  color: #3139b8;
+  font-size: 0.72rem;
+  font-weight: 800;
+  line-height: 1;
+  cursor: pointer;
+  transition:
+    background-color 0.18s ease,
+    border-color 0.18s ease,
+    color 0.18s ease,
+    transform 0.18s ease;
+}
+
+.p4-pagination-button:hover,
+.p4-pagination-button:focus-visible {
+  border-color: rgba(49, 57, 184, 0.42);
+  background: #fff;
+  transform: translateY(-1px);
+}
+
+.p4-pagination-button.is-active {
+  border-color: #3139b8;
+  background: #3139b8;
+  color: #fff;
+  box-shadow: 0 0.3rem 0.75rem rgba(49, 57, 184, 0.18);
+}
+
+.p4-pagination-button:disabled,
+.p4-pagination-button:disabled:hover {
+  border-color: rgba(62, 69, 171, 0.1);
+  background: rgba(255, 255, 255, 0.4);
+  color: rgba(63, 72, 160, 0.42);
+  cursor: not-allowed;
+  transform: none;
+}
+
+.p4-pagination-summary {
+  margin-left: 0.35rem;
+  color: #4d55a8;
+  font-size: 0.7rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
 .p4-empty-state {
   padding: 4rem 1rem;
   border: 1px dashed rgba(42, 49, 152, 0.22);
@@ -2257,6 +2323,18 @@ body.p4-public-body .portal-main-flush > .p4-lobby,
 }
 
 @media (max-width: 560px) {
+  .p4-pagination {
+    flex-wrap: wrap;
+    row-gap: 0.6rem;
+  }
+
+  .p4-pagination-summary {
+    width: 100%;
+    margin-left: 0;
+    order: 3;
+    text-align: center;
+  }
+
   /* Dialog detail: poster di atas, konten di bawah — berdampingan hanya
      menyisakan kolom sempit yang tidak nyaman dibaca. */
   .p4-game-dialog {
@@ -2284,6 +2362,21 @@ body.p4-public-body .portal-main-flush > .p4-lobby,
 }
 
 @media (max-width: 460px) {
+  .p4-pagination {
+    gap: 0.25rem;
+  }
+
+  .p4-pagination-pages {
+    gap: 0.2rem;
+  }
+
+  .p4-pagination-button {
+    min-width: 1.95rem;
+    height: 2rem;
+    padding-inline: 0.3rem;
+    font-size: 0.68rem;
+  }
+
   .p4-header-inner,
   .p4-hero,
   .p4-primary-sections,
@@ -2573,5 +2666,18 @@ body.p4-public-body .portal-main-flush > .p4-lobby,
 
   .p4-provider-copy strong {
     font-size: 0.66rem;
+  }
+}
+
+/* Katalog publik memakai 5 × 5 card per halaman; rail provider tetap memakai
+   komposisi enam kolomnya sendiri. Pada layar sempit grid turun ke tiga kolom
+   agar kartu tetap mudah dibaca dan disentuh. */
+.p4-catalog-grid {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+
+@media (max-width: 900px) {
+  .p4-catalog-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
