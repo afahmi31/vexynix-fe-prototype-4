@@ -1,3 +1,104 @@
+# Design QA — P4 category catalog redesign
+
+## Source visual truth
+
+- Source mockup: `C:\Users\user\.codex\generated_images\01a0bf6d-e7ea-74f1-ac79-1b911463af15\exec-6861ed09-622b-4bdb-b13f-7c46a8365d9a.png`
+- Source pixels: `1003 x 1568`
+- Source state: public `Semua Game` category with the selected filter-sidebar layout, split Neon Racer hero, quick picks, 5-column catalog, pagination, new-games CTA, activity/ranking panels, and VEXYNIX footer.
+
+## Rendered implementation evidence
+
+- Local route: `http://localhost:3004/lobby?category=all#p4-catalog`
+- Browser evidence: screenshots captured from the live Chrome tab through CUA at desktop, tablet, and mobile viewports. The browser adapter returned the captures inline and did not expose a persisted screenshot file path.
+- Desktop CSS viewport: `2560 x 1215`, device scale factor 1; full-page capture was also inspected after the lazy-loaded CTA/activity regions were brought into view.
+- Tablet CSS viewport: `1024 x 800`, device scale factor 1.
+- Tablet revision viewport: `820 x 1180`, device scale factor 1.
+- Mobile CSS viewport: `390 x 844`, device scale factor 1.
+- Implementation asset pixels: hero `2170 x 725`; CTA `2172 x 724`.
+- Density normalization: no downsampling was applied; comparisons use CSS viewport measurements and the source mockup's displayed composition.
+
+## Comparison evidence
+
+- Full-view composition: the category page now follows the selected mockup hierarchy: heading/search, split Neon Racer hero with `Pilihan cepat`, filter rail plus catalog grid, pagination, image-led CTA, activity/ranking block, and footer.
+- Focused hero comparison: the desktop keeps the dark copy area on the right; tablet and mobile move the same copy to the lower-left with a left-side readability gradient.
+- Focused CTA comparison: the generated pink/lilac new-games banner keeps copy space on the left and the character/coins on the right. The banner uses the full image without a white card overlay.
+- Responsive evidence: desktop rendered 5 catalog columns; the revised tablet view renders 5 columns with a modal filter; mobile renders 3 columns with the same modal filter, and no horizontal overflow was observed.
+
+## Interaction checks
+
+- Provider checkbox filtering: verified `Evolution` changes the result count from 106 to 7.
+- Category filtering: verified `Slot` navigates to `/lobby?category=slot#p4-catalog` and combines with the selected provider to show the matching result.
+- Reset filter: verified provider/search/sort state resets and returns to `category=all`.
+- Pagination controls remain present and update the catalog page.
+- Hero action, quick-pick actions, CTA action, game cards, latest activity rows, and ranking rows remain wired to the existing P4 prototype interactions.
+
+## Required fidelity surfaces
+
+- Fonts and typography: hierarchy, weight, wrapping, and line-height were reviewed at desktop/tablet/mobile. The existing P4 type system is retained; compact labels reduce at narrow widths without clipping.
+- Spacing and layout rhythm: category hero, filter rail, 5-column grid, CTA, activity panels, and footer use consistent gutters and section gaps. The mobile CTA and activity panels remain within the viewport width.
+- Colors and visual tokens: lavender page canvas, indigo type, pink active states, white glass panels, dark navy hero copy area, and navy footer remain aligned with the selected P4 theme.
+- Image quality and asset fidelity: existing game artwork is reused. Only the two missing visual slots use generated raster assets: the catalog hero and new-games CTA. No inline SVG or placeholder artwork was introduced.
+- Copy and content: all visible labels are user-facing Indonesian copy; no development or generation prefixes appear in the UI.
+
+## Comparison history
+
+- Initial implementation pass: no actionable P0/P1/P2 visual difference remained after the desktop, tablet, and mobile review. The only build blocker was the existing P4 header `useSearchParams()` prerender requirement; a `Suspense` boundary was added in `PortalHeader.tsx`, then the production build passed.
+- Post-fix evidence: `next build` completed successfully, and the live route continued to render the category page with the same tested interactions.
+
+## Findings
+
+- No actionable P0, P1, or P2 findings remain.
+- P3 accepted polish: generated hero/CTA imagery is directionally matched to the mockup rather than pixel-identical to the source illustration. This is within the user's explicit permission to generate missing assets and keeps the layout/content contract intact.
+
+## Implementation checklist
+
+- [x] Split Neon Racer category hero with quick picks.
+- [x] Provider, category, sort, search, reset, and pagination controls.
+- [x] Five-column desktop catalog with responsive tablet/mobile layouts.
+- [x] Full-image new-games CTA below pagination.
+- [x] Activity and ranking panels below the CTA.
+- [x] Existing P4 game detail/launch interactions preserved.
+- [x] Desktop, tablet, and mobile browser QA completed.
+- [x] TypeScript, ESLint, formatting, and production build passed.
+
+## Final result
+
+passed
+
+## Post-comment revision — mobile filter
+
+- At viewports up to `760px`, the full filter sidebar is replaced by a compact `Filter Game` trigger.
+- The trigger opens a centered responsive modal dialog with a backdrop, visible close action, category/provider/sort controls, and reset action.
+- The page locks body scrolling while the filter modal is open and restores scrolling after close.
+- Browser verification at `412 x 915`: the closed trigger is `48px` high, the modal is hidden, the game grid renders three columns with no horizontal overflow, and provider filtering still updates the result count.
+- Open-modal measurement at `412 x 915`: the dialog is centered at `380 x 554px` with the themed lavender/indigo surface and backdrop.
+
+final result: passed
+
+## Post-comment revision — mobile hero
+
+- At mobile widths, hero copy is anchored to the lower-left of the artwork instead of the right side.
+- The hero overlay now darkens the left side for readable copy while keeping the car/city artwork visible on the right.
+- Badge, title, metadata, description, and CTA spacing were tightened to keep the visual focus in the lower hero area.
+- Browser verification at `412 x 915`: copy bounds remain inside the hero, the CTA sits above the lower edge, and the page has no horizontal overflow.
+
+final result: passed
+
+## Post-comment revision — tablet parity
+
+- At `820 x 1180`, the tablet filter now uses the same compact trigger and centered modal treatment as mobile.
+- Tablet hero copy is anchored to the lower-left with the same spacing direction as mobile.
+- Tablet catalog grid now renders five game cards per row.
+- Browser verification confirmed five equal grid columns, centered modal bounds, and no horizontal overflow.
+
+final result: passed
+
+---
+
+## Historical QA records
+
+The earlier P4 provider and lobby QA records are retained below for traceability.
+
 # Design QA — P4 Provider game grid parity
 
 ## Comparison target
@@ -14,12 +115,12 @@ The requested visual is the existing provider game-list treatment: a six-column 
 
 ## Capture and normalization
 
-| Capture | CSS viewport | Screenshot pixels | Density | State |
-| --- | ---: | ---: | ---: | --- |
-| Source visual | n/a | 1315 × 543 | source raster | Provider game list, Pragmatic Play |
-| Desktop implementation | 1440 × 1000 | 1348 × 548 | 1x CSS screenshot | Provider game list, Pragmatic Play |
-| Tablet implementation | 768 × 1024 | 720 × 301 | 1x CSS screenshot | Provider game list, Pragmatic Play |
-| Mobile implementation | 390 × 844 | 374 × 602 | 1x CSS screenshot | Provider game list, Pragmatic Play |
+| Capture                | CSS viewport | Screenshot pixels |           Density | State                              |
+| ---------------------- | -----------: | ----------------: | ----------------: | ---------------------------------- |
+| Source visual          |          n/a |        1315 × 543 |     source raster | Provider game list, Pragmatic Play |
+| Desktop implementation |  1440 × 1000 |        1348 × 548 | 1x CSS screenshot | Provider game list, Pragmatic Play |
+| Tablet implementation  |   768 × 1024 |         720 × 301 | 1x CSS screenshot | Provider game list, Pragmatic Play |
+| Mobile implementation  |    390 × 844 |         374 × 602 | 1x CSS screenshot | Provider game list, Pragmatic Play |
 
 The focused captures use the same game-list component boundary so the source and implementation can be compared without stretching the full lobby canvas.
 
@@ -70,12 +171,12 @@ The source visual is an isolated Provider Pilihan section. The implementation wa
 
 ## Capture and normalization
 
-| Capture | CSS viewport | Screenshot pixels | Density | State |
-| --- | ---: | ---: | ---: | --- |
-| Source visual | n/a | 1586 × 992 | source raster | Option 3, Pragmatic Play selected |
-| Desktop implementation | 1440 × 1000 | 1348 × 777 | 1x CSS screenshot | `/lobby`, Pragmatic Play selected |
-| Tablet implementation | 768 × 1024 | 720 × 913 | 1x CSS screenshot | `/lobby`, Pragmatic Play selected |
-| Mobile implementation | 390 × 844 | 374 × 701 | 1x CSS screenshot | `/lobby`, Pragmatic Play selected |
+| Capture                | CSS viewport | Screenshot pixels |           Density | State                             |
+| ---------------------- | -----------: | ----------------: | ----------------: | --------------------------------- |
+| Source visual          |          n/a |        1586 × 992 |     source raster | Option 3, Pragmatic Play selected |
+| Desktop implementation |  1440 × 1000 |        1348 × 777 | 1x CSS screenshot | `/lobby`, Pragmatic Play selected |
+| Tablet implementation  |   768 × 1024 |         720 × 913 | 1x CSS screenshot | `/lobby`, Pragmatic Play selected |
+| Mobile implementation  |    390 × 844 |         374 × 701 | 1x CSS screenshot | `/lobby`, Pragmatic Play selected |
 
 The implementation captures are element screenshots of `#p4-providers`; their pixels exclude the surrounding page gutter. Comparison was made on the content region rather than by stretching the two different canvas sizes to identical dimensions.
 
@@ -133,6 +234,7 @@ No actionable P0, P1, or P2 findings remain after the final pass.
 No P3 follow-up is required for this option build. Exact pixel-scale tuning can be revisited only if a final target export with the same page canvas and density is provided.
 
 final result: passed
+
 ## Previous QA record retained
 
 The preceding P4 lobby QA record is retained below; the latest provider Option 3 pass follows it.
