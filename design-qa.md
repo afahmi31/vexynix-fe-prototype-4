@@ -1,3 +1,142 @@
+# Design QA — P4 Provider game grid parity
+
+## Comparison target
+
+- Source visual truth: `C:/Users/user/AppData/Local/Temp/codex-clipboard-a83ef2c3-c7dd-4f0a-b4b9-1fca1c36cbe5.png`
+- Implementation URL: `http://localhost:3004/lobby`
+- Implementation focus: `#p4-provider-games`
+- Implementation screenshots:
+  - `output/playwright/p4-provider-games-desktop.png`
+  - `output/playwright/p4-provider-games-tablet.png`
+  - `output/playwright/p4-provider-games-mobile.png`
+
+The requested visual is the existing provider game-list treatment: a six-column desktop grid with three rows, a soft fade over the last row, and a centered `Lihat Semua` action layered over the fade.
+
+## Capture and normalization
+
+| Capture | CSS viewport | Screenshot pixels | Density | State |
+| --- | ---: | ---: | ---: | --- |
+| Source visual | n/a | 1315 × 543 | source raster | Provider game list, Pragmatic Play |
+| Desktop implementation | 1440 × 1000 | 1348 × 548 | 1x CSS screenshot | Provider game list, Pragmatic Play |
+| Tablet implementation | 768 × 1024 | 720 × 301 | 1x CSS screenshot | Provider game list, Pragmatic Play |
+| Mobile implementation | 390 × 844 | 374 × 602 | 1x CSS screenshot | Provider game list, Pragmatic Play |
+
+The focused captures use the same game-list component boundary so the source and implementation can be compared without stretching the full lobby canvas.
+
+## Visual review
+
+- Desktop now renders 18 provider games in 6 columns × 3 rows, matching the reference composition.
+- The final row is covered by the lavender bottom fade and the centered white `Lihat Semua` button is layered above it.
+- Tablet preserves the six-column list used by the previous P4 treatment; mobile switches to three columns so cards remain usable without horizontal overflow.
+- No placeholder imagery or new interaction was introduced; the existing provider selection and `Lihat Semua` navigation remain intact.
+
+## Findings
+
+No actionable P0, P1, or P2 findings remain for this requested parity change.
+
+## Verification
+
+- Browser metrics: 18 games, overlay present, `Lihat Semua` present at 1440px, 768px, and 390px widths.
+- Responsive width check: `document.body.scrollWidth` equals the viewport width at all three tested widths.
+- Browser console: 0 errors and 0 warnings in the final Playwright pass.
+- Prettier: passed for the changed TSX and SCSS files.
+- ESLint: passed for `src/components/game/p4/P4LobbyPage.tsx`.
+- TypeScript: `node_modules/.bin/tsc.cmd --noEmit` passed.
+- Dev server: running at `http://localhost:3004` from `D:/xproject/oches/fe-prototype-4`.
+
+## Implementation checklist
+
+- [x] 6-column × 3-row desktop provider game grid.
+- [x] Soft bottom overlay over the final row.
+- [x] Centered `Lihat Semua` action on the overlay.
+- [x] Responsive tablet/mobile columns without horizontal overflow.
+- [x] Existing provider and game interactions preserved.
+
+final result: passed
+
+# Design QA — P4 Provider Pilihan Option 3
+
+## Comparison target
+
+- Source visual truth: `C:/Users/user/.codex/generated_images/01a0bf6d-e7ea-74f1-ac79-1b911463af15/exec-aa7110d4-cf82-4577-9876-53f6cd95331c.png`
+- Implementation URL: `http://localhost:3004/lobby`
+- Implementation focus: `#p4-providers`
+- Implementation screenshots:
+  - `output/playwright/p4-provider-option3-desktop.png`
+  - `output/playwright/p4-provider-option3-tablet.png`
+  - `output/playwright/p4-provider-option3-mobile.png`
+
+The source visual is an isolated Provider Pilihan section. The implementation was compared as the same section inside the unauthenticated P4 public lobby so the surrounding shell was not treated as part of the target.
+
+## Capture and normalization
+
+| Capture | CSS viewport | Screenshot pixels | Density | State |
+| --- | ---: | ---: | ---: | --- |
+| Source visual | n/a | 1586 × 992 | source raster | Option 3, Pragmatic Play selected |
+| Desktop implementation | 1440 × 1000 | 1348 × 777 | 1x CSS screenshot | `/lobby`, Pragmatic Play selected |
+| Tablet implementation | 768 × 1024 | 720 × 913 | 1x CSS screenshot | `/lobby`, Pragmatic Play selected |
+| Mobile implementation | 390 × 844 | 374 × 701 | 1x CSS screenshot | `/lobby`, Pragmatic Play selected |
+
+The implementation captures are element screenshots of `#p4-providers`; their pixels exclude the surrounding page gutter. Comparison was made on the content region rather than by stretching the two different canvas sizes to identical dimensions.
+
+## Visual review
+
+### Full-view evidence
+
+The source and desktop implementation were opened together for comparison. The final implementation has the same primary composition: Provider Pilihan heading and link, five equal provider selector cards, a coral selected state, the divider with diamond ends, and six landscape game cards in a 3 × 2 grid.
+
+### Focused-region evidence
+
+The provider selector and game grid were reviewed at desktop, tablet, and mobile widths. The focused region was required because the source visual is itself a component-level design and the important fidelity details are the selector state, divider treatment, card ratio, image crop, and responsive grid.
+
+## Findings
+
+No actionable P0, P1, or P2 findings remain after the final pass.
+
+### Comparison history
+
+1. Initial implementation review — P2: the provider component rendered the complete provider catalog instead of the six cards shown by the selected design, which added extra rows and exposed mock assets that were not part of the target. Fix: render `providerGames.slice(0, 6)` in `P4ProviderSection`. Post-fix desktop, tablet, and mobile captures show exactly six cards.
+2. Final review — no P0/P1/P2 findings. The provider selector, selected state, game count, responsive columns, copy, imagery, and spacing were rechecked after the fix.
+
+## Required fidelity surfaces
+
+- Fonts and typography: heading hierarchy, italic provider label, compact selector labels, and game metadata remain readable at all three tested widths; no text collision or unexpected wrapping was observed in the provider section.
+- Spacing and layout rhythm: five selector cards are evenly distributed on desktop, collapse to three columns on tablet and two columns on mobile, and the game grid uses three columns on desktop/tablet and two columns on mobile. Final checks reported no horizontal overflow (`body.scrollWidth === innerWidth`).
+- Colors and visual tokens: the selected provider uses the warm coral outline, pale peach surface, orange mark, and active dot from the target direction; inactive cards retain the quiet lavender/white P4 palette.
+- Image quality and asset fidelity: the six displayed game cards use the existing P4/P3 mock game imagery and landscape crop; no new placeholder imagery or CSS image substitute was introduced.
+- Copy and content: the target-facing copy remains `Provider Pilihan`, `Pilih provider favorit untuk melihat koleksi gamenya.`, provider names, and the existing `Lihat Semua` action.
+- Icons: existing Font Awesome provider marks are used consistently and remain visible at the tested breakpoints.
+- States and interactions: provider selector buttons are semantic buttons with `aria-pressed`; clicking Evolution changed the selected state, heading, and six displayed games to Evolution data. Existing game-card click behavior and the top `Lihat Semua` action remain available.
+- Accessibility and responsiveness: provider controls have descriptive labels, selected state is exposed, and no viewport overflow was observed at 1440px, 768px, or 390px widths.
+
+## Verification
+
+- Prettier: passed for `src/components/game/p4/P4LobbyPage.tsx` and `src/styles/portal/_p4-lobby.scss`.
+- ESLint: passed for `src/components/game/p4/P4LobbyPage.tsx`.
+- TypeScript: `node_modules/.bin/tsc.cmd --noEmit` passed.
+- Production build: `node_modules/.bin/next.cmd build` passed.
+- Browser console: final Playwright pass reported 0 errors. One existing warning concerns the below-the-fold leaderboard CTA image being an LCP candidate; it is outside this provider redesign.
+- Dev server: running at `http://localhost:3004` from `D:/xproject/oches/fe-prototype-4`.
+
+## Implementation checklist
+
+- [x] Five equal provider selector cards.
+- [x] Coral selected state with active dot.
+- [x] Provider divider with diamond ends.
+- [x] Six provider games only, arranged as 3 × 2 on desktop.
+- [x] Responsive 3-column/2-column behavior for tablet and mobile.
+- [x] Existing provider and game interactions preserved.
+- [x] No new image generation required; existing project assets reused.
+
+## Follow-up Polish
+
+No P3 follow-up is required for this option build. Exact pixel-scale tuning can be revisited only if a final target export with the same page canvas and density is provided.
+
+final result: passed
+## Previous QA record retained
+
+The preceding P4 lobby QA record is retained below; the latest provider Option 3 pass follows it.
+
 # FE Prototype 4 Top 5 Design QA
 
 ## Source visual truth
@@ -193,5 +332,13 @@ and does not invalidate the browser-rendered visual result.
 - The exact poster artwork in the supplied design is not part of the existing
   P4 local asset baseline. Replacing that artwork would require an explicit
   asset decision; this pass keeps the documented mock asset boundary.
+
+final result: passed
+
+---
+
+## Latest result
+
+The Provider Option 3 QA report at the top supersedes the retained prior lobby record.
 
 final result: passed

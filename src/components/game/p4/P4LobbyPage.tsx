@@ -1035,29 +1035,27 @@ function P4ProviderSection({
           Lihat Semua <i className="fa-solid fa-arrow-right" aria-hidden="true" />
         </button>
       </div>
-      <div className="p4-provider-grid">
+      <div className="p4-provider-selector">
         {providers.map((provider) => (
           <button
             type="button"
             key={provider.id}
+            aria-label={`${provider.name}: ${provider.description}`}
+            aria-pressed={selectedProvider === provider.id}
             className={`p4-provider-card ${provider.featured ? "is-featured" : ""} ${
               selectedProvider === provider.id ? "is-selected" : ""
             }`}
             onClick={() => onSelectProvider(provider.id)}
           >
-            {provider.image ? (
-              <span className="p4-provider-art" aria-hidden="true">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={provider.image} alt="" loading="lazy" decoding="async" />
-              </span>
-            ) : null}
             <span className="p4-provider-mark" aria-hidden="true">
               <i className={provider.icon} />
             </span>
             <span className="p4-provider-copy">
               <strong>{provider.name}</strong>
-              <small>{provider.description}</small>
             </span>
+            {selectedProvider === provider.id ? (
+              <span className="p4-provider-active-dot" aria-hidden="true" />
+            ) : null}
           </button>
         ))}
       </div>

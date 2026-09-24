@@ -2390,3 +2390,188 @@ body.p4-public-body .portal-main-flush > .p4-lobby,
     transition-duration: 0.01ms !important;
   }
 }
+
+/* Option 3: a quiet provider selector with the games as the visual focus. */
+.p4-provider-section {
+  margin-top: clamp(1.4rem, 2.3vw, 2.4rem);
+  padding: 0;
+  overflow: visible;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.p4-provider-section > .p4-section-heading {
+  margin-bottom: clamp(0.9rem, 1.5vw, 1.25rem);
+}
+
+.p4-provider-selector {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: clamp(0.55rem, 1vw, 0.85rem);
+}
+
+.p4-provider-card,
+.p4-provider-card.is-featured {
+  grid-column: auto;
+  align-items: center;
+  min-height: clamp(4.1rem, 5vw, 5rem);
+  padding: 0.75rem clamp(0.75rem, 1.3vw, 1.15rem);
+  gap: 0.75rem;
+  border: 1px solid rgba(120, 130, 220, 0.16);
+  border-radius: 0.85rem;
+  background: rgba(255, 255, 255, 0.72);
+  box-shadow: 0 0.25rem 0.75rem rgba(80, 80, 190, 0.055);
+}
+
+.p4-provider-card:hover,
+.p4-provider-card:focus-visible {
+  border-color: rgba(111, 103, 226, 0.45);
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 0.35rem 1rem rgba(80, 77, 207, 0.11);
+}
+
+.p4-provider-card.is-selected {
+  border: 1px solid #f38d7d;
+  background: rgba(255, 248, 243, 0.94);
+  box-shadow:
+    0 0 0 1px rgba(243, 141, 125, 0.2),
+    0 0.4rem 1rem rgba(236, 129, 113, 0.12);
+}
+
+.p4-provider-card.is-selected:hover,
+.p4-provider-card.is-selected:focus-visible {
+  border-color: #ef7f6c;
+  background: rgba(255, 250, 247, 0.98);
+}
+
+.p4-provider-card .p4-provider-mark,
+.p4-provider-card.is-featured .p4-provider-mark {
+  width: 2.35rem;
+  height: 2.35rem;
+  border-radius: 0.7rem;
+  background: #edeaff;
+  color: #4e55d7;
+  font-size: 1.1rem;
+}
+
+.p4-provider-card.is-selected .p4-provider-mark {
+  background: #fff0e3;
+  color: #f39047;
+}
+
+.p4-provider-copy {
+  display: block;
+  min-width: 0;
+}
+
+.p4-provider-copy strong {
+  font-size: clamp(0.7rem, 0.95vw, 0.88rem);
+}
+
+.p4-provider-active-dot {
+  flex: 0 0 auto;
+  width: 0.55rem;
+  height: 0.55rem;
+  margin-left: auto;
+  border-radius: 50%;
+  background: #f27463;
+  box-shadow: 0 0 0 0.25rem rgba(242, 116, 99, 0.12);
+}
+
+.p4-provider-games {
+  margin-top: clamp(2rem, 3.2vw, 3rem);
+}
+
+.p4-provider-games-heading {
+  margin-bottom: clamp(1rem, 1.6vw, 1.35rem);
+}
+
+.p4-provider-games-heading strong {
+  font-size: clamp(1.35rem, 2.4vw, 2.25rem);
+}
+
+.p4-provider-games-grid {
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: clamp(0.65rem, 1.15vw, 1rem);
+}
+
+.p4-provider-games-grid .p4-game-card-art {
+  aspect-ratio: 1.38;
+}
+
+@media (max-width: 1100px) {
+  .p4-provider-selector {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+
+  .p4-provider-games-grid {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 900px) {
+  .p4-provider-selector {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .p4-provider-card,
+  .p4-provider-card.is-featured {
+    min-height: 4.25rem;
+  }
+}
+
+@media (max-width: 760px) {
+  .p4-provider-selector {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.55rem;
+  }
+
+  .p4-provider-card,
+  .p4-provider-card.is-featured {
+    min-height: 3.7rem;
+    padding: 0.6rem 0.7rem;
+    gap: 0.55rem;
+  }
+
+  .p4-provider-card .p4-provider-mark,
+  .p4-provider-card.is-featured .p4-provider-mark {
+    width: 2rem;
+    height: 2rem;
+    font-size: 0.95rem;
+  }
+
+  .p4-provider-copy strong {
+    font-size: 0.7rem;
+  }
+
+  .p4-provider-games {
+    margin-top: 1.75rem;
+  }
+
+  .p4-provider-games-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 460px) {
+  .p4-provider-selector {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .p4-provider-card,
+  .p4-provider-card.is-featured {
+    min-height: 3.55rem;
+  }
+
+  .p4-provider-card .p4-provider-mark,
+  .p4-provider-card.is-featured .p4-provider-mark {
+    width: 1.8rem;
+    height: 1.8rem;
+  }
+
+  .p4-provider-copy strong {
+    font-size: 0.66rem;
+  }
+}
