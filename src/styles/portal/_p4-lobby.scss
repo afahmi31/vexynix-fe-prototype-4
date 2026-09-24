@@ -4387,3 +4387,789 @@ body.p4-public-body .portal-main-flush > .p4-lobby,
     line-height: 1.4;
   }
 }
+
+/* P4 theme tokens. The default keeps the owner-approved lavender look; the
+   alternate themes only change tokens and never change the page structure. */
+.portal.p4-public-shell {
+  --p4-page-background:
+    radial-gradient(circle at 0% 0%, rgba(205, 191, 246, 0.9), transparent 17rem),
+    radial-gradient(circle at -6% 45%, rgba(214, 197, 250, 0.85), transparent 24rem),
+    radial-gradient(circle at 106% 46%, rgba(255, 222, 235, 0.45), transparent 21rem),
+    #eff2fd;
+  --p4-text: #11157a;
+  --p4-text-strong: #171a99;
+  --p4-text-muted: #5360ac;
+  --p4-text-soft: #6972b7;
+  --p4-surface: rgba(255, 255, 255, 0.8);
+  --p4-surface-strong: rgba(255, 255, 255, 0.96);
+  --p4-surface-soft: rgba(246, 243, 255, 0.9);
+  --p4-surface-hover: #fff;
+  --p4-border: rgba(106, 104, 220, 0.16);
+  --p4-border-strong: rgba(91, 82, 224, 0.42);
+  --p4-accent: #4d4ee0;
+  --p4-accent-strong: #252ca1;
+  --p4-accent-soft: #ffd7dc;
+  --p4-accent-text: #fff;
+  --p4-on-secondary: #fff;
+  --p4-image-copy: #171a99;
+  --p4-image-copy-muted: #34368f;
+  --p4-secondary: #433667;
+  --p4-secondary-hover: #30274f;
+  --p4-header-background: rgba(239, 242, 253, 0.72);
+  --p4-footer-background: linear-gradient(180deg, #303673 0%, #292e69 38%, #252852 100%);
+  --p4-shadow: 0 0.45rem 1.1rem rgba(89, 83, 188, 0.08);
+  --p4-focus: rgba(93, 80, 218, 0.48);
+  --p4-success: #27c98a;
+  color: var(--p4-text);
+  background: var(--p4-page-background);
+}
+
+html[data-p4-theme="midnight-neon"] .portal.p4-public-shell {
+  color-scheme: dark;
+  --p4-page-background:
+    radial-gradient(circle at 5% 0%, rgba(236, 76, 255, 0.22), transparent 19rem),
+    radial-gradient(circle at 100% 40%, rgba(0, 176, 252, 0.2), transparent 23rem),
+    #09152b;
+  --p4-text: #ecf9ff;
+  --p4-text-strong: #ecf9ff;
+  --p4-text-muted: #b1e7ff;
+  --p4-text-soft: #76d5fe;
+  --p4-surface: rgba(8, 39, 81, 0.86);
+  --p4-surface-strong: rgba(9, 21, 43, 0.96);
+  --p4-surface-soft: rgba(6, 57, 119, 0.62);
+  --p4-surface-hover: rgba(3, 92, 194, 0.34);
+  --p4-border: rgba(118, 213, 254, 0.22);
+  --p4-border-strong: rgba(0, 176, 252, 0.62);
+  --p4-accent: #00b0fc;
+  --p4-accent-strong: #ec4cff;
+  --p4-accent-soft: rgba(0, 176, 252, 0.16);
+  --p4-accent-text: #09152b;
+  --p4-on-secondary: #ecf9ff;
+  --p4-image-copy: #071a35;
+  --p4-image-copy-muted: #163c68;
+  --p4-secondary: #182f5a;
+  --p4-secondary-hover: #214d83;
+  --p4-header-background: rgba(9, 21, 43, 0.76);
+  --p4-footer-background: linear-gradient(180deg, #071a35 0%, #06152b 100%);
+  --p4-shadow: 0 0.6rem 1.4rem rgba(0, 0, 0, 0.28);
+  --p4-focus: rgba(118, 213, 254, 0.68);
+  --p4-success: #7de2d1;
+}
+
+html[data-p4-theme="ocean-blue-dream"] .portal.p4-public-shell {
+  color-scheme: dark;
+  --p4-page-background:
+    radial-gradient(circle at 0% 0%, rgba(2, 134, 223, 0.25), transparent 18rem),
+    radial-gradient(circle at 100% 44%, rgba(118, 213, 254, 0.18), transparent 24rem),
+    #09152b;
+  --p4-text: #ecf9ff;
+  --p4-text-strong: #ecf9ff;
+  --p4-text-muted: #b1e7ff;
+  --p4-text-soft: #76d5fe;
+  --p4-surface: rgba(8, 39, 81, 0.9);
+  --p4-surface-strong: rgba(7, 29, 61, 0.96);
+  --p4-surface-soft: rgba(3, 92, 194, 0.3);
+  --p4-surface-hover: rgba(2, 134, 223, 0.34);
+  --p4-border: rgba(118, 213, 254, 0.2);
+  --p4-border-strong: rgba(2, 134, 223, 0.66);
+  --p4-accent: #00b0fc;
+  --p4-accent-strong: #76d5fe;
+  --p4-accent-soft: rgba(0, 176, 252, 0.16);
+  --p4-accent-text: #061a35;
+  --p4-on-secondary: #ecf9ff;
+  --p4-image-copy: #071a35;
+  --p4-image-copy-muted: #163c68;
+  --p4-secondary: #082751;
+  --p4-secondary-hover: #063977;
+  --p4-header-background: rgba(9, 21, 43, 0.78);
+  --p4-footer-background: linear-gradient(180deg, #082751 0%, #09152b 100%);
+  --p4-shadow: 0 0.6rem 1.4rem rgba(0, 23, 60, 0.3);
+  --p4-focus: rgba(118, 213, 254, 0.68);
+  --p4-success: #7de2d1;
+}
+
+html[data-p4-theme="forest-adventure"] .portal.p4-public-shell {
+  --p4-page-background:
+    radial-gradient(circle at 0% 0%, rgba(125, 226, 209, 0.42), transparent 19rem),
+    radial-gradient(circle at 100% 45%, rgba(51, 153, 137, 0.18), transparent 23rem),
+    #fffafb;
+  --p4-text: #131515;
+  --p4-text-strong: #2b2c28;
+  --p4-text-muted: #39786d;
+  --p4-text-soft: #568d82;
+  --p4-surface: rgba(255, 255, 255, 0.88);
+  --p4-surface-strong: #fffafb;
+  --p4-surface-soft: rgba(125, 226, 209, 0.18);
+  --p4-surface-hover: #fff;
+  --p4-border: rgba(51, 153, 137, 0.2);
+  --p4-border-strong: rgba(51, 153, 137, 0.54);
+  --p4-accent: #339989;
+  --p4-accent-strong: #217a6d;
+  --p4-accent-soft: #d7f2ec;
+  --p4-accent-text: #fffafb;
+  --p4-on-secondary: #fffafb;
+  --p4-image-copy: #131515;
+  --p4-image-copy-muted: #2b2c28;
+  --p4-secondary: #2b2c28;
+  --p4-secondary-hover: #131515;
+  --p4-header-background: rgba(255, 250, 251, 0.72);
+  --p4-footer-background: linear-gradient(180deg, #2b2c28 0%, #131515 100%);
+  --p4-shadow: 0 0.45rem 1.1rem rgba(51, 110, 101, 0.12);
+  --p4-focus: rgba(51, 153, 137, 0.58);
+  --p4-success: #339989;
+}
+
+html[data-p4-theme="sunset-bloom"] .portal.p4-public-shell {
+  --p4-page-background:
+    radial-gradient(circle at 0% 0%, rgba(241, 206, 255, 0.58), transparent 18rem),
+    radial-gradient(circle at 100% 44%, rgba(255, 196, 209, 0.44), transparent 24rem),
+    #fff7fb;
+  --p4-text: #35204d;
+  --p4-text-strong: #5f2f79;
+  --p4-text-muted: #795a91;
+  --p4-text-soft: #9874a8;
+  --p4-surface: rgba(255, 255, 255, 0.88);
+  --p4-surface-strong: #fff;
+  --p4-surface-soft: rgba(248, 231, 255, 0.9);
+  --p4-surface-hover: #fff;
+  --p4-border: rgba(179, 75, 211, 0.18);
+  --p4-border-strong: rgba(179, 75, 211, 0.48);
+  --p4-accent: #b34bd3;
+  --p4-accent-strong: #f06b9a;
+  --p4-accent-soft: #ffe1ee;
+  --p4-accent-text: #fff;
+  --p4-on-secondary: #fff;
+  --p4-image-copy: #5f2f79;
+  --p4-image-copy-muted: #795a91;
+  --p4-secondary: #493567;
+  --p4-secondary-hover: #35204d;
+  --p4-header-background: rgba(255, 247, 251, 0.74);
+  --p4-footer-background: linear-gradient(180deg, #493567 0%, #35204d 100%);
+  --p4-shadow: 0 0.45rem 1.1rem rgba(138, 78, 161, 0.12);
+  --p4-focus: rgba(179, 75, 211, 0.52);
+  --p4-success: #339989;
+}
+
+html[data-p4-theme] .portal.p4-public-shell .portal-main-flush {
+  background: transparent;
+  color: var(--p4-text);
+}
+
+html[data-p4-theme] .portal.p4-public-shell .p4-header {
+  background: var(--p4-header-background);
+  border-bottom: 1px solid var(--p4-border);
+}
+
+html[data-p4-theme] .portal.p4-public-shell .p4-header-brand,
+html[data-p4-theme] .portal.p4-public-shell .p4-header-nav a,
+html[data-p4-theme] .portal.p4-public-shell .p4-header-login {
+  color: var(--p4-accent-strong);
+}
+
+html[data-p4-theme] .portal.p4-public-shell .p4-header-nav a:hover,
+html[data-p4-theme] .portal.p4-public-shell .p4-header-nav a:focus-visible,
+html[data-p4-theme] .portal.p4-public-shell .p4-header-nav a.is-active {
+  background: var(--p4-accent-soft);
+  color: var(--p4-accent-strong);
+}
+
+html[data-p4-theme] .portal.p4-public-shell .p4-header-login {
+  border-color: var(--p4-border);
+  background: var(--p4-surface);
+}
+
+html[data-p4-theme] .portal.p4-public-shell .p4-header-login:hover,
+html[data-p4-theme] .portal.p4-public-shell .p4-header-login:focus-visible {
+  border-color: var(--p4-border-strong);
+  background: var(--p4-surface-hover);
+  color: var(--p4-text-strong);
+}
+
+html[data-p4-theme] .portal.p4-public-shell .p4-header-register {
+  border-color: var(--p4-secondary);
+  background: var(--p4-secondary);
+  color: var(--p4-accent-text);
+}
+
+html[data-p4-theme] .portal.p4-public-shell .p4-header-register:hover,
+html[data-p4-theme] .portal.p4-public-shell .p4-header-register:focus-visible {
+  background: var(--p4-secondary-hover);
+  color: var(--p4-accent-text);
+}
+
+html[data-p4-theme] .portal.p4-public-shell .p4-section-heading h2,
+html[data-p4-theme] .portal.p4-public-shell .p4-activity-heading h2,
+html[data-p4-theme] .portal.p4-public-shell .p4-action-card h2,
+html[data-p4-theme] .portal.p4-public-shell .p4-catalog h1,
+html[data-p4-theme] .portal.p4-public-shell .p4-catalog-quick-heading h2,
+html[data-p4-theme] .portal.p4-public-shell .p4-catalog-filter-heading h2,
+html[data-p4-theme] .portal.p4-public-shell .p4-catalog-activity-title h2,
+html[data-p4-theme] .portal.p4-public-shell .p4-catalog-activity-panel-heading h3,
+html[data-p4-theme] .portal.p4-public-shell .p4-game-dialog-content h2,
+html[data-p4-theme] .portal.p4-public-shell .p4-game-info-card h2,
+html[data-p4-theme] .portal.p4-public-shell .p4-game-empty h1 {
+  color: var(--p4-text-strong);
+}
+
+html[data-p4-theme] .portal.p4-public-shell .p4-section-heading p,
+html[data-p4-theme] .portal.p4-public-shell .p4-action-card p,
+html[data-p4-theme] .portal.p4-public-shell .p4-catalog-heading p,
+html[data-p4-theme] .portal.p4-public-shell .p4-catalog-quick-heading p,
+html[data-p4-theme] .portal.p4-public-shell .p4-catalog-activity-title p,
+html[data-p4-theme] .portal.p4-public-shell .p4-game-dialog-content,
+html[data-p4-theme] .portal.p4-public-shell .p4-game-info-card p,
+html[data-p4-theme] .portal.p4-public-shell .p4-game-empty p {
+  color: var(--p4-text-muted);
+}
+
+html[data-p4-theme] .portal.p4-public-shell .p4-text-link,
+html[data-p4-theme] .portal.p4-public-shell .p4-catalog-filter-note,
+html[data-p4-theme] .portal.p4-public-shell .p4-catalog-results-heading,
+html[data-p4-theme] .portal.p4-public-shell .p4-provider-copy small {
+  color: var(--p4-accent-strong);
+}
+
+html[data-p4-theme] .portal.p4-public-shell .p4-button--primary,
+html[data-p4-theme] .portal.p4-public-shell .p4-game-primary {
+  border-color: transparent;
+  background: linear-gradient(135deg, var(--p4-accent), var(--p4-accent-strong));
+  color: var(--p4-accent-text);
+  box-shadow: 0 0.45rem 1rem var(--p4-shadow);
+}
+
+html[data-p4-theme] .portal.p4-public-shell .p4-button--primary:hover,
+html[data-p4-theme] .portal.p4-public-shell .p4-button--primary:focus-visible,
+html[data-p4-theme] .portal.p4-public-shell .p4-game-primary:hover,
+html[data-p4-theme] .portal.p4-public-shell .p4-game-primary:focus-visible {
+  filter: brightness(1.08);
+  color: var(--p4-accent-text);
+}
+
+html[data-p4-theme] .portal.p4-public-shell .p4-button--secondary,
+html[data-p4-theme] .portal.p4-public-shell .p4-game-secondary {
+  border-color: var(--p4-border-strong);
+  background: var(--p4-surface-strong);
+  color: var(--p4-accent-strong);
+}
+
+html[data-p4-theme] .portal.p4-public-shell .p4-button--dark {
+  background: var(--p4-secondary);
+  color: var(--p4-accent-text);
+}
+
+html[data-p4-theme] .portal.p4-public-shell .p4-activity-card,
+html[data-p4-theme] .portal.p4-public-shell .p4-catalog-quick-picks,
+html[data-p4-theme] .portal.p4-public-shell .p4-catalog-filter,
+html[data-p4-theme] .portal.p4-public-shell .p4-catalog-activity,
+html[data-p4-theme] .portal.p4-public-shell .p4-catalog-activity-panel,
+html[data-p4-theme] .portal.p4-public-shell .p4-game-play-panel,
+html[data-p4-theme] .portal.p4-public-shell .p4-game-info-card,
+html[data-p4-theme] .portal.p4-public-shell .p4-game-empty,
+html[data-p4-theme] .portal.p4-public-shell .p4-game-dialog {
+  border-color: var(--p4-border);
+  background: var(--p4-surface);
+  box-shadow: var(--p4-shadow);
+}
+
+html[data-p4-theme] .portal.p4-public-shell .p4-catalog-search,
+html[data-p4-theme] .portal.p4-public-shell .p4-catalog-filter-trigger,
+html[data-p4-theme] .portal.p4-public-shell .p4-catalog-quick-pick,
+html[data-p4-theme] .portal.p4-public-shell .p4-catalog-provider-option,
+html[data-p4-theme] .portal.p4-public-shell .p4-catalog-sort-option,
+html[data-p4-theme] .portal.p4-public-shell .p4-game-stats > div {
+  border-color: var(--p4-border);
+  background: var(--p4-surface-soft);
+  color: var(--p4-text);
+}
+
+html[data-p4-theme] .portal.p4-public-shell .p4-catalog-search input,
+html[data-p4-theme] .portal.p4-public-shell .p4-catalog-search input::placeholder {
+  color: var(--p4-text-muted);
+}
+
+html[data-p4-theme] .portal.p4-public-shell .p4-catalog-search:focus-within,
+html[data-p4-theme] .portal.p4-public-shell .p4-catalog-filter-trigger:focus-visible,
+html[data-p4-theme] .portal.p4-public-shell .p4-catalog-quick-pick:focus-visible {
+  border-color: var(--p4-border-strong);
+  box-shadow: 0 0 0 3px var(--p4-focus);
+}
+
+html[data-p4-theme] .portal.p4-public-shell .p4-catalog-filter-group,
+html[data-p4-theme] .portal.p4-public-shell .p4-activity-row--head,
+html[data-p4-theme] .portal.p4-public-shell .p4-catalog-activity-panel-heading {
+  border-color: var(--p4-border);
+}
+
+html[data-p4-theme] .portal.p4-public-shell .p4-catalog-filter-group legend,
+html[data-p4-theme] .portal.p4-public-shell .p4-catalog-provider-option span,
+html[data-p4-theme] .portal.p4-public-shell .p4-catalog-sort-option,
+html[data-p4-theme] .portal.p4-public-shell .p4-catalog-activity-panel-heading h3 {
+  color: var(--p4-text-strong);
+}
+
+html[data-p4-theme] .portal.p4-public-shell .p4-catalog-filter-pills button,
+html[data-p4-theme] .portal.p4-public-shell .p4-catalog-filter-reset,
+html[data-p4-theme] .portal.p4-public-shell .p4-pagination-button {
+  border-color: var(--p4-border);
+  background: var(--p4-surface-soft);
+  color: var(--p4-accent-strong);
+}
+
+html[data-p4-theme] .portal.p4-public-shell .p4-catalog-filter-pills button:hover,
+html[data-p4-theme] .portal.p4-public-shell .p4-catalog-filter-pills button:focus-visible,
+html[data-p4-theme] .portal.p4-public-shell .p4-catalog-filter-pills button.is-active,
+html[data-p4-theme] .portal.p4-public-shell .p4-pagination-button.is-active {
+  border-color: var(--p4-accent);
+  background: var(--p4-accent-soft);
+  color: var(--p4-accent-strong);
+}
+
+html[data-p4-theme] .portal.p4-public-shell .p4-catalog-filter-reset:hover,
+html[data-p4-theme] .portal.p4-public-shell .p4-catalog-filter-reset:focus-visible,
+html[data-p4-theme] .portal.p4-public-shell .p4-pagination-button:hover,
+html[data-p4-theme] .portal.p4-public-shell .p4-pagination-button:focus-visible {
+  border-color: var(--p4-border-strong);
+  background: var(--p4-surface-hover);
+}
+
+html[data-p4-theme] .portal.p4-public-shell .p4-catalog-quick-pick:hover,
+html[data-p4-theme] .portal.p4-public-shell .p4-catalog-quick-pick:focus-visible,
+html[data-p4-theme] .portal.p4-public-shell .p4-catalog-provider-option:hover,
+html[data-p4-theme] .portal.p4-public-shell .p4-catalog-sort-option:hover {
+  border-color: var(--p4-border-strong);
+  background: var(--p4-surface-hover);
+}
+
+html[data-p4-theme] .portal.p4-public-shell .p4-catalog-quick-icon--hot,
+html[data-p4-theme] .portal.p4-public-shell .p4-catalog-quick-icon--new,
+html[data-p4-theme] .portal.p4-public-shell .p4-catalog-quick-icon--live,
+html[data-p4-theme] .portal.p4-public-shell .p4-game-info-icon {
+  background: var(--p4-accent-soft);
+  color: var(--p4-accent);
+}
+
+html[data-p4-theme] .portal.p4-public-shell .p4-provider-card {
+  border-color: var(--p4-border);
+  background: var(--p4-surface);
+  box-shadow: var(--p4-shadow);
+}
+
+html[data-p4-theme] .portal.p4-public-shell .p4-provider-card:hover,
+html[data-p4-theme] .portal.p4-public-shell .p4-provider-card:focus-visible,
+html[data-p4-theme] .portal.p4-public-shell .p4-provider-card.is-selected {
+  border-color: var(--p4-border-strong);
+  background: var(--p4-surface-hover);
+}
+
+html[data-p4-theme] .portal.p4-public-shell .p4-provider-card .p4-provider-mark,
+html[data-p4-theme] .portal.p4-public-shell .p4-provider-card.is-featured .p4-provider-mark {
+  background: var(--p4-accent-soft);
+  color: var(--p4-accent);
+}
+
+html[data-p4-theme] .portal.p4-public-shell .p4-provider-active-dot {
+  background: var(--p4-success);
+  box-shadow: 0 0 0 0.25rem color-mix(in srgb, var(--p4-success) 18%, transparent);
+}
+
+html[data-p4-theme] .portal.p4-public-shell .p4-activity-row:not(.p4-activity-row--head):nth-child(even),
+html[data-p4-theme] .portal.p4-public-shell .p4-catalog-latest-row,
+html[data-p4-theme] .portal.p4-public-shell .p4-catalog-ranking-row {
+  background: var(--p4-surface-soft);
+}
+
+html[data-p4-theme] .portal.p4-public-shell .p4-activity-row strong,
+html[data-p4-theme] .portal.p4-public-shell .p4-catalog-latest-copy strong,
+html[data-p4-theme] .portal.p4-public-shell .p4-catalog-ranking-copy strong,
+html[data-p4-theme] .portal.p4-public-shell .p4-game-stats strong {
+  color: var(--p4-text-strong);
+}
+
+html[data-p4-theme] .portal.p4-public-shell .p4-activity-row em,
+html[data-p4-theme] .portal.p4-public-shell .p4-catalog-latest-copy small,
+html[data-p4-theme] .portal.p4-public-shell .p4-catalog-ranking-copy small,
+html[data-p4-theme] .portal.p4-public-shell .p4-game-stats span,
+html[data-p4-theme] .portal.p4-public-shell .p4-game-secondary {
+  color: var(--p4-text-muted);
+}
+
+html[data-p4-theme] .portal.p4-public-shell .p4-catalog-cta,
+html[data-p4-theme] .portal.p4-public-shell .p4-leaderboard-cta {
+  border-color: var(--p4-border);
+  box-shadow: var(--p4-shadow);
+}
+
+html[data-p4-theme] .portal.p4-public-shell .p4-game-back,
+html[data-p4-theme] .portal.p4-public-shell .p4-game-context {
+  color: var(--p4-accent-strong);
+}
+
+html[data-p4-theme] .portal.p4-public-shell .p4-game-kicker {
+  background: var(--p4-accent-soft);
+  color: var(--p4-accent-strong);
+}
+
+html[data-p4-theme] .portal.p4-public-shell .p4-game-status i {
+  color: var(--p4-success);
+}
+
+html[data-p4-theme] .portal.p4-public-shell .p4-game-info-card h2 {
+  color: var(--p4-text-strong);
+}
+
+html[data-p4-theme] .portal.p4-public-shell .p4-game-note {
+  border-color: var(--p4-border);
+  background: var(--p4-surface-soft);
+  color: var(--p4-text-muted);
+}
+
+html[data-p4-theme] .portal.p4-public-shell .p4-game-note i {
+  color: var(--p4-accent);
+}
+
+html[data-p4-theme] .portal.p4-public-shell .p4-game-dialog-content h2 {
+  color: var(--p4-text-strong);
+}
+
+html[data-p4-theme] .portal.p4-public-shell .p4-game-dialog-close,
+html[data-p4-theme] .portal.p4-public-shell .p4-game-modal-close {
+  background: var(--p4-surface-strong);
+  color: var(--p4-accent-strong);
+}
+
+html[data-p4-theme] .portal.p4-public-shell .p4-footer {
+  background: var(--p4-footer-background);
+}
+
+html[data-p4-theme] .portal.p4-public-shell .p4-footer-brand,
+html[data-p4-theme] .portal.p4-public-shell .p4-footer-links h2,
+html[data-p4-theme] .portal.p4-public-shell .p4-footer-socials a {
+  color: #fff;
+}
+
+/* Header theme picker. It intentionally lives inside the P4 header so the
+   existing portal preview dock remains unchanged for legacy routes. */
+.p4-theme-switcher {
+  position: relative;
+  flex: 0 0 auto;
+}
+
+.p4-theme-switcher-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  min-height: 1.82rem;
+  max-width: 11rem;
+  padding: 0 0.65rem;
+  border: 1px solid var(--p4-border);
+  border-radius: 0.45rem;
+  background: var(--p4-surface);
+  color: var(--p4-accent-strong);
+  font-size: 0.65rem;
+  font-weight: 700;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.p4-theme-switcher-toggle:hover,
+.p4-theme-switcher-toggle:focus-visible {
+  border-color: var(--p4-border-strong);
+  background: var(--p4-surface-hover);
+  outline: none;
+}
+
+.p4-theme-switcher-toggle > i:first-child {
+  color: var(--p4-accent);
+}
+
+.p4-theme-switcher-toggle > i:last-child {
+  font-size: 0.55rem;
+}
+
+.p4-theme-switcher-menu {
+  position: absolute;
+  top: calc(100% + 0.55rem);
+  right: 0;
+  z-index: 1040;
+  display: grid;
+  width: min(19rem, calc(100vw - 2rem));
+  gap: 0.25rem;
+  padding: 0.55rem;
+  border: 1px solid var(--p4-border-strong);
+  border-radius: 0.8rem;
+  background: var(--p4-surface-strong);
+  box-shadow: 0 1rem 2rem rgba(12, 18, 65, 0.22);
+  color: var(--p4-text);
+}
+
+.p4-theme-switcher-heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.3rem 0.4rem 0.45rem;
+  border-bottom: 1px solid var(--p4-border);
+}
+
+.p4-theme-switcher-heading strong {
+  color: var(--p4-text-strong);
+  font-size: 0.78rem;
+}
+
+.p4-theme-switcher-heading span {
+  color: var(--p4-text-soft);
+  font-size: 0.58rem;
+}
+
+.p4-theme-switcher-option {
+  display: grid;
+  grid-template-columns: 2rem minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: 0.55rem;
+  width: 100%;
+  padding: 0.45rem 0.4rem;
+  border: 1px solid transparent;
+  border-radius: 0.55rem;
+  background: transparent;
+  color: var(--p4-text);
+  text-align: left;
+  cursor: pointer;
+}
+
+.p4-theme-switcher-option:hover,
+.p4-theme-switcher-option:focus-visible,
+.p4-theme-switcher-option.is-active {
+  border-color: var(--p4-border);
+  background: var(--p4-surface-soft);
+  outline: none;
+}
+
+.p4-theme-switcher-swatch {
+  width: 2rem;
+  height: 1.55rem;
+  border-radius: 0.42rem;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.28);
+}
+
+.p4-theme-switcher-copy {
+  display: grid;
+  min-width: 0;
+  gap: 0.1rem;
+}
+
+.p4-theme-switcher-copy strong {
+  overflow: hidden;
+  color: var(--p4-text-strong);
+  font-size: 0.68rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.p4-theme-switcher-copy small {
+  overflow: hidden;
+  color: var(--p4-text-soft);
+  font-size: 0.56rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.p4-theme-switcher-mode {
+  color: var(--p4-text-soft);
+  font-size: 0.52rem;
+  text-transform: uppercase;
+}
+
+.p4-theme-switcher-option > i {
+  color: var(--p4-accent);
+  font-size: 0.7rem;
+}
+
+@media (max-width: 560px) {
+  .p4-theme-switcher-label {
+    display: none;
+  }
+
+  .p4-theme-switcher-toggle {
+    width: 2rem;
+    padding: 0;
+  }
+
+  .p4-theme-switcher-menu {
+    right: -0.35rem;
+  }
+}
+
+/* Keep legacy P4 text selectors readable across every switchable theme. */
+html[data-p4-theme] .portal.p4-public-shell .p4-header-brand,
+html[data-p4-theme] .portal.p4-public-shell .p4-header-nav a,
+html[data-p4-theme] .portal.p4-public-shell .p4-header-login,
+html[data-p4-theme] .portal.p4-public-shell .p4-theme-switcher-toggle {
+  color: var(--p4-text-strong);
+}
+
+html[data-p4-theme] .portal.p4-public-shell .p4-header-nav a:hover,
+html[data-p4-theme] .portal.p4-public-shell .p4-header-nav a:focus-visible,
+html[data-p4-theme] .portal.p4-public-shell .p4-header-nav a.is-active,
+html[data-p4-theme] .portal.p4-public-shell .p4-header-login:hover,
+html[data-p4-theme] .portal.p4-public-shell .p4-header-login:focus-visible {
+  color: var(--p4-text-strong);
+}
+
+html[data-p4-theme] .portal.p4-public-shell .p4-header-register,
+html[data-p4-theme] .portal.p4-public-shell .p4-button--dark {
+  color: var(--p4-on-secondary);
+}
+
+html[data-p4-theme] .portal.p4-public-shell .p4-action-card h2 {
+  color: var(--p4-image-copy);
+}
+
+html[data-p4-theme] .portal.p4-public-shell .p4-action-card p {
+  color: var(--p4-image-copy-muted);
+}
+
+html[data-p4-theme] .portal.p4-public-shell .p4-action-card-icon {
+  color: var(--p4-image-copy);
+}
+
+html[data-p4-theme] .portal.p4-public-shell .p4-activity-view-all,
+html[data-p4-theme] .portal.p4-public-shell .p4-activity-heading span {
+  color: var(--p4-accent);
+}
+
+html[data-p4-theme] .portal.p4-public-shell .p4-activity-tabs button {
+  color: var(--p4-text-muted);
+}
+
+html[data-p4-theme] .portal.p4-public-shell .p4-activity-tabs button.is-active {
+  color: var(--p4-text-strong);
+}
+
+html[data-p4-theme] .portal.p4-public-shell .p4-activity-row {
+  color: var(--p4-text-muted);
+}
+
+html[data-p4-theme] .portal.p4-public-shell .p4-activity-row--head {
+  color: var(--p4-text-soft);
+}
+
+html[data-p4-theme] .portal.p4-public-shell .p4-activity-row > span:not(.p4-activity-game) {
+  color: var(--p4-text-muted);
+}
+
+html[data-p4-theme] .portal.p4-public-shell .p4-activity-row strong {
+  color: var(--p4-text-strong);
+}
+
+html[data-p4-theme] .portal.p4-public-shell .p4-activity-row em {
+  color: #0b7a57;
+}
+
+html[data-p4-theme] .portal.p4-public-shell .p4-activity-row em.is-loss {
+  color: #ad3450;
+}
+
+html[data-p4-theme] .portal.p4-public-shell .p4-activity-row em.is-live {
+  color: #3c379c;
+}
+
+html[data-p4-theme] .portal.p4-public-shell .p4-provider-section {
+  border-color: var(--p4-border);
+  background: linear-gradient(135deg, var(--p4-surface-soft), var(--p4-surface));
+}
+
+html[data-p4-theme] .portal.p4-public-shell .p4-provider-card {
+  color: var(--p4-text);
+}
+
+html[data-p4-theme] .portal.p4-public-shell .p4-provider-card.is-selected {
+  border-color: var(--p4-border-strong);
+  background: linear-gradient(135deg, var(--p4-surface-soft), var(--p4-surface));
+  color: var(--p4-text-strong);
+}
+
+html[data-p4-theme] .portal.p4-public-shell .p4-provider-copy strong,
+html[data-p4-theme] .portal.p4-public-shell .p4-provider-games-heading strong {
+  color: var(--p4-text-strong);
+}
+
+html[data-p4-theme] .portal.p4-public-shell .p4-provider-games-heading {
+  color: var(--p4-text-muted);
+}
+
+html[data-p4-theme] .portal.p4-public-shell .p4-provider-games-heading strong i {
+  background: var(--p4-accent);
+  color: var(--p4-accent-text);
+}
+
+html[data-p4-theme] .portal.p4-public-shell .p4-provider-rule,
+html[data-p4-theme] .portal.p4-public-shell .p4-provider-rule::after {
+  background: var(--p4-accent);
+}
+
+html[data-p4-theme] .portal.p4-public-shell .p4-provider-games-overlay {
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    color-mix(in srgb, var(--p4-surface) 72%, transparent) 54%,
+    var(--p4-surface) 100%
+  );
+}
+
+html[data-p4-theme] .portal.p4-public-shell .p4-provider-games-more {
+  border-color: var(--p4-border);
+  background: var(--p4-surface-strong);
+  color: var(--p4-text-strong);
+}
+
+html[data-p4-theme] .portal.p4-public-shell .p4-catalog-quick-pick small,
+html[data-p4-theme] .portal.p4-public-shell .p4-catalog-latest-copy small,
+html[data-p4-theme] .portal.p4-public-shell .p4-catalog-ranking-copy small,
+html[data-p4-theme] .portal.p4-public-shell .p4-catalog-latest-row time {
+  color: var(--p4-text-soft);
+}
+
+html[data-p4-theme] .portal.p4-public-shell .p4-catalog-quick-pick > i,
+html[data-p4-theme] .portal.p4-public-shell .p4-catalog-activity-panel-heading h3 i,
+html[data-p4-theme] .portal.p4-public-shell .p4-catalog-activity-icon {
+  color: var(--p4-accent);
+}
+
+html[data-p4-theme] .portal.p4-public-shell .p4-catalog-provider-option,
+html[data-p4-theme] .portal.p4-public-shell .p4-catalog-sort-option,
+html[data-p4-theme] .portal.p4-public-shell .p4-catalog-results-heading,
+html[data-p4-theme] .portal.p4-public-shell .p4-empty-state,
+html[data-p4-theme] .portal.p4-public-shell .p4-pagination-summary {
+  color: var(--p4-text-muted);
+}
+
+html[data-p4-theme] .portal.p4-public-shell .p4-catalog-provider-option small {
+  color: var(--p4-text-soft);
+}
+
+html[data-p4-theme] .portal.p4-public-shell .p4-catalog-sort-option:has(input:checked),
+html[data-p4-theme] .portal.p4-public-shell .p4-catalog-results-heading strong {
+  color: var(--p4-text-strong);
+}
+
+html[data-p4-theme] .portal.p4-public-shell .p4-catalog-latest-row,
+html[data-p4-theme] .portal.p4-public-shell .p4-catalog-ranking-row {
+  color: var(--p4-text-muted);
+}
+
+html[data-p4-theme] .portal.p4-public-shell .p4-catalog-latest-row:hover,
+html[data-p4-theme] .portal.p4-public-shell .p4-catalog-latest-row:focus-visible,
+html[data-p4-theme] .portal.p4-public-shell .p4-catalog-ranking-row:hover,
+html[data-p4-theme] .portal.p4-public-shell .p4-catalog-ranking-row:focus-visible {
+  background: var(--p4-surface-hover);
+}
+
+html[data-p4-theme] .portal.p4-public-shell .p4-catalog-latest-copy strong,
+html[data-p4-theme] .portal.p4-public-shell .p4-catalog-ranking-copy strong {
+  color: var(--p4-text-strong);
+}
+
+html[data-p4-theme] .portal.p4-public-shell .p4-pagination-summary {
+  color: var(--p4-text-muted);
+}

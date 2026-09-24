@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { useBrandStore } from "@/stores/brand";
 import { useAuthModalStore } from "@/stores/auth-modal";
 import { useSessionStore } from "@/stores/session";
+import P4ThemeSwitcher from "./P4ThemeSwitcher";
 
 const NAV_LINKS = [
   { href: "/lobby", label: "Beranda", activeKey: "home" },
@@ -63,6 +64,7 @@ export default function P4Header() {
           ))}
         </nav>
         <div className="p4-header-actions">
+          <P4ThemeSwitcher />
           {token ? (
             <Link href="/account" className="p4-header-login">
               Akun
