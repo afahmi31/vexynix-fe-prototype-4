@@ -1,14 +1,18 @@
 "use client";
 
 import Link from "next/link";
+import { useBrandStore } from "@/stores/brand";
 
 export default function P4Footer() {
+  const brand = useBrandStore((state) => state.brand);
+  const brandLabel = brand.found && brand.label ? brand.label : "VEXYNIX";
+
   return (
     <footer className="p4-footer">
       <div className="p4-footer-inner">
         <div className="p4-footer-brand-block">
           <Link href="/lobby" className="p4-footer-brand">
-            VEXYNIX
+            {brandLabel}
           </Link>
           <p>Main Lebih Seru Setiap Hari</p>
         </div>

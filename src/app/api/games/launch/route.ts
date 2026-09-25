@@ -1,7 +1,22 @@
 import { NextRequest, NextResponse } from "next/server";
 import { MOCK_CATALOG } from "@/mocks/p4";
+import { isExternalBffMode, proxyBff } from "@/lib/bff-proxy";
 
 export async function POST(request: NextRequest) {
+  if (isExternalBffMode()) {
+    const headers = new Headers();
+    const authorization = request.headers.get("authorization");
+    const contentType = request.headers.get("content-type");
+    if (authorization) headers.set("Authorization", authorization);
+    if (contentType) headers.set("Content-Type", contentType);
+
+    return proxyBff(request, "/api/games/launch", {
+      method: "POST",
+      body: await request.text(),
+      headers,
+    });
+  }
+
   let body: { game_id?: string; demo?: boolean };
   try {
     body = (await request.json()) as { game_id?: string; demo?: boolean };

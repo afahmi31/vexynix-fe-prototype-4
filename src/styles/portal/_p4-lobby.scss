@@ -999,6 +999,7 @@ body.p4-public-body .portal-main-flush > .p4-lobby,
 .p4-activity-table {
   flex: 1 1 0;
   display: grid;
+  align-content: start;
   gap: 0.18rem;
   min-height: 0;
   overflow-y: auto;
@@ -1056,12 +1057,8 @@ body.p4-public-body .portal-main-flush > .p4-lobby,
   white-space: nowrap;
 }
 
-.p4-activity-table--active .p4-activity-column-metric {
-  line-height: 1.2;
-  white-space: normal;
-}
-
-.p4-activity-table--latest .p4-activity-row {
+.p4-activity-table--latest .p4-activity-row,
+.p4-activity-table--bigWins .p4-activity-row {
   grid-template-columns:
     minmax(0, 1.35fr)
     minmax(3.25rem, 0.82fr)
@@ -1074,6 +1071,13 @@ body.p4-public-body .portal-main-flush > .p4-lobby,
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.p4-activity-empty {
+  grid-column: 1 / -1;
+  justify-content: center;
+  color: #6872bb;
+  font-size: 0.68rem;
 }
 
 .p4-activity-profit {
@@ -1663,13 +1667,33 @@ body.p4-public-body .portal-main-flush > .p4-lobby,
   align-items: center;
   justify-content: center;
   gap: 0.45rem;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
   margin-top: clamp(1.25rem, 2vw, 1.8rem);
+  box-sizing: border-box;
+  flex-wrap: wrap;
 }
 
 .p4-pagination-pages {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 0.35rem;
+  max-width: 100%;
+  min-width: 0;
+  flex: 0 1 auto;
+  flex-wrap: wrap;
+}
+
+.p4-pagination-ellipsis {
+  display: inline-grid;
+  min-width: 1.3rem;
+  height: 2.25rem;
+  place-items: center;
+  color: #4d55a8;
+  font-size: 0.78rem;
+  font-weight: 800;
 }
 
 .p4-pagination-button {
@@ -1812,6 +1836,9 @@ body.p4-public-body .portal-main-flush > .p4-lobby,
 }
 
 .p4-game-dialog-art img {
+  display: block;
+  width: 100%;
+  height: 100%;
   object-fit: cover;
 }
 

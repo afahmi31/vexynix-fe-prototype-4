@@ -214,6 +214,49 @@ export interface VendorsRes {
   vendors: Vendor[];
 }
 
+// GET /api/feed/* — public, tenant-scoped lobby activity feeds.
+export interface ActivityBetRow {
+  vendor_id: string;
+  game: string;
+  player: string;
+  bet: number;
+  payout: number;
+  win: number;
+  multiplier: number;
+  settled_at: string;
+}
+
+export interface ActivityLeaderboardRow {
+  rank: number;
+  player: string;
+  rounds: number;
+  wager: number;
+  payout: number;
+  win: number;
+}
+
+export interface ActivityBetFeedRes {
+  generated_at: string;
+  kind: "latest-bets" | "big-wins";
+  rows: ActivityBetRow[];
+  tenant: number;
+  window: string;
+}
+
+export interface ActivityLeaderboardFeedRes {
+  generated_at: string;
+  kind: "leaderboard";
+  rows: ActivityLeaderboardRow[];
+  tenant: number;
+  window: string;
+}
+
+export interface ActivityFeedsRes {
+  latestBets: ActivityBetFeedRes;
+  bigWins: ActivityBetFeedRes;
+  leaderboard: ActivityLeaderboardFeedRes;
+}
+
 /** POST /api/games/vendors/toggle — wire shape (assumed, not live-verified). */
 export interface ToggleVendorReq {
   vendor_id: string;

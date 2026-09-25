@@ -4,11 +4,12 @@ import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useCatalog, useVendors } from "@/hooks/useCatalog";
+import { useActivityFeeds } from "@/hooks/useActivityFeeds";
 import { useLaunchGame } from "@/hooks/useLaunchGame";
 import { useActionDisabled } from "@/hooks/useTransactionLock";
 import { useAuthModalStore } from "@/stores/auth-modal";
 import { MOCK_CATALOG, MOCK_VENDORS } from "@/mocks/p4";
-import type { Game, Vendor } from "@/types/api";
+import type { ActivityFeedsRes, Game, Vendor } from "@/types/api";
 import { NEXT_PARAM, safeNextPath } from "@/lib/auth-redirect";
 import { P4GameCard } from "@/components/game/p4/P4GameCard";
 
@@ -58,9 +59,17 @@ const CATEGORY_LABELS: Record<string, string> = {
   slot: "Slot",
   live: "Live Casino",
   table: "Table Games",
+  "table-game": "Table Game",
   fish: "Tembak Ikan",
   sports: "Sports",
   arcade: "Arcade",
+  crash: "Crash",
+  bingo: "Bingo",
+  casino: "Casino",
+  card: "Card Games",
+  animal: "Animal",
+  lobby: "Lobby",
+  baccarat: "Baccarat",
 };
 
 const PROVIDER_FEATURES = [
@@ -131,25 +140,12 @@ const ACTIVITY_SETS = {
     ["Sweet Bonanza", "Bonanza77", "0.00x", "-IDR 7,159.89"],
     ["Wanted Dead or a Wild", "WildWest99", "1.28x", "+IDR 175.00"],
   ],
-  active: [
-    ["Deep Sea Odyssey", "LautBiru", "Sedang bermain", "Aktif"],
-    ["Sugar Rush", "BungaMalam", "Sedang bermain", "Aktif"],
-    ["Velvet Roulette", "Raka88", "Sedang bermain", "Aktif"],
-    ["Neon Racer", "MawarSakti", "Sedang bermain", "Aktif"],
-    ["Solar Riches", "OceanHunter", "Sedang bermain", "Aktif"],
-    ["Starlight Princess", "Bintang777", "Sedang bermain", "Aktif"],
-    ["Gates of Olympus", "Jackpot88", "Sedang bermain", "Aktif"],
-    ["Lightning Roulette", "NonaMalam", "Sedang bermain", "Aktif"],
-    ["Deep Sea Odyssey", "Samudra88", "Sedang bermain", "Aktif"],
-    ["Sugar Rush 1000", "BungaMalam", "Sedang bermain", "Aktif"],
-    ["Phoenix Rises", "Phoenix88", "Sedang bermain", "Aktif"],
-    ["Mystic Potions", "MysticGirl", "Sedang bermain", "Aktif"],
-    ["Reel Royale", "ReelMaster", "Sedang bermain", "Aktif"],
-    ["Candy Superwin", "CandyKing", "Sedang bermain", "Aktif"],
-    ["Fortune of Giza", "GizaHunter", "Sedang bermain", "Aktif"],
-    ["Mahjong Ways 2", "Tiles88", "Sedang bermain", "Aktif"],
-    ["Sweet Bonanza", "Bonanza77", "Sedang bermain", "Aktif"],
-    ["Wanted Dead or a Wild", "WildWest99", "Sedang bermain", "Aktif"],
+  bigWins: [
+    ["Gates of Olympus", "Jackpot88", "1.92x", "+IDR 1,250.00"],
+    ["Sugar Rush 1000", "BungaMalam", "1.34x", "+IDR 742.16"],
+    ["Phoenix Rises", "Phoenix88", "1.74x", "+IDR 514.75"],
+    ["Velvet Roulette", "Raka88", "1.42x", "+IDR 458.20"],
+    ["Deep Sea Odyssey", "LautBiru", "1.78x", "+IDR 329.80"],
   ],
   leaderboard: [
     ["Solar Riches", "OceanHunter", "Peringkat 1", "Menang"],
@@ -175,20 +171,78 @@ const ACTIVITY_SETS = {
 
 type ActivityTab = keyof typeof ACTIVITY_SETS;
 
+interface ActivityDisplayRow {
+  primary: string;
+  player: string;
+  metric: string;
+  result: string;
+}
+
 const ACTIVITY_COLUMN_LABELS: Record<ActivityTab, readonly [string, string, string, string]> = {
   latest: ["Game", "Player", "Multiplier", "Profit"],
-  active: ["Game", "Player", "Aktivitas", "Status"],
-  leaderboard: ["Game", "Player", "Peringkat", "Hasil"],
+  bigWins: ["Game", "Player", "Multiplier", "Profit"],
+  leaderboard: ["Peringkat", "Player", "Total Taruhan", "Profit"],
 };
+
+const ACTIVITY_FALLBACK_ROWS: Record<ActivityTab, ActivityDisplayRow[]> = {
+  latest: ACTIVITY_SETS.latest.map(([primary, player, metric, result]) => ({
+    primary,
+    player,
+    metric,
+    result,
+  })),
+  bigWins: ACTIVITY_SETS.bigWins.map(([primary, player, metric, result]) => ({
+    primary,
+    player,
+    metric,
+    result,
+  })),
+  leaderboard: ACTIVITY_SETS.leaderboard.map(([primary, player, metric, result]) => ({
+    primary,
+    player,
+    metric,
+    result,
+  })),
+};
+
+const IDR_NUMBER_FORMATTER = new Intl.NumberFormat("id-ID", {
+  maximumFractionDigits: 2,
+});
+
+function formatIdr(value: number): string {
+  return `Rp ${IDR_NUMBER_FORMATTER.format(Math.abs(value))}`;
+}
+
+function formatSignedIdr(value: number): string {
+  return `${value >= 0 ? "+" : "-"}${formatIdr(value)}`;
+}
+
+function activityRowsFor(
+  tab: ActivityTab,
+  feeds?: ActivityFeedsRes
+): ActivityDisplayRow[] {
+  if (!feeds) return ACTIVITY_FALLBACK_ROWS[tab];
+
+  if (tab === "leaderboard") {
+    return feeds.leaderboard.rows.map((row) => ({
+      primary: `Peringkat ${row.rank}`,
+      player: row.player,
+      metric: formatIdr(row.wager),
+      result: formatSignedIdr(row.win),
+    }));
+  }
+
+  const feed = tab === "latest" ? feeds.latestBets : feeds.bigWins;
+  return feed.rows.map((row) => ({
+    primary: row.game,
+    player: row.player,
+    metric: `${row.multiplier.toFixed(2)}x`,
+    result: formatSignedIdr(row.win),
+  }));
+}
 
 type CatalogSort = "popular" | "newest" | "az";
 type CatalogQuickPick = "popular" | "newest" | "live";
-
-const CATALOG_CATEGORY_OPTIONS = [
-  { id: "all", label: "Semua" },
-  { id: "slot", label: "Slot" },
-  { id: "live", label: "Live Casino" },
-] as const;
 
 const CATALOG_SORT_OPTIONS: { id: CatalogSort; label: string }[] = [
   { id: "popular", label: "Terpopuler" },
@@ -202,6 +256,11 @@ type CatalogProviderOption = {
   count: number;
 };
 
+type CatalogCategoryOption = {
+  id: string;
+  label: string;
+};
+
 const PROVIDER_GAME_LIMIT = 18;
 const CATALOG_PAGE_SIZE = 25;
 
@@ -212,6 +271,22 @@ function activeGamesFrom(data: { games?: Game[] } | undefined): Game[] {
 
 function vendorsFrom(data: { vendors?: Vendor[] } | undefined): Vendor[] {
   return data?.vendors?.length ? data.vendors : MOCK_VENDORS;
+}
+
+function normalizeCatalogCategory(value: string): string {
+  return value.trim().toLowerCase().replace(/\s+/g, "-");
+}
+
+function catalogCategoryLabel(value: string): string {
+  const categoryId = normalizeCatalogCategory(value);
+  const knownLabel = CATEGORY_LABELS[categoryId];
+  if (knownLabel) return knownLabel;
+
+  return value
+    .trim()
+    .split(/\s+/)
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
 }
 
 function gamesByIds(games: Game[], ids: string[], fallbackCount: number): Game[] {
@@ -282,6 +357,7 @@ export default function P4LobbyPage() {
   const router = useRouter();
   const { data: catalogData } = useCatalog();
   const { data: vendorsData } = useVendors();
+  const { data: activityFeeds } = useActivityFeeds();
   const { launch, launchDemo, launching, error: launchError, clearError } = useLaunchGame();
   const actionDisabled = useActionDisabled();
   const openLogin = useAuthModalStore((state) => state.openLogin);
@@ -312,9 +388,9 @@ export default function P4LobbyPage() {
     [activeGames]
   );
 
-  const category = searchParams.get("category") ?? "home";
-  const categoryLabel = CATEGORY_LABELS[category] ?? "Semua Game";
-  const isCatalogView = category !== "home";
+  const requestedCategory = searchParams.get("category") ?? "home";
+  const category = normalizeCatalogCategory(requestedCategory);
+  const isCatalogView = requestedCategory !== "home";
 
   useEffect(() => {
     if (isCatalogView || HERO_SLIDES.length < 2) return;
@@ -508,11 +584,34 @@ export default function P4LobbyPage() {
       )
       .map((vendor) => ({ id: vendor.id, name: vendor.name, count: counts.get(vendor.id) ?? 0 }));
   }, [activeGames, vendors]);
+  const catalogCategoryOptions = useMemo<CatalogCategoryOption[]>(() => {
+    const labels = new Map<string, string>();
+    activeGames.forEach((game) => {
+      const categoryId = normalizeCatalogCategory(game.category);
+      if (categoryId && !labels.has(categoryId)) {
+        labels.set(categoryId, catalogCategoryLabel(game.category));
+      }
+    });
+
+    return [
+      { id: "all", label: "Semua" },
+      ...Array.from(labels.entries())
+        .sort(([, firstLabel], [, secondLabel]) => firstLabel.localeCompare(secondLabel, "id"))
+        .map(([id, label]) => ({ id, label })),
+    ];
+  }, [activeGames]);
+  const categoryLabel =
+    category === "all"
+      ? CATEGORY_LABELS.all ?? "Semua Game"
+      : catalogCategoryOptions.find((option) => option.id === category)?.label ??
+        catalogCategoryLabel(category);
   const filteredCatalog = useMemo(() => {
     const query = catalogSearch.trim().toLowerCase();
     const providerIds = new Set(selectedCatalogProviders);
     const indexedGames = activeGames
-      .filter((game) => category === "all" || game.category.toLowerCase().includes(category))
+      .filter(
+        (game) => category === "all" || normalizeCatalogCategory(game.category) === category
+      )
       .filter((game) => providerIds.size === 0 || providerIds.has(game.vendor_id))
       .filter((game) => !query || game.name.toLowerCase().includes(query));
     return indexedGames
@@ -621,6 +720,7 @@ export default function P4LobbyPage() {
           pageCount={catalogPageCount}
           search={catalogSearch}
           category={category}
+          categoryOptions={catalogCategoryOptions}
           providerOptions={catalogProviderOptions}
           selectedProviders={selectedCatalogProviders}
           sort={catalogSort}
@@ -640,6 +740,7 @@ export default function P4LobbyPage() {
           onBrowse={() => scrollTo("p4-catalog-grid")}
           onViewActivity={() => scrollTo("p4-catalog-activity")}
           onPageChange={handleCatalogPageChange}
+          activityFeeds={activityFeeds}
           onSelect={setDetailGame}
         />
       ) : (
@@ -721,6 +822,7 @@ export default function P4LobbyPage() {
               />
               <P4ActivityCard
                 games={activeGames}
+                feeds={activityFeeds}
                 activeTab={activityTab}
                 onTabChange={setActivityTab}
                 onViewAll={() => router.push("/lobby?category=all#p4-catalog")}
@@ -1097,22 +1199,24 @@ function P4GameRailSection({
 
 function P4ActivityCard({
   games,
+  feeds,
   activeTab,
   onTabChange,
   onViewAll,
 }: {
   games: Game[];
+  feeds?: ActivityFeedsRes;
   activeTab: ActivityTab;
   onTabChange: (tab: ActivityTab) => void;
   onViewAll: () => void;
 }) {
   const labels: Record<ActivityTab, string> = {
-    latest: "Aktivitas Terbaru",
-    active: "Pemain Aktif",
-    leaderboard: "Papan Peringkat",
+    latest: "Taruhan Terbaru",
+    bigWins: "Menang Besar",
+    leaderboard: "Top Pemain",
   };
-  const rows = ACTIVITY_SETS[activeTab];
-  const isLatest = activeTab === "latest";
+  const rows = activityRowsFor(activeTab, feeds);
+  const isLeaderboard = activeTab === "leaderboard";
   const [gameColumn, playerColumn, metricColumn, resultColumn] = ACTIVITY_COLUMN_LABELS[activeTab];
   const gameImage = (name: string) => games.find((game) => game.name === name)?.image_url;
 
@@ -1149,43 +1253,46 @@ function P4ActivityCard({
           <span className="p4-activity-column-metric">{metricColumn}</span>
           <span className="p4-activity-column-result">{resultColumn}</span>
         </div>
-        {rows.map(([game, player, metric, result]) => {
-          const image = gameImage(game);
-          return (
-            <div className="p4-activity-row" role="row" key={`${game}-${player}`}>
-              <span className="p4-activity-game">
-                <span className="p4-activity-icon" aria-hidden="true">
-                  {image ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img src={image} alt="" loading="lazy" decoding="async" />
-                  ) : (
-                    game.charAt(0)
-                  )}
+        {rows.length ? (
+          rows.map((row) => {
+            const image = isLeaderboard ? undefined : gameImage(row.primary);
+            const isProfit = row.result.startsWith("+") || row.result.startsWith("-");
+            return (
+              <div className="p4-activity-row" role="row" key={`${row.primary}-${row.player}`}>
+                <span className="p4-activity-game">
+                  <span className="p4-activity-icon" aria-hidden="true">
+                    {image ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img src={image} alt="" loading="lazy" decoding="async" />
+                    ) : isLeaderboard ? (
+                      row.primary.replace("Peringkat ", "#")
+                    ) : (
+                      row.primary.charAt(0)
+                    )}
+                  </span>
+                  <strong>{row.primary}</strong>
                 </span>
-                <strong>{game}</strong>
-              </span>
-              <span className="p4-activity-column-player">{player}</span>
-              <span className="p4-activity-column-metric">{metric}</span>
-              {isLatest ? (
-                <span
-                  className={`p4-activity-column-result p4-activity-profit${
-                    result.startsWith("-") ? " is-loss" : " is-win"
-                  }`}
-                >
-                  {result}
-                </span>
-              ) : (
-                <em
-                  className={`p4-activity-column-result ${
-                    String(result) === "Kalah" ? "is-loss" : result === "Aktif" ? "is-live" : ""
-                  }`}
-                >
-                  {result}
-                </em>
-              )}
-            </div>
-          );
-        })}
+                <span className="p4-activity-column-player">{row.player}</span>
+                <span className="p4-activity-column-metric">{row.metric}</span>
+                {isProfit ? (
+                  <span
+                    className={`p4-activity-column-result p4-activity-profit${
+                      row.result.startsWith("-") ? " is-loss" : " is-win"
+                    }`}
+                  >
+                    {row.result}
+                  </span>
+                ) : (
+                  <em className="p4-activity-column-result">{row.result}</em>
+                )}
+              </div>
+            );
+          })
+        ) : (
+          <div className="p4-activity-row p4-activity-empty" role="row">
+            Belum ada data untuk aktivitas ini.
+          </div>
+        )}
       </div>
     </section>
   );
@@ -1289,6 +1396,7 @@ function P4CatalogView({
   pageCount,
   search,
   category,
+  categoryOptions,
   providerOptions,
   selectedProviders,
   sort,
@@ -1308,6 +1416,7 @@ function P4CatalogView({
   onBrowse,
   onViewActivity,
   onPageChange,
+  activityFeeds,
   onSelect,
 }: {
   categoryLabel: string;
@@ -1317,6 +1426,7 @@ function P4CatalogView({
   pageCount: number;
   search: string;
   category: string;
+  categoryOptions: CatalogCategoryOption[];
   providerOptions: CatalogProviderOption[];
   selectedProviders: string[];
   sort: CatalogSort;
@@ -1336,6 +1446,7 @@ function P4CatalogView({
   onBrowse: () => void;
   onViewActivity: () => void;
   onPageChange: (page: number) => void;
+  activityFeeds?: ActivityFeedsRes;
   onSelect: (game: Game) => void;
 }) {
   const activeFilterCount =
@@ -1393,6 +1504,7 @@ function P4CatalogView({
             <div className="p4-catalog-filter-sheet">
               <P4CatalogFilter
                 category={category}
+                categoryOptions={categoryOptions}
                 providerOptions={providerOptions}
                 selectedProviders={selectedProviders}
                 sort={sort}
@@ -1439,7 +1551,12 @@ function P4CatalogView({
         </div>
       </div>
       <P4CatalogCta onExplore={onBrowse} />
-      <P4CatalogActivity games={activityGames} onSelect={onSelect} onViewAll={onViewActivity} />
+      <P4CatalogActivity
+        feeds={activityFeeds}
+        games={activityGames}
+        onSelect={onSelect}
+        onViewAll={onViewActivity}
+      />
     </section>
   );
 }
@@ -1531,6 +1648,7 @@ function P4CatalogHero({
 
 function P4CatalogFilter({
   category,
+  categoryOptions,
   providerOptions,
   selectedProviders,
   sort,
@@ -1541,6 +1659,7 @@ function P4CatalogFilter({
   onClose,
 }: {
   category: string;
+  categoryOptions: CatalogCategoryOption[];
   providerOptions: CatalogProviderOption[];
   selectedProviders: string[];
   sort: CatalogSort;
@@ -1565,7 +1684,7 @@ function P4CatalogFilter({
       <fieldset className="p4-catalog-filter-group">
         <legend>Kategori Game</legend>
         <div className="p4-catalog-filter-pills">
-          {CATALOG_CATEGORY_OPTIONS.map((option) => (
+          {categoryOptions.map((option) => (
             <button
               type="button"
               key={option.id}
@@ -1640,16 +1759,18 @@ function P4CatalogCta({ onExplore }: { onExplore: () => void }) {
 }
 
 function P4CatalogActivity({
+  feeds,
   games,
   onSelect,
   onViewAll,
 }: {
+  feeds?: ActivityFeedsRes;
   games: Game[];
   onSelect: (game: Game) => void;
   onViewAll: () => void;
 }) {
-  const latestRows = ACTIVITY_SETS.latest.slice(0, 5);
-  const rankingRows = ACTIVITY_SETS.leaderboard.slice(0, 3);
+  const latestRows = activityRowsFor("latest", feeds).slice(0, 5);
+  const rankingRows = activityRowsFor("leaderboard", feeds).slice(0, 3);
   const gameByName = (name: string) => games.find((game) => game.name === name);
 
   return (
@@ -1687,13 +1808,13 @@ function P4CatalogActivity({
               <span>Profit</span>
             </div>
             <div className="p4-catalog-latest-list">
-              {latestRows.map(([gameName, player, multiplier, profit]) => {
-                const game = gameByName(gameName);
+              {latestRows.map((row) => {
+                const game = gameByName(row.primary);
                 return (
                   <button
                     type="button"
                     className="p4-catalog-latest-row"
-                    key={`${gameName}-${player}`}
+                    key={`${row.primary}-${row.player}`}
                     onClick={() => game && onSelect(game)}
                     disabled={!game}
                   >
@@ -1703,17 +1824,19 @@ function P4CatalogActivity({
                           // eslint-disable-next-line @next/next/no-img-element
                           <img src={game.image_url} alt="" loading="lazy" decoding="async" />
                         ) : (
-                          gameName.charAt(0)
+                          row.primary.charAt(0)
                         )}
                       </span>
-                      <strong>{gameName}</strong>
+                      <strong>{row.primary}</strong>
                     </span>
-                    <span className="p4-catalog-latest-player">{player}</span>
-                    <span className="p4-catalog-latest-multiplier">{multiplier}</span>
+                    <span className="p4-catalog-latest-player">{row.player}</span>
+                    <span className="p4-catalog-latest-multiplier">{row.metric}</span>
                     <span
-                      className={`p4-catalog-latest-profit${profit.startsWith("-") ? " is-loss" : " is-win"}`}
+                      className={`p4-catalog-latest-profit${
+                        row.result.startsWith("-") ? " is-loss" : " is-win"
+                      }`}
                     >
-                      {profit}
+                      {row.result}
                     </span>
                   </button>
                 );
@@ -1731,14 +1854,16 @@ function P4CatalogActivity({
             </button>
           </div>
           <div className="p4-catalog-ranking-list">
-            {rankingRows.map(([gameName, player, rank]) => {
-              const game = gameByName(gameName);
-              const rankNumber = rank.replace("Peringkat ", "");
+            {rankingRows.map((row) => {
+              const gameName = feeds ? "" : row.primary;
+              const game = gameName ? gameByName(gameName) : undefined;
+              const rankLabel = feeds ? row.primary : row.metric;
+              const rankNumber = rankLabel.replace("Peringkat ", "");
               return (
                 <button
                   type="button"
                   className="p4-catalog-ranking-row"
-                  key={`${gameName}-${player}`}
+                  key={`${row.primary}-${row.player}`}
                   onClick={() => game && onSelect(game)}
                   disabled={!game}
                 >
@@ -1746,11 +1871,11 @@ function P4CatalogActivity({
                     <i className="fa-solid fa-crown" />
                   </span>
                   <span className="p4-catalog-ranking-avatar" aria-hidden="true">
-                    {player.charAt(0)}
+                    {row.player.charAt(0)}
                   </span>
                   <span className="p4-catalog-ranking-copy">
-                    <strong>{player}</strong>
-                    <small>{gameName}</small>
+                    <strong>{row.player}</strong>
+                    <small>{feeds ? "Top pemain" : gameName}</small>
                   </span>
                   <span className="p4-catalog-ranking-score">{rankNumber}</span>
                 </button>
@@ -1761,6 +1886,22 @@ function P4CatalogActivity({
       </div>
     </section>
   );
+}
+
+function getP4PaginationItems(page: number, pageCount: number): Array<number | "ellipsis"> {
+  if (pageCount <= 7) {
+    return Array.from({ length: pageCount }, (_, index) => index + 1);
+  }
+
+  if (page <= 4) {
+    return [1, 2, 3, 4, 5, "ellipsis", pageCount];
+  }
+
+  if (page >= pageCount - 3) {
+    return [1, "ellipsis", pageCount - 4, pageCount - 3, pageCount - 2, pageCount - 1, pageCount];
+  }
+
+  return [1, "ellipsis", page - 1, page, page + 1, "ellipsis", pageCount];
 }
 
 function P4CatalogPagination({
@@ -1786,21 +1927,24 @@ function P4CatalogPagination({
         <i className="fa-solid fa-chevron-left" aria-hidden="true" />
       </button>
       <div className="p4-pagination-pages">
-        {Array.from({ length: pageCount }, (_, index) => {
-          const pageNumber = index + 1;
-          return (
+        {getP4PaginationItems(page, pageCount).map((item, index) =>
+          item === "ellipsis" ? (
+            <span key={`ellipsis-${index}`} className="p4-pagination-ellipsis" aria-hidden="true">
+              …
+            </span>
+          ) : (
             <button
               type="button"
-              key={pageNumber}
-              className={`p4-pagination-button${pageNumber === page ? " is-active" : ""}`}
-              aria-label={`Buka halaman ${pageNumber}`}
-              aria-current={pageNumber === page ? "page" : undefined}
-              onClick={() => onPageChange(pageNumber)}
+              key={item}
+              className={`p4-pagination-button${item === page ? " is-active" : ""}`}
+              aria-label={`Buka halaman ${item}`}
+              aria-current={item === page ? "page" : undefined}
+              onClick={() => onPageChange(item)}
             >
-              {pageNumber}
+              {item}
             </button>
-          );
-        })}
+          )
+        )}
       </div>
       <button
         type="button"
@@ -1865,6 +2009,9 @@ function P4GameDetail({
               fill
               sizes="(max-width: 640px) 45vw, 260px"
             />
+          ) : game.image_url ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={game.image_url} alt={game.name} decoding="async" />
           ) : null}
         </div>
         <div className="p4-game-dialog-content">

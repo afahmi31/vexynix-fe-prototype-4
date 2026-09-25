@@ -1,4 +1,5 @@
 import { apiFetch } from "./client";
+import { resolveBffAssetUrl } from "./assets";
 import type {
   RegisterReq,
   RegisterRes,
@@ -24,5 +25,11 @@ export const authApi = {
       method: "POST",
       body: JSON.stringify({ password }),
     }),
-  brand: () => apiFetch<BrandRes>("/api/brand"),
+  brand: async (): Promise<BrandRes> => {
+    const brand = await apiFetch<BrandRes>("/api/brand");
+    return {
+      ...brand,
+      logo_url: resolveBffAssetUrl(brand.logo_url) ?? "",
+    };
+  },
 };
