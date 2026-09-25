@@ -175,6 +175,12 @@ const ACTIVITY_SETS = {
 
 type ActivityTab = keyof typeof ACTIVITY_SETS;
 
+const ACTIVITY_COLUMN_LABELS: Record<ActivityTab, readonly [string, string, string, string]> = {
+  latest: ["Game", "Player", "Multiplier", "Profit"],
+  active: ["Game", "Player", "Aktivitas", "Status"],
+  leaderboard: ["Game", "Player", "Peringkat", "Hasil"],
+};
+
 type CatalogSort = "popular" | "newest" | "az";
 type CatalogQuickPick = "popular" | "newest" | "live";
 
@@ -1107,6 +1113,7 @@ function P4ActivityCard({
   };
   const rows = ACTIVITY_SETS[activeTab];
   const isLatest = activeTab === "latest";
+  const [gameColumn, playerColumn, metricColumn, resultColumn] = ACTIVITY_COLUMN_LABELS[activeTab];
   const gameImage = (name: string) => games.find((game) => game.name === name)?.image_url;
 
   return (
@@ -1132,15 +1139,15 @@ function P4ActivityCard({
         ))}
       </div>
       <div
-        className={`p4-activity-table${isLatest ? " p4-activity-table--latest" : ""}`}
+        className={`p4-activity-table p4-activity-table--${activeTab}`}
         role="table"
         aria-label={labels[activeTab]}
       >
         <div className="p4-activity-row p4-activity-row--head" role="row">
-          <span>Game</span>
-          <span>Player</span>
-          <span>{isLatest ? "Multiplier" : "Waktu"}</span>
-          <span>{isLatest ? "Profit" : "Hasil"}</span>
+          <span className="p4-activity-column-game">{gameColumn}</span>
+          <span className="p4-activity-column-player">{playerColumn}</span>
+          <span className="p4-activity-column-metric">{metricColumn}</span>
+          <span className="p4-activity-column-result">{resultColumn}</span>
         </div>
         {rows.map(([game, player, metric, result]) => {
           const image = gameImage(game);
@@ -1157,17 +1164,21 @@ function P4ActivityCard({
                 </span>
                 <strong>{game}</strong>
               </span>
-              <span>{player}</span>
-              <span>{metric}</span>
+              <span className="p4-activity-column-player">{player}</span>
+              <span className="p4-activity-column-metric">{metric}</span>
               {isLatest ? (
-                <span className={`p4-activity-profit${result.startsWith("-") ? " is-loss" : " is-win"}`}>
+                <span
+                  className={`p4-activity-column-result p4-activity-profit${
+                    result.startsWith("-") ? " is-loss" : " is-win"
+                  }`}
+                >
                   {result}
                 </span>
               ) : (
                 <em
-                  className={
+                  className={`p4-activity-column-result ${
                     String(result) === "Kalah" ? "is-loss" : result === "Aktif" ? "is-live" : ""
-                  }
+                  }`}
                 >
                   {result}
                 </em>

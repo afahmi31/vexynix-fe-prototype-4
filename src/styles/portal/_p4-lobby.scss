@@ -1002,6 +1002,7 @@ body.p4-public-body .portal-main-flush > .p4-lobby,
   gap: 0.18rem;
   min-height: 0;
   overflow-y: auto;
+  overflow-x: hidden;
   padding-right: 0.2rem;
   scrollbar-color: rgba(48, 50, 175, 0.32) transparent;
   scrollbar-width: thin;
@@ -1018,7 +1019,11 @@ body.p4-public-body .portal-main-flush > .p4-lobby,
 
 .p4-activity-row {
   display: grid;
-  grid-template-columns: minmax(6.8rem, 1.5fr) minmax(4rem, 0.9fr) minmax(4.2rem, 0.75fr) auto;
+  grid-template-columns:
+    minmax(0, 1.3fr)
+    minmax(3.25rem, 0.82fr)
+    minmax(4.45rem, 0.75fr)
+    minmax(3.8rem, auto);
   align-items: center;
   gap: 0.35rem;
   min-height: 1.7rem;
@@ -1035,6 +1040,25 @@ body.p4-public-body .portal-main-flush > .p4-lobby,
 .p4-activity-row--head {
   color: #6872bb;
   font-size: 0.58rem;
+}
+
+.p4-activity-row--head > .p4-activity-column-result,
+.p4-activity-row > .p4-activity-column-result {
+  justify-self: end;
+  text-align: right;
+}
+
+.p4-activity-column-player,
+.p4-activity-column-metric {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.p4-activity-table--active .p4-activity-column-metric {
+  line-height: 1.2;
+  white-space: normal;
 }
 
 .p4-activity-table--latest .p4-activity-row {
@@ -5395,6 +5419,19 @@ html[data-p4-theme] .portal.p4-public-shell .p4-pagination-summary {
 }
 
 @media (max-width: 560px) {
+  .p4-activity-row > span:nth-child(3) {
+    display: block;
+  }
+
+  .p4-activity-row {
+    grid-template-columns:
+      minmax(0, 1.3fr)
+      minmax(3.4rem, 0.82fr)
+      minmax(4.1rem, 0.75fr)
+      minmax(3.8rem, auto);
+    gap: 0.3rem;
+  }
+
   .p4-activity-table--latest .p4-activity-row > span:nth-child(3) {
     display: block;
   }
