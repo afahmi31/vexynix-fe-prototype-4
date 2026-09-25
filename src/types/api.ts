@@ -208,6 +208,7 @@ export interface Vendor {
   name: string;
   status: string;
   enabled: boolean;
+  sort_order?: number;
 }
 
 export interface VendorsRes {
@@ -217,7 +218,8 @@ export interface VendorsRes {
 // GET /api/feed/* — public, tenant-scoped lobby activity feeds.
 export interface ActivityBetRow {
   vendor_id: string;
-  game: string;
+  /** The backend may not resolve a round to a catalog game. */
+  game: string | null;
   player: string;
   bet: number;
   payout: number;

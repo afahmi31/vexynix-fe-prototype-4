@@ -512,3 +512,30 @@ scanning the generated `.next\\standalone` directory. The source compilation
 step succeeds before that generated-output failure.
 
 final result: passed with generated build-cache limitation
+
+---
+
+## Post-comment revision — mobile hero option 2
+
+- Implemented the selected option 2 direction from
+  `C:\Users\user\.codex\generated_images\01a0d7ae-b5d3-7550-bb63-9652041a7d89\exec-637c969d-ed5d-454e-b390-f99acefebe11.png` for the mobile P4 hero.
+- Kept the existing backend-provided game artwork and changed only the mobile
+  presentation to a compact centered full-bleed cover treatment with a lower
+  text gradient.
+- Reduced the mobile hero height and changed both `Top 5 Minggu Ini` and
+  `Pilihan Teratas` to four visible cards with shorter proportional artwork;
+  the remaining cards stay horizontally swipeable.
+- Reset each rail when its item count changes so fallback-to-live catalog data
+  does not leave the first card scrolled out of view.
+- Bound the mobile hero overlay to `--p4-secondary` and the hero text to
+  `--p4-on-secondary`, so the treatment follows the active theme.
+- Verified at a 390x844 mobile viewport in Aurora and Midnight Neon. The hero
+  image uses `object-fit: cover` and `object-position: 50% 50%`; both themes
+  rendered without horizontal overflow or browser console errors.
+- TypeScript passed and the local browser render completed without console
+  errors. The direct Next production build is currently blocked before
+  compilation by the existing `EPERM` scan failure in
+  `.next\\standalone\\node_modules\\react`; the `pnpm build` wrapper also
+  remains blocked by the repository's ignored dependency build scripts.
+
+final result: passed with existing tooling warnings

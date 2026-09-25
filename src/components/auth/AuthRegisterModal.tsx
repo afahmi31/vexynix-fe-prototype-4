@@ -13,6 +13,7 @@ import { z } from "zod";
 import { authApi } from "@/lib/api/auth";
 import { isApiError } from "@/lib/api/client";
 import { useAuthModalStore } from "@/stores/auth-modal";
+import { useBrandStore } from "@/stores/brand";
 import PasswordField from "@/components/auth/PasswordField";
 
 const registerSchema = z
@@ -41,6 +42,9 @@ type RegisterFormData = z.infer<typeof registerSchema>;
 export default function AuthRegisterModal() {
   const close = useAuthModalStore((s) => s.close);
   const openLogin = useAuthModalStore((s) => s.openLogin);
+  const brand = useBrandStore((s) => s.brand);
+
+  const brandLabel = brand.found && brand.label ? brand.label : "VEXYNIX";
 
   const [formError, setFormError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
@@ -91,24 +95,40 @@ export default function AuthRegisterModal() {
       aria-modal="true"
       aria-label="Daftar"
     >
-      <div className="modal-dialog modal-dialog-centered">
-        <div className="modal-content">
-          <form onSubmit={onSubmit}>
-            <div className="modal-header">
-              <h5 className="modal-title">Buat Akun</h5>
+      <div className="modal-dialog modal-dialog-centered auth-modal-dialog">
+        <div className="modal-content auth-modal-content">
+          <form className="auth-form" onSubmit={onSubmit}>
+            <div className="auth-modal-header">
               <button
                 type="button"
-                className="btn-close"
-                aria-label="Tutup"
+                className="auth-back-button"
+                aria-label="Kembali"
                 onClick={close}
                 disabled={submitting}
-              />
+              >
+                <i className="fa-solid fa-arrow-left" aria-hidden="true" />
+              </button>
+              <h5 className="modal-title auth-modal-title">Buat Akun dengan {brandLabel}</h5>
             </div>
-            <div className="modal-body">
+            <div className="auth-modal-body">
+              <div className="auth-divider" />
+              <div className="auth-brand-lockup" aria-label={brandLabel}>
+                <strong>{brandLabel}</strong>
+                <small>GAME PORTAL</small>
+              </div>
+              <div className="auth-switch-copy">
+                <span>Sudah punya akun?</span>
+                <button type="button" onClick={() => openLogin()}>
+                  Masuk
+                </button>
+              </div>
+
               {formError && <div className="auth-error">{formError}</div>}
 
               <div className="auth-field">
-                <label htmlFor="register-username">Username</label>
+                <label htmlFor="register-username" className="visually-hidden">
+                  Username
+                </label>
                 <input
                   id="register-username"
                   type="text"
@@ -116,18 +136,17 @@ export default function AuthRegisterModal() {
                   placeholder="Username"
                   autoComplete="username"
                   aria-label="Username"
-                  autoFocus
                   {...registerField("username")}
                 />
                 {errors.username && (
-                  <div className="text-danger small mt-1">
-                    {errors.username.message}
-                  </div>
+                  <div className="text-danger small mt-1">{errors.username.message}</div>
                 )}
               </div>
 
               <div className="auth-field">
-                <label htmlFor="register-phone">No. HP</label>
+                <label htmlFor="register-phone" className="visually-hidden">
+                  No. HP
+                </label>
                 <input
                   id="register-phone"
                   type="tel"
@@ -138,9 +157,7 @@ export default function AuthRegisterModal() {
                   {...registerField("phone_number")}
                 />
                 {errors.phone_number && (
-                  <div className="text-danger small mt-1">
-                    {errors.phone_number.message}
-                  </div>
+                  <div className="text-danger small mt-1">{errors.phone_number.message}</div>
                 )}
               </div>
 
@@ -150,6 +167,7 @@ export default function AuthRegisterModal() {
                 placeholder="Password"
                 autoComplete="new-password"
                 aria-label="Password"
+                hideLabel
                 error={errors.password?.message}
                 {...registerField("password")}
               />
@@ -160,36 +178,26 @@ export default function AuthRegisterModal() {
                 placeholder="Konfirmasi Password"
                 autoComplete="new-password"
                 aria-label="Konfirmasi Password"
+                hideLabel
                 error={errors.confirmPassword?.message}
                 {...registerField("confirmPassword")}
               />
 
-              <div className="auth-field">
-                <label htmlFor="register-currency">Valuta</label>
-                <select
-                  id="register-currency"
-                  className="form-select"
-                  aria-label="Valuta"
-                  {...registerField("currency")}
-                >
-                  <option value="IDR">IDR — Rupiah</option>
-                  <option value="USD">USD — US Dollar</option>
-                </select>
-              </div>
+              <input type="hidden" {...registerField("currency")} />
+              <p className="auth-terms-note">
+                Dengan melanjutkan, kamu menyetujui Syarat &amp; Ketentuan dan Kebijakan Privasi
+                VEXYNIX.
+              </p>
             </div>
-            <div className="modal-footer">
-              <button
-                type="submit"
-                className="auth-submit"
-                disabled={submitting}
-              >
+            <div className="auth-modal-footer">
+              <button type="submit" className="auth-submit" disabled={submitting}>
                 {submitting ? (
                   <>
                     <span className="spinner-border spinner-border-sm me-2" />
                     Membuat akun...
                   </>
                 ) : (
-                  "Daftar"
+                  "Buat Akun"
                 )}
               </button>
             </div>

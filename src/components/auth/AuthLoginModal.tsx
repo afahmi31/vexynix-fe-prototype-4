@@ -18,6 +18,7 @@ import { isApiError } from "@/lib/api/client";
 import { takeSessionExpired } from "@/lib/auth-redirect";
 import RateLimitMessage from "@/components/shared/RateLimitMessage";
 import { useAuthModalStore } from "@/stores/auth-modal";
+import { useBrandStore } from "@/stores/brand";
 import PasswordField from "@/components/auth/PasswordField";
 
 const loginSchema = z.object({
@@ -32,7 +33,11 @@ export default function AuthLoginModal() {
   const registered = useAuthModalStore((s) => s.registered);
   const nextPath = useAuthModalStore((s) => s.nextPath);
   const close = useAuthModalStore((s) => s.close);
+  const openRegister = useAuthModalStore((s) => s.openRegister);
   const setSession = useSessionStore((s) => s.setSession);
+  const brand = useBrandStore((s) => s.brand);
+
+  const brandLabel = brand.found && brand.label ? brand.label : "VEXYNIX";
 
   const [formError, setFormError] = useState<string | null>(null);
   const [rateLimited, setRateLimited] = useState(false);
@@ -97,20 +102,34 @@ export default function AuthLoginModal() {
       aria-modal="true"
       aria-label="Masuk"
     >
-      <div className="modal-dialog modal-dialog-centered">
-        <div className="modal-content">
-          <form onSubmit={onSubmit}>
-            <div className="modal-header">
-              <h5 className="modal-title">Masuk</h5>
+      <div className="modal-dialog modal-dialog-centered auth-modal-dialog">
+        <div className="modal-content auth-modal-content">
+          <form className="auth-form" onSubmit={onSubmit}>
+            <div className="auth-modal-header">
               <button
                 type="button"
-                className="btn-close"
-                aria-label="Tutup"
+                className="auth-back-button"
+                aria-label="Kembali"
                 onClick={close}
                 disabled={submitting}
-              />
+              >
+                <i className="fa-solid fa-arrow-left" aria-hidden="true" />
+              </button>
+              <h5 className="modal-title auth-modal-title">Masuk dengan {brandLabel}</h5>
             </div>
-            <div className="modal-body">
+            <div className="auth-modal-body">
+              <div className="auth-divider" />
+              <div className="auth-brand-lockup" aria-label={brandLabel}>
+                <strong>{brandLabel}</strong>
+                <small>GAME PORTAL</small>
+              </div>
+              <div className="auth-switch-copy">
+                <span>Belum punya akun?</span>
+                <button type="button" onClick={openRegister}>
+                  Buat Akun
+                </button>
+              </div>
+
               {registered && (
                 <div className="auth-success">
                   Akun berhasil dibuat! Silakan masuk untuk melanjutkan.
@@ -118,14 +137,13 @@ export default function AuthLoginModal() {
               )}
               {expired && (
                 <div className="auth-notice">
-                  Sesi Anda telah berakhir — silakan masuk kembali untuk
-                  melanjutkan.
+                  Sesi Anda telah berakhir — silakan masuk kembali untuk melanjutkan.
                 </div>
               )}
               {rateLimited && <RateLimitMessage />}
               {formError && <div className="auth-error">{formError}</div>}
 
-              <div className="auth-field">
+              <div className="auth-field auth-field--floating">
                 <label htmlFor="login-identifier">Username atau No. HP</label>
                 <input
                   id="login-identifier"
@@ -134,13 +152,10 @@ export default function AuthLoginModal() {
                   placeholder="Username atau No. HP"
                   autoComplete="username"
                   aria-label="Username atau No. HP"
-                  autoFocus
                   {...registerField("identifier")}
                 />
                 {errors.identifier && (
-                  <div className="text-danger small mt-1">
-                    {errors.identifier.message}
-                  </div>
+                  <div className="text-danger small mt-1">{errors.identifier.message}</div>
                 )}
               </div>
 
@@ -150,16 +165,21 @@ export default function AuthLoginModal() {
                 placeholder="Password"
                 autoComplete="current-password"
                 aria-label="Password"
+                hideLabel
                 error={errors.password?.message}
                 {...registerField("password")}
               />
+
+              <div className="auth-form-options">
+                <label className="auth-checkbox">
+                  <input type="checkbox" />
+                  <span>Ingat saya</span>
+                </label>
+                <span className="auth-inline-note">Lupa Password?</span>
+              </div>
             </div>
-            <div className="modal-footer">
-              <button
-                type="submit"
-                className="auth-submit"
-                disabled={submitting}
-              >
+            <div className="auth-modal-footer">
+              <button type="submit" className="auth-submit" disabled={submitting}>
                 {submitting ? (
                   <>
                     <span className="spinner-border spinner-border-sm me-2" />

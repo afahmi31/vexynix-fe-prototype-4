@@ -2288,34 +2288,48 @@ body.p4-public-body .portal-main-flush > .p4-lobby,
   }
 
   .p4-hero {
-    min-height: 20rem;
-    aspect-ratio: 1.4;
+    min-height: 17.5rem;
+    aspect-ratio: 1.24;
   }
 
   .p4-hero-image {
-    object-position: 62% center;
+    object-fit: cover !important;
+    object-position: center center !important;
   }
 
   .p4-hero-overlay {
-    background: linear-gradient(90deg, rgba(8, 12, 41, 0.88), rgba(8, 12, 41, 0.25) 85%);
+    background: linear-gradient(
+      180deg,
+      transparent 20%,
+      color-mix(in srgb, var(--p4-secondary) 28%, transparent) 45%,
+      color-mix(in srgb, var(--p4-secondary) 88%, transparent) 68%,
+      var(--p4-secondary) 100%
+    );
   }
 
   .p4-hero-content {
     right: 1rem;
-    bottom: 1.5rem;
+    bottom: 1rem;
     left: 1rem;
+    color: var(--p4-on-secondary);
   }
 
   .p4-hero-content h1 {
-    font-size: clamp(2.3rem, 12vw, 4rem);
+    max-width: 96%;
+    color: var(--p4-on-secondary);
+    font-size: clamp(1.85rem, 8.5vw, 2.8rem);
   }
 
-  /* Top 5 menjadi slider hanya di mobile: tepat tiga kartu terlihat,
-     sisanya digeser (snap per kartu). Tablet tetap grid 5 kolom penuh. */
+  .p4-hero-meta,
+  .p4-hero-description {
+    color: color-mix(in srgb, var(--p4-on-secondary) 88%, transparent);
+  }
+
+  /* Mobile shows four cards while the remaining games stay swipeable. */
   .p4-top-five-grid {
     grid-template-columns: none;
     grid-auto-flow: column;
-    grid-auto-columns: calc((100% - 1.1rem) / 3);
+    grid-auto-columns: calc((100% - 1.65rem) / 4);
     gap: 0.55rem;
     overflow-x: auto;
     overflow-y: hidden;
@@ -2332,9 +2346,18 @@ body.p4-public-body .portal-main-flush > .p4-lobby,
     scroll-snap-align: start;
   }
 
-  /* Poster rail sedikit lebih lebar di mobile agar judul terbaca. */
+  .p4-top-five .p4-game-card--ranked .p4-game-card-art {
+    aspect-ratio: 0.76;
+  }
+
+  /* The featured rail uses the same four-up rhythm as Top 5. */
   .p4-rail--featured {
-    grid-auto-columns: clamp(6.1rem, 27%, 8.2rem);
+    grid-auto-columns: calc((100% - 1.65rem) / 4);
+    padding-right: 0.1rem;
+  }
+
+  .p4-rail--featured .p4-game-card-art {
+    aspect-ratio: 0.76;
   }
 
   /* Ritme antar-section lebih longgar di layar kecil. */
@@ -2623,7 +2646,6 @@ body.p4-public-body .portal-main-flush > .p4-lobby,
   }
 
   .p4-catalog-filter-sheet .p4-catalog-filter-group,
-  .p4-catalog-filter-sheet .p4-catalog-sort-group,
   .p4-catalog-filter-sheet .p4-catalog-filter-reset {
     grid-column: 1;
   }
@@ -2859,7 +2881,7 @@ body.p4-public-body .portal-main-flush > .p4-lobby,
 }
 
 .p4-provider-games-grid .p4-game-card-art {
-  aspect-ratio: 1.38;
+  aspect-ratio: 1.42 / 1.4;
 }
 
 @media (max-width: 1100px) {
@@ -2972,108 +2994,6 @@ body.p4-public-body .portal-main-flush > .p4-lobby,
   font-size: clamp(0.78rem, 0.9vw, 0.92rem);
 }
 
-.p4-catalog-hero {
-  display: grid;
-  grid-template-columns: minmax(0, 2.75fr) minmax(15rem, 1fr);
-  gap: clamp(0.75rem, 1.3vw, 1.05rem);
-  margin-bottom: clamp(1rem, 1.6vw, 1.25rem);
-}
-
-.p4-catalog-hero-feature {
-  position: relative;
-  min-height: 12rem;
-  overflow: hidden;
-  border: 1px solid rgba(106, 104, 220, 0.18);
-  border-radius: 0.75rem;
-  background: #101946;
-  isolation: isolate;
-}
-
-.p4-catalog-hero-image {
-  object-fit: cover;
-  object-position: center;
-}
-
-.p4-catalog-hero-feature::after {
-  position: absolute;
-  inset: 0 0 0 48%;
-  z-index: 1;
-  background: linear-gradient(
-    90deg,
-    rgba(10, 16, 61, 0),
-    rgba(7, 12, 48, 0.86) 36%,
-    rgba(8, 13, 51, 0.98)
-  );
-  content: "";
-  pointer-events: none;
-}
-
-.p4-catalog-hero-copy {
-  position: absolute;
-  z-index: 2;
-  top: 0;
-  right: clamp(0.85rem, 2.5vw, 2.4rem);
-  bottom: 0;
-  display: flex;
-  width: min(43%, 22rem);
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: center;
-  color: #fff;
-}
-
-.p4-catalog-hero-badge {
-  display: inline-flex;
-  align-items: center;
-  min-height: 1.45rem;
-  padding: 0.2rem 0.65rem;
-  border-radius: 999px;
-  background: #9e43e6;
-  color: #fff;
-  font-size: 0.62rem;
-  font-weight: 800;
-  line-height: 1;
-}
-
-.p4-catalog-hero-copy h2 {
-  margin: 0.5rem 0 0;
-  color: #fff;
-  font-size: clamp(1.55rem, 2.8vw, 2.55rem);
-  font-weight: 800;
-  letter-spacing: -0.05em;
-  line-height: 1;
-}
-
-.p4-catalog-hero-copy p {
-  max-width: 20rem;
-  margin: 0.42rem 0 0;
-  color: rgba(255, 255, 255, 0.88);
-  font-size: clamp(0.7rem, 0.85vw, 0.84rem);
-  line-height: 1.38;
-}
-
-.p4-catalog-hero-copy .p4-catalog-hero-meta {
-  margin-top: 0.35rem;
-  color: rgba(255, 255, 255, 0.96);
-  font-weight: 700;
-}
-
-.p4-catalog-hero-copy .p4-button {
-  margin-top: 0.85rem;
-}
-
-.p4-catalog-quick-picks {
-  display: grid;
-  align-content: start;
-  gap: 0.48rem;
-  padding: clamp(0.8rem, 1.3vw, 1.05rem);
-  border: 1px solid rgba(106, 104, 220, 0.16);
-  border-radius: 0.75rem;
-  background: rgba(255, 255, 255, 0.78);
-  box-shadow: 0 0.45rem 1.2rem rgba(89, 83, 188, 0.08);
-}
-
-.p4-catalog-quick-heading h2,
 .p4-catalog-filter-heading h2,
 .p4-catalog-activity-title h2 {
   margin: 0;
@@ -3083,90 +3003,11 @@ body.p4-public-body .portal-main-flush > .p4-lobby,
   letter-spacing: -0.035em;
 }
 
-.p4-catalog-quick-heading p,
 .p4-catalog-activity-title p {
   margin: 0.2rem 0 0;
   color: #5360ac;
   font-size: clamp(0.66rem, 0.75vw, 0.76rem);
   line-height: 1.35;
-}
-
-.p4-catalog-quick-pick {
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr) auto;
-  align-items: center;
-  gap: 0.65rem;
-  min-width: 0;
-  padding: 0.45rem 0.55rem;
-  border: 1px solid rgba(106, 104, 220, 0.06);
-  border-radius: 0.6rem;
-  background: rgba(246, 243, 255, 0.9);
-  color: #2129a1;
-  text-align: left;
-  cursor: pointer;
-  transition:
-    border-color 0.18s ease,
-    background-color 0.18s ease,
-    transform 0.18s ease;
-}
-
-.p4-catalog-quick-pick:hover,
-.p4-catalog-quick-pick:focus-visible {
-  border-color: rgba(93, 80, 218, 0.25);
-  background: #fff;
-  transform: translateY(-1px);
-}
-
-.p4-catalog-quick-pick > span:nth-child(2) {
-  display: grid;
-  min-width: 0;
-  gap: 0.12rem;
-}
-
-.p4-catalog-quick-pick strong,
-.p4-catalog-quick-pick small {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.p4-catalog-quick-pick strong {
-  font-size: 0.74rem;
-  font-weight: 800;
-}
-
-.p4-catalog-quick-pick small {
-  color: #6972b7;
-  font-size: 0.62rem;
-}
-
-.p4-catalog-quick-pick > i {
-  color: #6065d4;
-  font-size: 0.7rem;
-}
-
-.p4-catalog-quick-icon {
-  display: grid;
-  width: 2rem;
-  height: 2rem;
-  place-items: center;
-  border-radius: 50%;
-  font-size: 1rem;
-}
-
-.p4-catalog-quick-icon--hot {
-  background: #fff0dc;
-  color: #f47b42;
-}
-
-.p4-catalog-quick-icon--new {
-  background: #fff5ca;
-  color: #e5a317;
-}
-
-.p4-catalog-quick-icon--live {
-  background: #e8ddff;
-  color: #8e55dc;
 }
 
 .p4-catalog-body {
@@ -3248,15 +3089,13 @@ body.p4-public-body .portal-main-flush > .p4-lobby,
   color: #292a9d;
 }
 
-.p4-catalog-provider-list,
-.p4-catalog-sort-list {
+.p4-catalog-provider-list {
   display: grid;
   clear: both;
   gap: 0.5rem;
 }
 
-.p4-catalog-provider-option,
-.p4-catalog-sort-option {
+.p4-catalog-provider-option {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr) auto;
   align-items: center;
@@ -3268,8 +3107,7 @@ body.p4-public-body .portal-main-flush > .p4-lobby,
   cursor: pointer;
 }
 
-.p4-catalog-provider-option input,
-.p4-catalog-sort-option input {
+.p4-catalog-provider-option input {
   width: 1rem;
   height: 1rem;
   margin: 0;
@@ -3286,15 +3124,6 @@ body.p4-public-body .portal-main-flush > .p4-lobby,
 .p4-catalog-provider-option small {
   color: #858bd0;
   font-size: 0.7rem;
-}
-
-.p4-catalog-sort-option {
-  grid-template-columns: auto minmax(0, 1fr);
-}
-
-.p4-catalog-sort-option:has(input:checked) {
-  color: #252ca1;
-  font-weight: 800;
 }
 
 .p4-catalog-filter-reset {
@@ -3350,7 +3179,7 @@ body.p4-public-body .portal-main-flush > .p4-lobby,
 }
 
 .p4-catalog-main .p4-catalog-grid .p4-game-card-art {
-  aspect-ratio: 1.42;
+  aspect-ratio: 1.42 / 1.4;
 }
 
 .p4-catalog-cta {
@@ -3703,10 +3532,6 @@ body.p4-public-body .portal-main-flush > .p4-lobby,
 }
 
 @media (max-width: 1100px) {
-  .p4-catalog-hero {
-    grid-template-columns: minmax(0, 2.3fr) minmax(14rem, 1fr);
-  }
-
   .p4-catalog-body {
     grid-template-columns: minmax(10.5rem, 12rem) minmax(0, 1fr);
   }
@@ -3760,48 +3585,6 @@ body.p4-public-body .portal-main-flush > .p4-lobby,
     width: min(100% - 2rem, 1580px);
   }
 
-  .p4-catalog-hero {
-    grid-template-columns: 1fr;
-    gap: 0.55rem;
-  }
-
-  .p4-catalog-hero-feature {
-    min-height: 14rem;
-  }
-
-  .p4-catalog-hero-copy {
-    top: auto;
-    right: auto;
-    bottom: 0.75rem;
-    left: 0.8rem;
-    width: 68%;
-    justify-content: flex-end;
-  }
-
-  .p4-catalog-quick-picks {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-
-  .p4-catalog-quick-heading {
-    grid-column: 1 / -1;
-  }
-
-  .p4-catalog-quick-pick {
-    grid-template-columns: 1fr;
-    justify-items: center;
-    gap: 0.3rem;
-    padding: 0.6rem 0.35rem;
-    text-align: center;
-  }
-
-  .p4-catalog-quick-pick > span:nth-child(2) {
-    justify-items: center;
-  }
-
-  .p4-catalog-quick-pick > i {
-    display: none;
-  }
-
   .p4-catalog-filter {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -3816,10 +3599,6 @@ body.p4-public-body .portal-main-flush > .p4-lobby,
 
   .p4-catalog-filter-group {
     padding: 0.6rem 0;
-  }
-
-  .p4-catalog-sort-group {
-    grid-column: 1 / -1;
   }
 
   .p4-catalog-filter-reset {
@@ -3860,82 +3639,11 @@ body.p4-public-body .portal-main-flush > .p4-lobby,
     width: 100%;
   }
 
-  .p4-catalog-hero-feature {
-    min-height: 12.5rem;
-  }
-
-  .p4-catalog-hero-feature::after {
-    inset: 0;
-    background: linear-gradient(
-      90deg,
-      rgba(8, 13, 51, 0.94),
-      rgba(8, 13, 51, 0.72) 38%,
-      rgba(8, 13, 51, 0.12) 72%,
-      rgba(8, 13, 51, 0)
-    );
-  }
-
-  .p4-catalog-hero-copy {
-    right: auto;
-    bottom: 0.65rem;
-    left: 0.75rem;
-    width: 72%;
-    gap: 0;
-  }
-
-  .p4-catalog-hero-badge {
-    min-height: 1.25rem;
-    padding-inline: 0.5rem;
-    font-size: 0.56rem;
-  }
-
-  .p4-catalog-hero-copy h2 {
-    margin-top: 0.25rem;
-    font-size: clamp(1.35rem, 8vw, 2rem);
-  }
-
-  .p4-catalog-hero-copy p {
-    margin-top: 0.2rem;
-    font-size: 0.66rem;
-    line-height: 1.25;
-  }
-
-  .p4-catalog-hero-copy .p4-catalog-hero-meta {
-    margin-top: 0.18rem;
-  }
-
-  .p4-catalog-hero-copy .p4-button {
-    min-height: 1.9rem;
-    margin-top: 0.45rem;
-    padding-inline: 0.65rem;
-    font-size: 0.62rem;
-  }
-
-  .p4-catalog-quick-picks {
-    gap: 0.3rem;
-    padding: 0.65rem 0.45rem;
-  }
-
-  .p4-catalog-quick-icon {
-    width: 1.7rem;
-    height: 1.7rem;
-    font-size: 0.82rem;
-  }
-
-  .p4-catalog-quick-pick strong {
-    font-size: 0.62rem;
-  }
-
-  .p4-catalog-quick-pick small {
-    font-size: 0.52rem;
-  }
-
   .p4-catalog-filter {
     grid-template-columns: 1fr;
   }
 
-  .p4-catalog-filter-group,
-  .p4-catalog-sort-group {
+  .p4-catalog-filter-group {
     grid-column: 1;
   }
 
@@ -3989,44 +3697,6 @@ body.p4-public-body .portal-main-flush > .p4-lobby,
 @media (min-width: 761px) and (max-width: 900px) {
   .p4-catalog-main .p4-catalog-grid {
     grid-template-columns: repeat(5, minmax(0, 1fr));
-  }
-
-  .p4-catalog-hero-feature::after {
-    inset: 0;
-    background: linear-gradient(
-      90deg,
-      rgba(8, 13, 51, 0.94),
-      rgba(8, 13, 51, 0.72) 38%,
-      rgba(8, 13, 51, 0.12) 72%,
-      rgba(8, 13, 51, 0)
-    );
-  }
-
-  .p4-catalog-hero-copy {
-    top: auto;
-    right: auto;
-    bottom: 0.8rem;
-    left: 1rem;
-    width: 62%;
-    justify-content: flex-end;
-    gap: 0;
-  }
-
-  .p4-catalog-hero-copy h2 {
-    margin-top: 0.3rem;
-  }
-
-  .p4-catalog-hero-copy p {
-    margin-top: 0.25rem;
-    line-height: 1.28;
-  }
-
-  .p4-catalog-hero-copy .p4-catalog-hero-meta {
-    margin-top: 0.2rem;
-  }
-
-  .p4-catalog-hero-copy .p4-button {
-    margin-top: 0.55rem;
   }
 
   .p4-catalog-filter-heading {
@@ -4552,8 +4222,7 @@ body.p4-public-body .portal-main-flush > .p4-lobby,
   --p4-page-background:
     radial-gradient(circle at 0% 0%, rgba(205, 191, 246, 0.9), transparent 17rem),
     radial-gradient(circle at -6% 45%, rgba(214, 197, 250, 0.85), transparent 24rem),
-    radial-gradient(circle at 106% 46%, rgba(255, 222, 235, 0.45), transparent 21rem),
-    #eff2fd;
+    radial-gradient(circle at 106% 46%, rgba(255, 222, 235, 0.45), transparent 21rem), #eff2fd;
   --p4-text: #11157a;
   --p4-text-strong: #171a99;
   --p4-text-muted: #5360ac;
@@ -4587,8 +4256,7 @@ html[data-p4-theme="midnight-neon"] .portal.p4-public-shell {
   color-scheme: dark;
   --p4-page-background:
     radial-gradient(circle at 5% 0%, rgba(236, 76, 255, 0.22), transparent 19rem),
-    radial-gradient(circle at 100% 40%, rgba(0, 176, 252, 0.2), transparent 23rem),
-    #09152b;
+    radial-gradient(circle at 100% 40%, rgba(0, 176, 252, 0.2), transparent 23rem), #09152b;
   --p4-text: #ecf9ff;
   --p4-text-strong: #ecf9ff;
   --p4-text-muted: #b1e7ff;
@@ -4620,8 +4288,7 @@ html[data-p4-theme="ocean-blue-dream"] .portal.p4-public-shell {
   color-scheme: dark;
   --p4-page-background:
     radial-gradient(circle at 0% 0%, rgba(2, 134, 223, 0.25), transparent 18rem),
-    radial-gradient(circle at 100% 44%, rgba(118, 213, 254, 0.18), transparent 24rem),
-    #09152b;
+    radial-gradient(circle at 100% 44%, rgba(118, 213, 254, 0.18), transparent 24rem), #09152b;
   --p4-text: #ecf9ff;
   --p4-text-strong: #ecf9ff;
   --p4-text-muted: #b1e7ff;
@@ -4652,8 +4319,7 @@ html[data-p4-theme="ocean-blue-dream"] .portal.p4-public-shell {
 html[data-p4-theme="forest-adventure"] .portal.p4-public-shell {
   --p4-page-background:
     radial-gradient(circle at 0% 0%, rgba(125, 226, 209, 0.42), transparent 19rem),
-    radial-gradient(circle at 100% 45%, rgba(51, 153, 137, 0.18), transparent 23rem),
-    #fffafb;
+    radial-gradient(circle at 100% 45%, rgba(51, 153, 137, 0.18), transparent 23rem), #fffafb;
   --p4-text: #131515;
   --p4-text-strong: #2b2c28;
   --p4-text-muted: #39786d;
@@ -4684,8 +4350,7 @@ html[data-p4-theme="forest-adventure"] .portal.p4-public-shell {
 html[data-p4-theme="sunset-bloom"] .portal.p4-public-shell {
   --p4-page-background:
     radial-gradient(circle at 0% 0%, rgba(241, 206, 255, 0.58), transparent 18rem),
-    radial-gradient(circle at 100% 44%, rgba(255, 196, 209, 0.44), transparent 24rem),
-    #fff7fb;
+    radial-gradient(circle at 100% 44%, rgba(255, 196, 209, 0.44), transparent 24rem), #fff7fb;
   --p4-text: #35204d;
   --p4-text-strong: #5f2f79;
   --p4-text-muted: #795a91;
@@ -4764,7 +4429,6 @@ html[data-p4-theme] .portal.p4-public-shell .p4-section-heading h2,
 html[data-p4-theme] .portal.p4-public-shell .p4-activity-heading h2,
 html[data-p4-theme] .portal.p4-public-shell .p4-action-card h2,
 html[data-p4-theme] .portal.p4-public-shell .p4-catalog h1,
-html[data-p4-theme] .portal.p4-public-shell .p4-catalog-quick-heading h2,
 html[data-p4-theme] .portal.p4-public-shell .p4-catalog-filter-heading h2,
 html[data-p4-theme] .portal.p4-public-shell .p4-catalog-activity-title h2,
 html[data-p4-theme] .portal.p4-public-shell .p4-catalog-activity-panel-heading h3,
@@ -4777,7 +4441,6 @@ html[data-p4-theme] .portal.p4-public-shell .p4-game-empty h1 {
 html[data-p4-theme] .portal.p4-public-shell .p4-section-heading p,
 html[data-p4-theme] .portal.p4-public-shell .p4-action-card p,
 html[data-p4-theme] .portal.p4-public-shell .p4-catalog-heading p,
-html[data-p4-theme] .portal.p4-public-shell .p4-catalog-quick-heading p,
 html[data-p4-theme] .portal.p4-public-shell .p4-catalog-activity-title p,
 html[data-p4-theme] .portal.p4-public-shell .p4-game-dialog-content,
 html[data-p4-theme] .portal.p4-public-shell .p4-game-info-card p,
@@ -4821,7 +4484,6 @@ html[data-p4-theme] .portal.p4-public-shell .p4-button--dark {
 }
 
 html[data-p4-theme] .portal.p4-public-shell .p4-activity-card,
-html[data-p4-theme] .portal.p4-public-shell .p4-catalog-quick-picks,
 html[data-p4-theme] .portal.p4-public-shell .p4-catalog-filter,
 html[data-p4-theme] .portal.p4-public-shell .p4-catalog-activity,
 html[data-p4-theme] .portal.p4-public-shell .p4-catalog-activity-panel,
@@ -4836,9 +4498,7 @@ html[data-p4-theme] .portal.p4-public-shell .p4-game-dialog {
 
 html[data-p4-theme] .portal.p4-public-shell .p4-catalog-search,
 html[data-p4-theme] .portal.p4-public-shell .p4-catalog-filter-trigger,
-html[data-p4-theme] .portal.p4-public-shell .p4-catalog-quick-pick,
 html[data-p4-theme] .portal.p4-public-shell .p4-catalog-provider-option,
-html[data-p4-theme] .portal.p4-public-shell .p4-catalog-sort-option,
 html[data-p4-theme] .portal.p4-public-shell .p4-game-stats > div {
   border-color: var(--p4-border);
   background: var(--p4-surface-soft);
@@ -4851,8 +4511,7 @@ html[data-p4-theme] .portal.p4-public-shell .p4-catalog-search input::placeholde
 }
 
 html[data-p4-theme] .portal.p4-public-shell .p4-catalog-search:focus-within,
-html[data-p4-theme] .portal.p4-public-shell .p4-catalog-filter-trigger:focus-visible,
-html[data-p4-theme] .portal.p4-public-shell .p4-catalog-quick-pick:focus-visible {
+html[data-p4-theme] .portal.p4-public-shell .p4-catalog-filter-trigger:focus-visible {
   border-color: var(--p4-border-strong);
   box-shadow: 0 0 0 3px var(--p4-focus);
 }
@@ -4865,7 +4524,6 @@ html[data-p4-theme] .portal.p4-public-shell .p4-catalog-activity-panel-heading {
 
 html[data-p4-theme] .portal.p4-public-shell .p4-catalog-filter-group legend,
 html[data-p4-theme] .portal.p4-public-shell .p4-catalog-provider-option span,
-html[data-p4-theme] .portal.p4-public-shell .p4-catalog-sort-option,
 html[data-p4-theme] .portal.p4-public-shell .p4-catalog-activity-panel-heading h3 {
   color: var(--p4-text-strong);
 }
@@ -4895,17 +4553,11 @@ html[data-p4-theme] .portal.p4-public-shell .p4-pagination-button:focus-visible 
   background: var(--p4-surface-hover);
 }
 
-html[data-p4-theme] .portal.p4-public-shell .p4-catalog-quick-pick:hover,
-html[data-p4-theme] .portal.p4-public-shell .p4-catalog-quick-pick:focus-visible,
-html[data-p4-theme] .portal.p4-public-shell .p4-catalog-provider-option:hover,
-html[data-p4-theme] .portal.p4-public-shell .p4-catalog-sort-option:hover {
+html[data-p4-theme] .portal.p4-public-shell .p4-catalog-provider-option:hover {
   border-color: var(--p4-border-strong);
   background: var(--p4-surface-hover);
 }
 
-html[data-p4-theme] .portal.p4-public-shell .p4-catalog-quick-icon--hot,
-html[data-p4-theme] .portal.p4-public-shell .p4-catalog-quick-icon--new,
-html[data-p4-theme] .portal.p4-public-shell .p4-catalog-quick-icon--live,
 html[data-p4-theme] .portal.p4-public-shell .p4-game-info-icon {
   background: var(--p4-accent-soft);
   color: var(--p4-accent);
@@ -4935,7 +4587,9 @@ html[data-p4-theme] .portal.p4-public-shell .p4-provider-active-dot {
   box-shadow: 0 0 0 0.25rem color-mix(in srgb, var(--p4-success) 18%, transparent);
 }
 
-html[data-p4-theme] .portal.p4-public-shell .p4-activity-row:not(.p4-activity-row--head):nth-child(even),
+html[data-p4-theme]
+  .portal.p4-public-shell
+  .p4-activity-row:not(.p4-activity-row--head):nth-child(even),
 html[data-p4-theme] .portal.p4-public-shell .p4-catalog-latest-row,
 html[data-p4-theme] .portal.p4-public-shell .p4-catalog-ranking-row {
   background: var(--p4-surface-soft);
@@ -5286,21 +4940,18 @@ html[data-p4-theme] .portal.p4-public-shell .p4-provider-games-more {
   color: var(--p4-text-strong);
 }
 
-html[data-p4-theme] .portal.p4-public-shell .p4-catalog-quick-pick small,
 html[data-p4-theme] .portal.p4-public-shell .p4-catalog-latest-copy small,
 html[data-p4-theme] .portal.p4-public-shell .p4-catalog-ranking-copy small,
 html[data-p4-theme] .portal.p4-public-shell .p4-catalog-latest-row time {
   color: var(--p4-text-soft);
 }
 
-html[data-p4-theme] .portal.p4-public-shell .p4-catalog-quick-pick > i,
 html[data-p4-theme] .portal.p4-public-shell .p4-catalog-activity-panel-heading h3 i,
 html[data-p4-theme] .portal.p4-public-shell .p4-catalog-activity-icon {
   color: var(--p4-accent);
 }
 
 html[data-p4-theme] .portal.p4-public-shell .p4-catalog-provider-option,
-html[data-p4-theme] .portal.p4-public-shell .p4-catalog-sort-option,
 html[data-p4-theme] .portal.p4-public-shell .p4-catalog-results-heading,
 html[data-p4-theme] .portal.p4-public-shell .p4-empty-state,
 html[data-p4-theme] .portal.p4-public-shell .p4-pagination-summary {
@@ -5314,11 +4965,7 @@ html[data-p4-theme] .portal.p4-public-shell .p4-provider-section {
   border: 1px solid var(--p4-border);
   border-radius: 1.25rem;
   border-color: var(--p4-border-strong);
-  background: linear-gradient(
-    135deg,
-    var(--p4-surface-strong),
-    var(--p4-surface)
-  );
+  background: linear-gradient(135deg, var(--p4-surface-strong), var(--p4-surface));
   box-shadow: var(--p4-shadow);
 }
 
@@ -5336,11 +4983,7 @@ html[data-p4-theme] .portal.p4-public-shell .p4-provider-games {
 
 /* Keep activity lists inside the panel surface instead of tinting the whole list. */
 html[data-p4-theme] .portal.p4-public-shell .p4-catalog-activity {
-  background: linear-gradient(
-    135deg,
-    var(--p4-surface-strong),
-    var(--p4-surface)
-  );
+  background: linear-gradient(135deg, var(--p4-surface-strong), var(--p4-surface));
 }
 
 html[data-p4-theme] .portal.p4-public-shell .p4-catalog-activity-panel {
@@ -5374,15 +5017,13 @@ html[data-p4-theme] .portal.p4-public-shell .p4-catalog-ranking-avatar {
 
 /* Filter choices belong to the filter card; only show a surface on interaction. */
 html[data-p4-theme] .portal.p4-public-shell .p4-catalog-provider-option,
-html[data-p4-theme] .portal.p4-public-shell .p4-catalog-sort-option {
+html[data-p4-theme] .portal.p4-public-shell .p4-catalog-provider-option {
   border-color: transparent;
   background: transparent;
 }
 
 html[data-p4-theme] .portal.p4-public-shell .p4-catalog-provider-option:hover,
-html[data-p4-theme] .portal.p4-public-shell .p4-catalog-provider-option:focus-within,
-html[data-p4-theme] .portal.p4-public-shell .p4-catalog-sort-option:hover,
-html[data-p4-theme] .portal.p4-public-shell .p4-catalog-sort-option:focus-within {
+html[data-p4-theme] .portal.p4-public-shell .p4-catalog-provider-option:focus-within {
   border-color: var(--p4-border-strong);
   background: var(--p4-surface-hover);
 }
@@ -5396,7 +5037,6 @@ html[data-p4-theme] .portal.p4-public-shell .p4-catalog-provider-option small {
   color: var(--p4-text-soft);
 }
 
-html[data-p4-theme] .portal.p4-public-shell .p4-catalog-sort-option:has(input:checked),
 html[data-p4-theme] .portal.p4-public-shell .p4-catalog-results-heading strong {
   color: var(--p4-text-strong);
 }

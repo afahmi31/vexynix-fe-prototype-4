@@ -15,19 +15,23 @@ type PasswordFieldProps = React.ComponentPropsWithRef<"input"> & {
   id: string;
   label: string;
   error?: string;
+  hideLabel?: boolean;
 };
 
 export default function PasswordField({
   id,
   label,
   error,
+  hideLabel = false,
   ...inputProps
 }: PasswordFieldProps) {
   const [visible, setVisible] = useState(false);
 
   return (
     <div className="auth-field">
-      <label htmlFor={id}>{label}</label>
+      <label htmlFor={id} className={hideLabel ? "visually-hidden" : undefined}>
+        {label}
+      </label>
       <div className="auth-password-wrap">
         <input
           id={id}
@@ -43,10 +47,7 @@ export default function PasswordField({
           aria-pressed={visible}
           title={visible ? "Sembunyikan password" : "Tampilkan password"}
         >
-          <i
-            className={visible ? "fa fa-eye-slash" : "fa fa-eye"}
-            aria-hidden="true"
-          />
+          <i className={visible ? "fa fa-eye-slash" : "fa fa-eye"} aria-hidden="true" />
         </button>
       </div>
       {error && <div className="text-danger small mt-1">{error}</div>}

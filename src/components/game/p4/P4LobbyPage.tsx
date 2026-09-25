@@ -21,9 +21,7 @@ const CTA_ARTWORK = {
   catalog: "/assets/prototype-4/cta/new-games-banner.png",
 } as const;
 
-const CATALOG_HERO_ART = "/assets/prototype-4/hero/neon-racer-catalog.png";
-
-const HERO_SLIDES = [
+const HERO_FALLBACK_SLIDES = [
   {
     gameId: "neon-racer",
     title: "Neon Racer",
@@ -217,10 +215,7 @@ function formatSignedIdr(value: number): string {
   return `${value >= 0 ? "+" : "-"}${formatIdr(value)}`;
 }
 
-function activityRowsFor(
-  tab: ActivityTab,
-  feeds?: ActivityFeedsRes
-): ActivityDisplayRow[] {
+function activityRowsFor(tab: ActivityTab, feeds?: ActivityFeedsRes): ActivityDisplayRow[] {
   if (!feeds) return ACTIVITY_FALLBACK_ROWS[tab];
 
   if (tab === "leaderboard") {
@@ -234,21 +229,12 @@ function activityRowsFor(
 
   const feed = tab === "latest" ? feeds.latestBets : feeds.bigWins;
   return feed.rows.map((row) => ({
-    primary: row.game,
+    primary: row.game ?? "Game tidak tersedia",
     player: row.player,
     metric: `${row.multiplier.toFixed(2)}x`,
     result: formatSignedIdr(row.win),
   }));
 }
-
-type CatalogSort = "popular" | "newest" | "az";
-type CatalogQuickPick = "popular" | "newest" | "live";
-
-const CATALOG_SORT_OPTIONS: { id: CatalogSort; label: string }[] = [
-  { id: "popular", label: "Terpopuler" },
-  { id: "newest", label: "Terbaru" },
-  { id: "az", label: "A-Z" },
-];
 
 type CatalogProviderOption = {
   id: string;
@@ -297,6 +283,49 @@ function gamesByIds(games: Game[], ids: string[], fallbackCount: number): Game[]
   return [...picked, ...fallback].slice(0, fallbackCount);
 }
 
+function gamesByStagingPopularOrder(games: Game[], vendors: Vendor[], limit: number): Game[] {
+  const popularGames = games.filter((game) => game.is_popular);
+  if (popularGames.length >= limit) return popularGames.slice(0, limit);
+
+  const gamesWithImages = games.filter((game) => game.image_url);
+  const sourceGames = gamesWithImages.length >= limit ? gamesWithImages : games;
+  const gamesByVendor = new Map<string, Game[]>();
+
+  sourceGames.forEach((game) => {
+    const vendorGames = gamesByVendor.get(game.vendor_id) ?? [];
+    vendorGames.push(game);
+    gamesByVendor.set(game.vendor_id, vendorGames);
+  });
+
+  const vendorById = new Map(vendors.map((vendor) => [vendor.id, vendor]));
+  const vendorGroups = [...gamesByVendor.entries()].sort(([vendorA], [vendorB]) => {
+    const detailsA = vendorById.get(vendorA);
+    const detailsB = vendorById.get(vendorB);
+    const orderA = detailsA?.sort_order ?? 100;
+    const orderB = detailsB?.sort_order ?? 100;
+
+    return orderA - orderB || (detailsA?.name ?? vendorA).localeCompare(detailsB?.name ?? vendorB);
+  });
+
+  const selectedGames: Game[] = [];
+  for (let index = 0; selectedGames.length < limit; index += 1) {
+    let addedGame = false;
+
+    for (const [, vendorGames] of vendorGroups) {
+      const game = vendorGames[index];
+      if (!game) continue;
+
+      selectedGames.push(game);
+      addedGame = true;
+      if (selectedGames.length >= limit) break;
+    }
+
+    if (!addedGame) break;
+  }
+
+  return selectedGames;
+}
+
 type RailDirection = "previous" | "next";
 
 function useP4HorizontalRail(itemCount: number) {
@@ -307,6 +336,8 @@ function useP4HorizontalRail(itemCount: number) {
   useEffect(() => {
     const rail = railRef.current;
     if (!rail) return;
+
+    rail.scrollLeft = 0;
 
     let frame = 0;
     const updateScrollControls = () => {
@@ -368,7 +399,6 @@ export default function P4LobbyPage() {
   const [activityTab, setActivityTab] = useState<ActivityTab>("latest");
   const [catalogSearch, setCatalogSearch] = useState("");
   const [selectedCatalogProviders, setSelectedCatalogProviders] = useState<string[]>([]);
-  const [catalogSort, setCatalogSort] = useState<CatalogSort>("popular");
   const [isCatalogFilterOpen, setIsCatalogFilterOpen] = useState(false);
   const [catalogPage, setCatalogPage] = useState(1);
   const [heroSlideIndex, setHeroSlideIndex] = useState(0);
@@ -376,7 +406,19 @@ export default function P4LobbyPage() {
 
   const activeGames = useMemo(() => activeGamesFrom(catalogData), [catalogData]);
   const vendors = useMemo(() => vendorsFrom(vendorsData), [vendorsData]);
+  const hasLiveCatalog = Boolean(catalogData?.games?.length);
+  const stagingPopularGames = useMemo(
+    () => gamesByStagingPopularOrder(activeGames, vendors, 10),
+    [activeGames, vendors]
+  );
   const vendorName = (id: string) => vendors.find((vendor) => vendor.id === id)?.name ?? id;
+  const heroGames = useMemo(() => {
+    if (hasLiveCatalog) return stagingPopularGames.slice(0, 5);
+
+    return HERO_FALLBACK_SLIDES.map((slide) =>
+      activeGames.find((game) => game.id === slide.gameId)
+    ).filter((game): game is Game => Boolean(game));
+  }, [activeGames, hasLiveCatalog, stagingPopularGames]);
   const providerFeatures = useMemo<P4ProviderFeature[]>(
     () =>
       PROVIDER_FEATURES.map((provider) => ({
@@ -393,14 +435,19 @@ export default function P4LobbyPage() {
   const isCatalogView = requestedCategory !== "home";
 
   useEffect(() => {
-    if (isCatalogView || HERO_SLIDES.length < 2) return;
+    if (isCatalogView || heroGames.length < 2) return;
 
     const timer = window.setInterval(() => {
-      setHeroSlideIndex((current) => (current + 1) % HERO_SLIDES.length);
+      setHeroSlideIndex((current) => (current + 1) % heroGames.length);
     }, 6000);
 
     return () => window.clearInterval(timer);
-  }, [isCatalogView]);
+  }, [heroGames.length, isCatalogView]);
+
+  useEffect(() => {
+    if (heroSlideIndex < heroGames.length) return;
+    setHeroSlideIndex(0);
+  }, [heroGames.length, heroSlideIndex]);
 
   useEffect(() => {
     if (isCatalogView) return;
@@ -478,14 +525,26 @@ export default function P4LobbyPage() {
     };
   }, [detailGame]);
 
-  const heroSlide = HERO_SLIDES[heroSlideIndex] ?? HERO_SLIDES[0];
-  const heroGame = useMemo(
-    () => activeGames.find((game) => game.id === heroSlide.gameId) ?? activeGames[0],
-    [activeGames, heroSlide.gameId]
-  );
-  const topFive = useMemo(
-    () =>
-      gamesByIds(
+  const heroGame = heroGames[heroSlideIndex] ?? heroGames[0];
+  const fallbackHeroSlide =
+    HERO_FALLBACK_SLIDES.find((slide) => slide.gameId === heroGame?.id) ?? HERO_FALLBACK_SLIDES[0];
+  const heroSlide =
+    hasLiveCatalog && heroGame
+      ? {
+          gameId: heroGame.id,
+          title: heroGame.name,
+          backdrop: heroGame.image_url ?? fallbackHeroSlide.backdrop,
+          meta: `${catalogCategoryLabel(heroGame.category)}  ·  ${vendorName(
+            heroGame.vendor_id
+          )}  ·  ${heroGame.demo_supported ? "Gratis Demo" : "Main Sekarang"}`,
+          description:
+            heroGame.description ??
+            `Mainkan ${heroGame.name} dari ${vendorName(heroGame.vendor_id)}.`,
+        }
+      : fallbackHeroSlide;
+  const topFive = useMemo(() => {
+    if (!hasLiveCatalog) {
+      return gamesByIds(
         activeGames,
         [
           "gates-of-olympus",
@@ -495,9 +554,11 @@ export default function P4LobbyPage() {
           "solar-riches",
         ],
         5
-      ),
-    [activeGames]
-  );
+      );
+    }
+
+    return stagingPopularGames.slice(0, 5);
+  }, [activeGames, hasLiveCatalog, stagingPopularGames]);
   const featuredGames = useMemo(
     () =>
       gamesByIds(
@@ -602,25 +663,19 @@ export default function P4LobbyPage() {
   }, [activeGames]);
   const categoryLabel =
     category === "all"
-      ? CATEGORY_LABELS.all ?? "Semua Game"
-      : catalogCategoryOptions.find((option) => option.id === category)?.label ??
-        catalogCategoryLabel(category);
+      ? (CATEGORY_LABELS.all ?? "Semua Game")
+      : (catalogCategoryOptions.find((option) => option.id === category)?.label ??
+        catalogCategoryLabel(category));
   const filteredCatalog = useMemo(() => {
     const query = catalogSearch.trim().toLowerCase();
     const providerIds = new Set(selectedCatalogProviders);
     const indexedGames = activeGames
-      .filter(
-        (game) => category === "all" || normalizeCatalogCategory(game.category) === category
-      )
+      .filter((game) => category === "all" || normalizeCatalogCategory(game.category) === category)
       .filter((game) => providerIds.size === 0 || providerIds.has(game.vendor_id))
       .filter((game) => !query || game.name.toLowerCase().includes(query));
     return indexedGames
       .map((game, index) => ({ game, index }))
       .sort((a, b) => {
-        if (catalogSort === "az") return a.game.name.localeCompare(b.game.name, "id");
-        if (catalogSort === "newest") {
-          return Number(b.game.is_new) - Number(a.game.is_new) || a.index - b.index;
-        }
         return (
           Number(b.game.is_popular) - Number(a.game.is_popular) ||
           Number(b.game.is_featured) - Number(a.game.is_featured) ||
@@ -628,7 +683,7 @@ export default function P4LobbyPage() {
         );
       })
       .map(({ game }) => game);
-  }, [activeGames, catalogSearch, catalogSort, category, selectedCatalogProviders]);
+  }, [activeGames, catalogSearch, category, selectedCatalogProviders]);
   const catalogPageCount = Math.max(1, Math.ceil(filteredCatalog.length / CATALOG_PAGE_SIZE));
   const visibleCatalogPage = Math.min(catalogPage, catalogPageCount);
   const paginatedCatalog = useMemo(
@@ -642,7 +697,7 @@ export default function P4LobbyPage() {
 
   useEffect(() => {
     setCatalogPage(1);
-  }, [category, catalogSearch, catalogSort, selectedCatalogProviders]);
+  }, [category, catalogSearch, selectedCatalogProviders]);
 
   useEffect(() => {
     setCatalogPage((currentPage) => Math.min(currentPage, catalogPageCount));
@@ -672,18 +727,9 @@ export default function P4LobbyPage() {
     );
   };
 
-  const handleCatalogQuickPick = (quickPick: CatalogQuickPick) => {
-    if (quickPick === "live") {
-      handleCatalogCategoryChange("live");
-      return;
-    }
-    setCatalogSort(quickPick);
-  };
-
   const handleCatalogReset = () => {
     setCatalogSearch("");
     setSelectedCatalogProviders([]);
-    setCatalogSort("popular");
     if (category !== "all") handleCatalogCategoryChange("all");
   };
 
@@ -696,17 +742,6 @@ export default function P4LobbyPage() {
     if (!heroGame || actionDisabled) return;
     if (heroGame.demo_supported) void launchDemo(heroGame.id);
     else void launch(heroGame.id);
-  };
-
-  const catalogHeroGame = useMemo(
-    () => activeGames.find((game) => game.id === "neon-racer") ?? activeGames[0],
-    [activeGames]
-  );
-
-  const handleCatalogHeroLaunch = () => {
-    if (!catalogHeroGame || actionDisabled) return;
-    if (catalogHeroGame.demo_supported) void launchDemo(catalogHeroGame.id);
-    else void launch(catalogHeroGame.id);
   };
 
   return (
@@ -723,20 +758,15 @@ export default function P4LobbyPage() {
           categoryOptions={catalogCategoryOptions}
           providerOptions={catalogProviderOptions}
           selectedProviders={selectedCatalogProviders}
-          sort={catalogSort}
           activityGames={activeGames}
-          heroGame={catalogHeroGame}
           vendorName={vendorName}
           onSearch={setCatalogSearch}
           onCategoryChange={handleCatalogCategoryChange}
           onToggleProvider={handleCatalogProviderToggle}
-          onSortChange={setCatalogSort}
           onReset={handleCatalogReset}
           isFilterOpen={isCatalogFilterOpen}
           onToggleFilter={() => setIsCatalogFilterOpen((isOpen) => !isOpen)}
           onCloseFilter={() => setIsCatalogFilterOpen(false)}
-          onQuickPick={handleCatalogQuickPick}
-          onHeroLaunch={handleCatalogHeroLaunch}
           onBrowse={() => scrollTo("p4-catalog-grid")}
           onViewActivity={() => scrollTo("p4-catalog-activity")}
           onPageChange={handleCatalogPageChange}
@@ -746,15 +776,34 @@ export default function P4LobbyPage() {
       ) : (
         <>
           <section className="p4-hero" aria-labelledby="p4-hero-title">
-            <Image
-              key={`hero-image-${heroSlide.gameId}`}
-              src={heroSlide.backdrop}
-              alt={heroSlide.title}
-              fill
-              priority
-              sizes="100vw"
-              className="p4-hero-image"
-            />
+            {heroSlide.backdrop.startsWith("/") ? (
+              <Image
+                key={`hero-image-${heroSlide.gameId}`}
+                src={heroSlide.backdrop}
+                alt={heroSlide.title}
+                fill
+                priority
+                sizes="100vw"
+                className="p4-hero-image"
+              />
+            ) : (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                key={`hero-image-${heroSlide.gameId}`}
+                src={heroSlide.backdrop}
+                alt={heroSlide.title}
+                className="p4-hero-image"
+                decoding="async"
+                style={{
+                  position: "absolute",
+                  inset: 0,
+                  width: "100%",
+                  height: "100%",
+                  objectFit: "contain",
+                  objectPosition: "right center",
+                }}
+              />
+            )}
             <div className="p4-hero-overlay" aria-hidden="true" />
             <div
               className="p4-hero-content"
@@ -783,12 +832,12 @@ export default function P4LobbyPage() {
               </div>
             </div>
             <div className="p4-hero-dots" role="tablist" aria-label="Pilihan hero">
-              {HERO_SLIDES.map((slide, index) => (
+              {heroGames.map((game, index) => (
                 <button
-                  key={slide.gameId}
+                  key={game.id}
                   type="button"
                   role="tab"
-                  aria-label={`Tampilkan ${slide.title}`}
+                  aria-label={`Tampilkan ${game.name}`}
                   aria-selected={heroSlideIndex === index}
                   className={heroSlideIndex === index ? "is-active" : undefined}
                   onClick={() => setHeroSlideIndex(index)}
@@ -1168,7 +1217,7 @@ function P4GameRailSection({
         ) : null}
         <div
           ref={railRef}
-          className="p4-rail p4-rail--landscape"
+          className="p4-rail p4-rail--featured"
           tabIndex={0}
           aria-label={railLabel}
         >
@@ -1176,7 +1225,7 @@ function P4GameRailSection({
             <P4GameCard
               key={game.id}
               game={game}
-              variant="landscape"
+              variant="portrait"
               vendorName={vendorName(game.vendor_id)}
               onSelect={onSelect}
             />
@@ -1399,20 +1448,15 @@ function P4CatalogView({
   categoryOptions,
   providerOptions,
   selectedProviders,
-  sort,
   activityGames,
-  heroGame,
   vendorName,
   onSearch,
   onCategoryChange,
   onToggleProvider,
-  onSortChange,
   onReset,
   isFilterOpen,
   onToggleFilter,
   onCloseFilter,
-  onQuickPick,
-  onHeroLaunch,
   onBrowse,
   onViewActivity,
   onPageChange,
@@ -1429,28 +1473,22 @@ function P4CatalogView({
   categoryOptions: CatalogCategoryOption[];
   providerOptions: CatalogProviderOption[];
   selectedProviders: string[];
-  sort: CatalogSort;
   activityGames: Game[];
-  heroGame?: Game;
   vendorName: (id: string) => string;
   onSearch: (value: string) => void;
   onCategoryChange: (category: string) => void;
   onToggleProvider: (providerId: string) => void;
-  onSortChange: (sort: CatalogSort) => void;
   onReset: () => void;
   isFilterOpen: boolean;
   onToggleFilter: () => void;
   onCloseFilter: () => void;
-  onQuickPick: (quickPick: CatalogQuickPick) => void;
-  onHeroLaunch: () => void;
   onBrowse: () => void;
   onViewActivity: () => void;
   onPageChange: (page: number) => void;
   activityFeeds?: ActivityFeedsRes;
   onSelect: (game: Game) => void;
 }) {
-  const activeFilterCount =
-    (category !== "all" ? 1 : 0) + selectedProviders.length + (sort !== "popular" ? 1 : 0);
+  const activeFilterCount = (category !== "all" ? 1 : 0) + selectedProviders.length;
 
   return (
     <section className="p4-catalog" id="p4-catalog" aria-labelledby="p4-catalog-title">
@@ -1470,7 +1508,6 @@ function P4CatalogView({
           />
         </label>
       </div>
-      <P4CatalogHero heroGame={heroGame} onLaunch={onHeroLaunch} onQuickPick={onQuickPick} />
       <div className="p4-catalog-body">
         <div className="p4-catalog-filter-shell">
           <button
@@ -1507,10 +1544,8 @@ function P4CatalogView({
                 categoryOptions={categoryOptions}
                 providerOptions={providerOptions}
                 selectedProviders={selectedProviders}
-                sort={sort}
                 onCategoryChange={onCategoryChange}
                 onToggleProvider={onToggleProvider}
-                onSortChange={onSortChange}
                 onReset={onReset}
                 onClose={onCloseFilter}
               />
@@ -1561,100 +1596,13 @@ function P4CatalogView({
   );
 }
 
-function P4CatalogHero({
-  heroGame,
-  onLaunch,
-  onQuickPick,
-}: {
-  heroGame?: Game;
-  onLaunch: () => void;
-  onQuickPick: (quickPick: CatalogQuickPick) => void;
-}) {
-  return (
-    <section className="p4-catalog-hero" aria-labelledby="p4-catalog-hero-title">
-      <div className="p4-catalog-hero-feature">
-        <Image
-          src={CATALOG_HERO_ART}
-          alt="Neon Racer"
-          fill
-          priority
-          sizes="(max-width: 900px) 100vw, 72vw"
-          className="p4-catalog-hero-image"
-        />
-        <div className="p4-catalog-hero-copy">
-          <span className="p4-catalog-hero-badge">Game Pilihan</span>
-          <h2 id="p4-catalog-hero-title">Neon Racer</h2>
-          <p className="p4-catalog-hero-meta">Arcade · Habanero · Gratis Demo</p>
-          <p>Kejar ritme kota dan taklukkan setiap tikungan.</p>
-          <button
-            type="button"
-            className="p4-button p4-button--primary"
-            disabled={!heroGame}
-            onClick={onLaunch}
-          >
-            Mainkan Sekarang <i className="fa-solid fa-arrow-right" aria-hidden="true" />
-          </button>
-        </div>
-      </div>
-      <aside className="p4-catalog-quick-picks" aria-labelledby="p4-catalog-quick-title">
-        <div className="p4-catalog-quick-heading">
-          <div>
-            <h2 id="p4-catalog-quick-title">Pilihan cepat</h2>
-            <p>Temukan game sesuai seleramu.</p>
-          </div>
-        </div>
-        <button
-          type="button"
-          className="p4-catalog-quick-pick"
-          onClick={() => onQuickPick("popular")}
-        >
-          <span className="p4-catalog-quick-icon p4-catalog-quick-icon--hot" aria-hidden="true">
-            <i className="fa-solid fa-fire" />
-          </span>
-          <span>
-            <strong>Terpopuler</strong>
-            <small>Game favorit pemain</small>
-          </span>
-          <i className="fa-solid fa-chevron-right" aria-hidden="true" />
-        </button>
-        <button
-          type="button"
-          className="p4-catalog-quick-pick"
-          onClick={() => onQuickPick("newest")}
-        >
-          <span className="p4-catalog-quick-icon p4-catalog-quick-icon--new" aria-hidden="true">
-            <i className="fa-solid fa-sun" />
-          </span>
-          <span>
-            <strong>Game Baru</strong>
-            <small>Rilis terbaru minggu ini</small>
-          </span>
-          <i className="fa-solid fa-chevron-right" aria-hidden="true" />
-        </button>
-        <button type="button" className="p4-catalog-quick-pick" onClick={() => onQuickPick("live")}>
-          <span className="p4-catalog-quick-icon p4-catalog-quick-icon--live" aria-hidden="true">
-            <i className="fa-solid fa-circle-play" />
-          </span>
-          <span>
-            <strong>Live Casino</strong>
-            <small>Rasakan dealer langsung</small>
-          </span>
-          <i className="fa-solid fa-chevron-right" aria-hidden="true" />
-        </button>
-      </aside>
-    </section>
-  );
-}
-
 function P4CatalogFilter({
   category,
   categoryOptions,
   providerOptions,
   selectedProviders,
-  sort,
   onCategoryChange,
   onToggleProvider,
-  onSortChange,
   onReset,
   onClose,
 }: {
@@ -1662,10 +1610,8 @@ function P4CatalogFilter({
   categoryOptions: CatalogCategoryOption[];
   providerOptions: CatalogProviderOption[];
   selectedProviders: string[];
-  sort: CatalogSort;
   onCategoryChange: (category: string) => void;
   onToggleProvider: (providerId: string) => void;
-  onSortChange: (sort: CatalogSort) => void;
   onReset: () => void;
   onClose?: () => void;
 }) {
@@ -1709,23 +1655,6 @@ function P4CatalogFilter({
               />
               <span>{provider.name}</span>
               <small>{provider.count}</small>
-            </label>
-          ))}
-        </div>
-      </fieldset>
-      <fieldset className="p4-catalog-filter-group p4-catalog-sort-group">
-        <legend>Urutkan</legend>
-        <div className="p4-catalog-sort-list">
-          {CATALOG_SORT_OPTIONS.map((option) => (
-            <label className="p4-catalog-sort-option" key={option.id}>
-              <input
-                type="radio"
-                name="catalog-sort"
-                value={option.id}
-                checked={sort === option.id}
-                onChange={() => onSortChange(option.id)}
-              />
-              <span>{option.label}</span>
             </label>
           ))}
         </div>
@@ -1789,9 +1718,6 @@ function P4CatalogActivity({
             <p>Lihat game terbaru yang dimainkan dan pemain dengan skor tertinggi.</p>
           </div>
         </div>
-        <button type="button" className="p4-text-link" onClick={onViewAll}>
-          Lihat semua aktivitas <i className="fa-solid fa-arrow-right" aria-hidden="true" />
-        </button>
       </div>
       <div className="p4-catalog-activity-grid">
         <article className="p4-catalog-activity-panel">
