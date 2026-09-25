@@ -1037,6 +1037,38 @@ body.p4-public-body .portal-main-flush > .p4-lobby,
   font-size: 0.58rem;
 }
 
+.p4-activity-table--latest .p4-activity-row {
+  grid-template-columns:
+    minmax(0, 1.35fr)
+    minmax(3.25rem, 0.82fr)
+    minmax(2.8rem, 0.55fr)
+    minmax(5.1rem, auto);
+}
+
+.p4-activity-table--latest .p4-activity-row > span:nth-child(2),
+.p4-activity-table--latest .p4-activity-row > span:nth-child(3) {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.p4-activity-profit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  min-width: 0;
+  padding: 0;
+  color: var(--p4-success, #15945d);
+  font-size: 0.62rem;
+  font-style: normal;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.p4-activity-profit.is-loss {
+  color: var(--p4-danger, #d24b65);
+}
+
 /* Design: ikon game bulat di kiri nama pada tiap baris aktivitas. */
 .p4-activity-game {
   display: flex;
@@ -3544,6 +3576,81 @@ body.p4-public-body .portal-main-flush > .p4-lobby,
   color: #b76651;
 }
 
+.p4-catalog-latest-table {
+  min-width: 0;
+}
+
+.p4-catalog-latest-header,
+.p4-catalog-latest-row {
+  display: grid;
+  grid-template-columns:
+    minmax(8rem, 1.3fr)
+    minmax(5rem, 0.9fr)
+    minmax(3.8rem, 0.55fr)
+    minmax(7rem, auto);
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.p4-catalog-latest-header {
+  padding: 0.45rem 0.1rem 0.35rem;
+  color: #6973b6;
+  font-size: 0.58rem;
+  font-weight: 700;
+}
+
+.p4-catalog-latest-row {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.p4-catalog-latest-game,
+.p4-catalog-latest-player,
+.p4-catalog-latest-multiplier,
+.p4-catalog-latest-profit {
+  min-width: 0;
+}
+
+.p4-catalog-latest-game {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.p4-catalog-latest-game strong,
+.p4-catalog-latest-player,
+.p4-catalog-latest-multiplier,
+.p4-catalog-latest-profit {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.p4-catalog-latest-game strong {
+  color: #242c9e;
+  font-size: 0.68rem;
+  font-weight: 800;
+}
+
+.p4-catalog-latest-player,
+.p4-catalog-latest-multiplier {
+  color: #6973b6;
+  font-size: 0.6rem;
+}
+
+.p4-catalog-latest-profit {
+  overflow: visible;
+  color: var(--p4-success, #15945d);
+  font-size: 0.62rem;
+  font-weight: 800;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.p4-catalog-latest-profit.is-loss {
+  color: var(--p4-danger, #d24b65);
+}
+
 @media (max-width: 1100px) {
   .p4-catalog-hero {
     grid-template-columns: minmax(0, 2.3fr) minmax(14rem, 1fr);
@@ -4420,6 +4527,7 @@ body.p4-public-body .portal-main-flush > .p4-lobby,
   --p4-shadow: 0 0.45rem 1.1rem rgba(89, 83, 188, 0.08);
   --p4-focus: rgba(93, 80, 218, 0.48);
   --p4-success: #27c98a;
+  --p4-danger: #d24b65;
   color: var(--p4-text);
   background: var(--p4-page-background);
 }
@@ -4454,6 +4562,7 @@ html[data-p4-theme="midnight-neon"] .portal.p4-public-shell {
   --p4-shadow: 0 0.6rem 1.4rem rgba(0, 0, 0, 0.28);
   --p4-focus: rgba(118, 213, 254, 0.68);
   --p4-success: #7de2d1;
+  --p4-danger: #ff9cb7;
 }
 
 html[data-p4-theme="ocean-blue-dream"] .portal.p4-public-shell {
@@ -4486,6 +4595,7 @@ html[data-p4-theme="ocean-blue-dream"] .portal.p4-public-shell {
   --p4-shadow: 0 0.6rem 1.4rem rgba(0, 23, 60, 0.3);
   --p4-focus: rgba(118, 213, 254, 0.68);
   --p4-success: #7de2d1;
+  --p4-danger: #ff9cae;
 }
 
 html[data-p4-theme="forest-adventure"] .portal.p4-public-shell {
@@ -4517,6 +4627,7 @@ html[data-p4-theme="forest-adventure"] .portal.p4-public-shell {
   --p4-shadow: 0 0.45rem 1.1rem rgba(51, 110, 101, 0.12);
   --p4-focus: rgba(51, 153, 137, 0.58);
   --p4-success: #339989;
+  --p4-danger: #c14963;
 }
 
 html[data-p4-theme="sunset-bloom"] .portal.p4-public-shell {
@@ -4548,6 +4659,7 @@ html[data-p4-theme="sunset-bloom"] .portal.p4-public-shell {
   --p4-shadow: 0 0.45rem 1.1rem rgba(138, 78, 161, 0.12);
   --p4-focus: rgba(179, 75, 211, 0.52);
   --p4-success: #339989;
+  --p4-danger: #c94c73;
 }
 
 html[data-p4-theme] .portal.p4-public-shell .portal-main-flush {
@@ -5255,6 +5367,78 @@ html[data-p4-theme] .portal.p4-public-shell .p4-catalog-ranking-copy strong {
   color: var(--p4-text-strong);
 }
 
+html[data-p4-theme] .portal.p4-public-shell .p4-activity-profit.is-win,
+html[data-p4-theme] .portal.p4-public-shell .p4-catalog-latest-profit.is-win {
+  color: var(--p4-success);
+}
+
+html[data-p4-theme] .portal.p4-public-shell .p4-activity-profit.is-loss,
+html[data-p4-theme] .portal.p4-public-shell .p4-catalog-latest-profit.is-loss {
+  color: var(--p4-danger);
+}
+
+html[data-p4-theme] .portal.p4-public-shell .p4-catalog-latest-header {
+  color: var(--p4-text-soft);
+}
+
+html[data-p4-theme] .portal.p4-public-shell .p4-catalog-latest-game strong {
+  color: var(--p4-text-strong);
+}
+
+html[data-p4-theme] .portal.p4-public-shell .p4-catalog-latest-player,
+html[data-p4-theme] .portal.p4-public-shell .p4-catalog-latest-multiplier {
+  color: var(--p4-text-muted);
+}
+
 html[data-p4-theme] .portal.p4-public-shell .p4-pagination-summary {
   color: var(--p4-text-muted);
+}
+
+@media (max-width: 560px) {
+  .p4-activity-table--latest .p4-activity-row > span:nth-child(3) {
+    display: block;
+  }
+
+  .p4-activity-table--latest .p4-activity-row {
+    grid-template-columns:
+      minmax(0, 1.45fr)
+      minmax(3.65rem, 0.8fr)
+      minmax(3.2rem, 0.55fr)
+      minmax(5.8rem, auto);
+    gap: 0.3rem;
+  }
+
+  .p4-activity-table--latest .p4-activity-profit {
+    font-size: 0.58rem;
+  }
+
+  .p4-catalog-latest-header,
+  .p4-catalog-latest-row {
+    grid-template-columns:
+      minmax(5.8rem, 1.35fr)
+      minmax(3.55rem, 0.8fr)
+      minmax(3.05rem, 0.55fr)
+      minmax(5.7rem, auto);
+    gap: 0.3rem;
+  }
+
+  .p4-catalog-latest-header {
+    font-size: 0.52rem;
+  }
+
+  .p4-catalog-latest-game {
+    gap: 0.35rem;
+  }
+
+  .p4-catalog-latest-game strong,
+  .p4-catalog-latest-player,
+  .p4-catalog-latest-multiplier,
+  .p4-catalog-latest-profit {
+    font-size: 0.56rem;
+  }
+
+  .p4-catalog-latest-art {
+    width: 2.15rem;
+    height: 1.45rem;
+  }
 }

@@ -112,24 +112,24 @@ type P4ProviderFeature = (typeof PROVIDER_FEATURES)[number] & {
 
 const ACTIVITY_SETS = {
   latest: [
-    ["Velvet Roulette", "Raka88", "Baru saja", "Menang"],
-    ["Neon Racer", "MawarSakti", "2 menit lalu", "Menang"],
-    ["Solar Riches", "OceanHunter", "4 menit lalu", "Kalah"],
-    ["Deep Sea Odyssey", "LautBiru", "6 menit lalu", "Menang"],
-    ["Sugar Rush 1000", "BungaMalam", "7 menit lalu", "Menang"],
-    ["Lightning Roulette", "NonaMalam", "8 menit lalu", "Menang"],
-    ["Gates of Olympus", "Jackpot88", "10 menit lalu", "Menang"],
-    ["Starlight Princess", "Bintang777", "12 menit lalu", "Kalah"],
-    ["Fortune Ox", "SultanMuda", "14 menit lalu", "Menang"],
-    ["Lucky Fortune Cat", "KucingEmas", "16 menit lalu", "Menang"],
-    ["Phoenix Rises", "Phoenix88", "18 menit lalu", "Menang"],
-    ["Mystic Potions", "MysticGirl", "20 menit lalu", "Menang"],
-    ["Reel Royale", "ReelMaster", "22 menit lalu", "Kalah"],
-    ["Candy Superwin", "CandyKing", "24 menit lalu", "Menang"],
-    ["Fortune of Giza", "GizaHunter", "26 menit lalu", "Menang"],
-    ["Mahjong Ways 2", "Tiles88", "28 menit lalu", "Menang"],
-    ["Sweet Bonanza", "Bonanza77", "30 menit lalu", "Kalah"],
-    ["Wanted Dead or a Wild", "WildWest99", "32 menit lalu", "Menang"],
+    ["Velvet Roulette", "Raka88", "1.42x", "+IDR 458.20"],
+    ["Neon Racer", "MawarSakti", "1.20x", "+IDR 214.03"],
+    ["Solar Riches", "OceanHunter", "0.00x", "-IDR 13,513.51"],
+    ["Deep Sea Odyssey", "LautBiru", "1.78x", "+IDR 329.80"],
+    ["Sugar Rush 1000", "BungaMalam", "1.34x", "+IDR 742.16"],
+    ["Lightning Roulette", "NonaMalam", "0.00x", "-IDR 6,248.90"],
+    ["Gates of Olympus", "Jackpot88", "1.92x", "+IDR 1,250.00"],
+    ["Starlight Princess", "Bintang777", "0.00x", "-IDR 4,120.40"],
+    ["Fortune Ox", "SultanMuda", "1.16x", "+IDR 86.40"],
+    ["Lucky Fortune Cat", "KucingEmas", "0.00x", "-IDR 9,980.00"],
+    ["Phoenix Rises", "Phoenix88", "1.74x", "+IDR 514.75"],
+    ["Mystic Potions", "MysticGirl", "0.00x", "-IDR 1,790.16"],
+    ["Reel Royale", "ReelMaster", "1.23x", "+IDR 388.40"],
+    ["Candy Superwin", "CandyKing", "1.61x", "+IDR 620.55"],
+    ["Fortune of Giza", "GizaHunter", "0.00x", "-IDR 3,580.33"],
+    ["Mahjong Ways 2", "Tiles88", "1.45x", "+IDR 910.20"],
+    ["Sweet Bonanza", "Bonanza77", "0.00x", "-IDR 7,159.89"],
+    ["Wanted Dead or a Wild", "WildWest99", "1.28x", "+IDR 175.00"],
   ],
   active: [
     ["Deep Sea Odyssey", "LautBiru", "Sedang bermain", "Aktif"],
@@ -1106,6 +1106,7 @@ function P4ActivityCard({
     leaderboard: "Papan Peringkat",
   };
   const rows = ACTIVITY_SETS[activeTab];
+  const isLatest = activeTab === "latest";
   const gameImage = (name: string) => games.find((game) => game.name === name)?.image_url;
 
   return (
@@ -1130,14 +1131,18 @@ function P4ActivityCard({
           </button>
         ))}
       </div>
-      <div className="p4-activity-table" role="table" aria-label={labels[activeTab]}>
+      <div
+        className={`p4-activity-table${isLatest ? " p4-activity-table--latest" : ""}`}
+        role="table"
+        aria-label={labels[activeTab]}
+      >
         <div className="p4-activity-row p4-activity-row--head" role="row">
           <span>Game</span>
-          <span>Pemain</span>
-          <span>Waktu</span>
-          <span>Hasil</span>
+          <span>Player</span>
+          <span>{isLatest ? "Multiplier" : "Waktu"}</span>
+          <span>{isLatest ? "Profit" : "Hasil"}</span>
         </div>
-        {rows.map(([game, player, time, result]) => {
+        {rows.map(([game, player, metric, result]) => {
           const image = gameImage(game);
           return (
             <div className="p4-activity-row" role="row" key={`${game}-${player}`}>
@@ -1153,10 +1158,20 @@ function P4ActivityCard({
                 <strong>{game}</strong>
               </span>
               <span>{player}</span>
-              <span>{time}</span>
-              <em className={result === "Kalah" ? "is-loss" : result === "Aktif" ? "is-live" : ""}>
-                {result}
-              </em>
+              <span>{metric}</span>
+              {isLatest ? (
+                <span className={`p4-activity-profit${result.startsWith("-") ? " is-loss" : " is-win"}`}>
+                  {result}
+                </span>
+              ) : (
+                <em
+                  className={
+                    String(result) === "Kalah" ? "is-loss" : result === "Aktif" ? "is-live" : ""
+                  }
+                >
+                  {result}
+                </em>
+              )}
             </div>
           );
         })}
@@ -1653,33 +1668,46 @@ function P4CatalogActivity({
               <i className="fa-regular fa-clock" aria-hidden="true" /> Game terbaru
             </h3>
           </div>
-          <div className="p4-catalog-latest-list">
-            {latestRows.map(([gameName, player, time]) => {
-              const game = gameByName(gameName);
-              return (
-                <button
-                  type="button"
-                  className="p4-catalog-latest-row"
-                  key={`${gameName}-${player}`}
-                  onClick={() => game && onSelect(game)}
-                  disabled={!game}
-                >
-                  <span className="p4-catalog-latest-art" aria-hidden="true">
-                    {game?.image_url ? (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img src={game.image_url} alt="" loading="lazy" decoding="async" />
-                    ) : (
-                      gameName.charAt(0)
-                    )}
-                  </span>
-                  <span className="p4-catalog-latest-copy">
-                    <strong>{gameName}</strong>
-                    <small>{player}</small>
-                  </span>
-                  <time>{time}</time>
-                </button>
-              );
-            })}
+          <div className="p4-catalog-latest-table" role="table" aria-label="Game terbaru">
+            <div className="p4-catalog-latest-header" role="row">
+              <span>Game</span>
+              <span>Player</span>
+              <span>Multiplier</span>
+              <span>Profit</span>
+            </div>
+            <div className="p4-catalog-latest-list">
+              {latestRows.map(([gameName, player, multiplier, profit]) => {
+                const game = gameByName(gameName);
+                return (
+                  <button
+                    type="button"
+                    className="p4-catalog-latest-row"
+                    key={`${gameName}-${player}`}
+                    onClick={() => game && onSelect(game)}
+                    disabled={!game}
+                  >
+                    <span className="p4-catalog-latest-game">
+                      <span className="p4-catalog-latest-art" aria-hidden="true">
+                        {game?.image_url ? (
+                          // eslint-disable-next-line @next/next/no-img-element
+                          <img src={game.image_url} alt="" loading="lazy" decoding="async" />
+                        ) : (
+                          gameName.charAt(0)
+                        )}
+                      </span>
+                      <strong>{gameName}</strong>
+                    </span>
+                    <span className="p4-catalog-latest-player">{player}</span>
+                    <span className="p4-catalog-latest-multiplier">{multiplier}</span>
+                    <span
+                      className={`p4-catalog-latest-profit${profit.startsWith("-") ? " is-loss" : " is-win"}`}
+                    >
+                      {profit}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
           </div>
         </article>
         <article className="p4-catalog-activity-panel">
