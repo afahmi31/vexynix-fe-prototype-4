@@ -5144,6 +5144,91 @@ html[data-p4-theme] .portal.p4-public-shell .p4-pagination-summary {
   color: var(--p4-text-muted);
 }
 
+/* Keep the provider collection as one themed surface around its content. */
+html[data-p4-theme] .portal.p4-public-shell .p4-provider-section {
+  margin-top: clamp(1.5rem, 2.4vw, 2.4rem);
+  padding: clamp(1rem, 1.8vw, 1.5rem);
+  border: 1px solid var(--p4-border);
+  border-radius: 1.25rem;
+  border-color: var(--p4-border-strong);
+  background: linear-gradient(
+    135deg,
+    var(--p4-surface-strong),
+    var(--p4-surface)
+  );
+  box-shadow: var(--p4-shadow);
+}
+
+html[data-p4-theme] .portal.p4-public-shell .p4-provider-section > .p4-section-heading {
+  margin-bottom: clamp(1rem, 1.5vw, 1.25rem);
+}
+
+html[data-p4-theme] .portal.p4-public-shell .p4-provider-grid {
+  gap: clamp(0.7rem, 1.1vw, 1rem);
+}
+
+html[data-p4-theme] .portal.p4-public-shell .p4-provider-games {
+  margin-top: clamp(1.75rem, 2.6vw, 2.5rem);
+}
+
+/* Keep activity lists inside the panel surface instead of tinting the whole list. */
+html[data-p4-theme] .portal.p4-public-shell .p4-catalog-activity {
+  background: linear-gradient(
+    135deg,
+    var(--p4-surface-strong),
+    var(--p4-surface)
+  );
+}
+
+html[data-p4-theme] .portal.p4-public-shell .p4-catalog-activity-panel {
+  background: var(--p4-surface-strong);
+  box-shadow: none;
+}
+
+html[data-p4-theme] .portal.p4-public-shell .p4-catalog-latest-row,
+html[data-p4-theme] .portal.p4-public-shell .p4-catalog-ranking-row {
+  border-bottom-color: var(--p4-border);
+  background: transparent;
+  color: var(--p4-text-muted);
+}
+
+html[data-p4-theme] .portal.p4-public-shell .p4-catalog-latest-row:not(:disabled):hover,
+html[data-p4-theme] .portal.p4-public-shell .p4-catalog-latest-row:not(:disabled):focus-visible,
+html[data-p4-theme] .portal.p4-public-shell .p4-catalog-ranking-row:not(:disabled):hover,
+html[data-p4-theme] .portal.p4-public-shell .p4-catalog-ranking-row:not(:disabled):focus-visible {
+  background: var(--p4-surface-hover);
+}
+
+html[data-p4-theme] .portal.p4-public-shell .p4-catalog-latest-art {
+  background: var(--p4-accent-soft);
+  color: var(--p4-accent);
+}
+
+html[data-p4-theme] .portal.p4-public-shell .p4-catalog-ranking-avatar {
+  background: var(--p4-accent);
+  color: var(--p4-accent-text);
+}
+
+/* Filter choices belong to the filter card; only show a surface on interaction. */
+html[data-p4-theme] .portal.p4-public-shell .p4-catalog-provider-option,
+html[data-p4-theme] .portal.p4-public-shell .p4-catalog-sort-option {
+  border-color: transparent;
+  background: transparent;
+}
+
+html[data-p4-theme] .portal.p4-public-shell .p4-catalog-provider-option:hover,
+html[data-p4-theme] .portal.p4-public-shell .p4-catalog-provider-option:focus-within,
+html[data-p4-theme] .portal.p4-public-shell .p4-catalog-sort-option:hover,
+html[data-p4-theme] .portal.p4-public-shell .p4-catalog-sort-option:focus-within {
+  border-color: var(--p4-border-strong);
+  background: var(--p4-surface-hover);
+}
+
+/* Preserve the panel's bottom alignment while separating stats from the action. */
+.p4-game-stats {
+  margin-bottom: clamp(1rem, 1.5vw, 1.35rem);
+}
+
 html[data-p4-theme] .portal.p4-public-shell .p4-catalog-provider-option small {
   color: var(--p4-text-soft);
 }
