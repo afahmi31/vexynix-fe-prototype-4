@@ -22,6 +22,7 @@ export default function P4Header() {
   const searchParams = useSearchParams();
   const [hash, setHash] = useState("");
   const brand = useBrandStore((state) => state.brand);
+  const brandLoaded = useBrandStore((state) => state.loaded);
   const token = useSessionStore((state) => state.token);
   const openLogin = useAuthModalStore((state) => state.openLogin);
   const openRegister = useAuthModalStore((state) => state.openRegister);
@@ -49,8 +50,12 @@ export default function P4Header() {
   return (
     <header className="p4-header">
       <div className="p4-header-inner">
-        <Link href="/lobby" className="p4-header-brand" aria-label="Vexynix Beranda">
-          {brandLabel}
+        <Link
+          href="/lobby"
+          className="p4-header-brand"
+          aria-label={brandLoaded ? `${brandLabel} Beranda` : "Memuat brand"}
+        >
+          {brandLoaded ? brandLabel : <span className="p4-brand-skeleton" aria-hidden="true" />}
         </Link>
         <nav className="p4-header-nav" aria-label="Navigasi utama">
           {NAV_LINKS.map((link) => (
