@@ -8,7 +8,7 @@ import P4Footer from "./P4Footer";
 export default function PortalFooter() {
   const brand = useBrandStore((state) => state.brand);
   const pathname = usePathname();
-  const brandLabel = brand.label || "VEXYNIX";
+  const brandLabel = brand.label || "Game Portal";
 
   const isP4Surface =
     pathname === "/login" ||

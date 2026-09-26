@@ -1,5 +1,7 @@
 "use client";
 
+import { useBrandStore } from "@/stores/brand";
+
 const trustItems = [
   {
     icon: "fa-solid fa-shield-halved",
@@ -19,8 +21,11 @@ const trustItems = [
 ] as const;
 
 export function LobbyTrustStrip() {
+  const brand = useBrandStore((state) => state.brand);
+  const brandLabel = brand.found && brand.label ? brand.label : "Game Portal";
+
   return (
-    <section className="lobby-trust-strip" id="bantuan" aria-label="Bantuan VEXYNIX">
+    <section className="lobby-trust-strip" id="bantuan" aria-label={`Bantuan ${brandLabel}`}>
       {trustItems.map((item) => (
         <article className="lobby-trust-card" key={item.title}>
           <span className="lobby-trust-icon" aria-hidden="true">

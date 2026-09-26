@@ -6,7 +6,7 @@ import { useBrandStore } from "@/stores/brand";
 export default function P4Footer() {
   const brand = useBrandStore((state) => state.brand);
   const brandLoaded = useBrandStore((state) => state.loaded);
-  const brandLabel = brand.found && brand.label ? brand.label : "VEXYNIX";
+  const brandLabel = brand.found && brand.label ? brand.label : "Game Portal";
 
   return (
     <footer className="p4-footer">
@@ -35,7 +35,7 @@ export default function P4Footer() {
             <Link href="/lobby#bantuan">Hubungi Kami</Link>
           </div>
           <div>
-            <h2>Tentang Vexynix</h2>
+            <h2>Tentang {brandLabel}</h2>
             <Link href="/lobby#bantuan">Tentang Kami</Link>
             <Link href="/lobby#bantuan">Karir</Link>
           </div>
@@ -46,7 +46,7 @@ export default function P4Footer() {
           </div>
         </div>
         <div className="p4-footer-side">
-          <div className="p4-footer-socials" aria-label="Media sosial Vexynix">
+          <div className="p4-footer-socials" aria-label={`Media sosial ${brandLabel}`}>
             {[
               ["fa-brands fa-facebook", "Facebook"],
               ["fa-brands fa-instagram", "Instagram"],
@@ -63,7 +63,7 @@ export default function P4Footer() {
               </a>
             ))}
           </div>
-          <div className="p4-footer-bottom">© 2024 Vexynix. Semua Hak Dilindungi.</div>
+          <div className="p4-footer-bottom">© 2024 {brandLabel}. Semua Hak Dilindungi.</div>
         </div>
       </div>
     </footer>
