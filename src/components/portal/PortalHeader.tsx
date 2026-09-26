@@ -33,7 +33,8 @@ export default function PortalHeader() {
   const isLoggedIn = !!token;
 
   // The public lobby and game-play pages share the P4 discovery header.
-  const isP4Surface = pathname === "/lobby" || pathname.startsWith("/mock-game/");
+  const isAuthRoute = pathname === "/login" || pathname === "/register";
+  const isP4Surface = isAuthRoute || pathname === "/lobby" || pathname.startsWith("/mock-game/");
   const isLobby = pathname === "/lobby";
   const showNav = isLoggedIn && !isP4Surface;
   const isVexynix = brand.label.trim().toUpperCase() === "VEXYNIX";

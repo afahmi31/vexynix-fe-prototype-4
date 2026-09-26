@@ -3,6 +3,7 @@
 import { Suspense, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { NEXT_PARAM, safeNextPath } from "@/lib/auth-redirect";
+import AuthRouteLoading from "@/components/auth/AuthRouteLoading";
 
 /**
  * /login is now a deep-link shim. It redirects to the lobby and signals the
@@ -24,12 +25,12 @@ function LoginRedirect() {
     router.replace(`/lobby?${params.toString()}`);
   }, [router, registered, next]);
 
-  return null;
+  return <AuthRouteLoading mode="login" />;
 }
 
 export default function LoginPage() {
   return (
-    <Suspense fallback={null}>
+    <Suspense fallback={<AuthRouteLoading mode="login" />}>
       <LoginRedirect />
     </Suspense>
   );

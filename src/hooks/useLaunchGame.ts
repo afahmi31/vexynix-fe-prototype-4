@@ -2,7 +2,6 @@ import { useState, useCallback } from "react";
 import { gamesApi } from "@/lib/api/games";
 import { useSessionStore } from "@/stores/session";
 import { useTransactionLock } from "@/hooks/useTransactionLock";
-import { useSessionExpired } from "@/hooks/useSessionExpired";
 import { isApiError } from "@/lib/api/client";
 import { isSessionExpiredError } from "@/lib/auth-redirect";
 
@@ -11,7 +10,6 @@ export function useLaunchGame() {
   const [error, setError] = useState<string | null>(null);
   const currency = useSessionStore((s) => s.currency);
   const { withLock } = useTransactionLock();
-  const sessionExpired = useSessionExpired();
 
   const launch = useCallback(
     async (gameId: string, opts?: { demo?: boolean }) => {
@@ -39,10 +37,10 @@ export function useLaunchGame() {
         // Open in new tab — vendors require top-level browsing context
         window.open(result.launch_url, "_blank", "noopener");
       } catch (err) {
-        // Dead session — send them to login instead of stranding them in the
-        // lobby with an error they cannot act on.
+        // The public layout handles an expired session in place by opening the
+        // login modal. Do not redirect from this hook as well: that creates a
+        // visible blank /login shim before the modal can open.
         if (isSessionExpiredError(err)) {
-          sessionExpired();
           return;
         }
         if (isApiError(err, 403)) {
@@ -65,7 +63,7 @@ export function useLaunchGame() {
         setLaunching(null);
       }
     },
-    [currency, withLock, sessionExpired]
+    [currency, withLock]
   );
 
   const launchDemo = useCallback((gameId: string) => launch(gameId, { demo: true }), [launch]);
