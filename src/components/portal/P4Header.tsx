@@ -26,7 +26,7 @@ export default function P4Header() {
   const token = useSessionStore((state) => state.token);
   const openLogin = useAuthModalStore((state) => state.openLogin);
   const openRegister = useAuthModalStore((state) => state.openRegister);
-  const brandLabel = brand.found && brand.label ? brand.label : "VEXYNIX";
+  const brandLabel = brand.found && brand.label ? brand.label : "Game Portal";
 
   useEffect(() => {
     const syncHash = () => setHash(window.location.hash);

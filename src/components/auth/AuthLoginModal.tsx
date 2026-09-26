@@ -37,7 +37,7 @@ export default function AuthLoginModal() {
   const setSession = useSessionStore((s) => s.setSession);
   const brand = useBrandStore((s) => s.brand);
 
-  const brandLabel = brand.found && brand.label ? brand.label : "VEXYNIX";
+  const brandLabel = brand.found && brand.label ? brand.label : "Game Portal";
 
   const [formError, setFormError] = useState<string | null>(null);
   const [rateLimited, setRateLimited] = useState(false);

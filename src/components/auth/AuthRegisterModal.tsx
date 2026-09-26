@@ -44,7 +44,7 @@ export default function AuthRegisterModal() {
   const openLogin = useAuthModalStore((s) => s.openLogin);
   const brand = useBrandStore((s) => s.brand);
 
-  const brandLabel = brand.found && brand.label ? brand.label : "VEXYNIX";
+  const brandLabel = brand.found && brand.label ? brand.label : "Game Portal";
 
   const [formError, setFormError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
@@ -193,7 +193,7 @@ export default function AuthRegisterModal() {
                 <input type="hidden" {...registerField("currency")} />
                 <p className="auth-terms-note">
                   Dengan melanjutkan, kamu menyetujui Syarat &amp; Ketentuan dan Kebijakan Privasi
-                  VEXYNIX.
+                  {brandLabel}.
                 </p>
               </div>
               <div className="auth-modal-footer">
