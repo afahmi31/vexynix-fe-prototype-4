@@ -338,6 +338,102 @@ body.p4-public-body .portal-main-flush > .p4-lobby,
   background: #fff;
 }
 
+.p4-hero-preview {
+  position: absolute;
+  z-index: 3;
+  right: clamp(1rem, 2vw, 1.7rem);
+  bottom: clamp(2.6rem, 4vw, 4.2rem);
+  display: block;
+  width: clamp(6.5rem, 9vw, 9rem);
+  aspect-ratio: 0.78;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.72);
+  border-radius: 0.65rem;
+  background: rgba(15, 18, 57, 0.7);
+  box-shadow: 0 0.7rem 1.5rem rgba(10, 12, 38, 0.3);
+  color: #fff;
+  cursor: pointer;
+  font: inherit;
+  text-align: left;
+  transform: rotate(2deg);
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.p4-hero-preview::after {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(180deg, transparent 38%, rgba(8, 10, 39, 0.92));
+  content: "";
+}
+
+.p4-hero-preview:hover,
+.p4-hero-preview:focus-visible {
+  box-shadow: 0 0.95rem 1.8rem rgba(10, 12, 38, 0.42);
+  outline: none;
+  transform: translateY(-0.2rem) rotate(0deg);
+}
+
+.p4-hero-preview:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+
+.p4-hero-preview-image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.p4-hero-preview-label {
+  position: absolute;
+  z-index: 2;
+  top: 0.45rem;
+  left: 0.45rem;
+  padding: 0.18rem 0.3rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.86);
+  color: #282067;
+  font-size: 0.52rem;
+  font-weight: 800;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.p4-hero-preview-copy {
+  position: absolute;
+  z-index: 2;
+  right: 0.45rem;
+  bottom: 0.45rem;
+  left: 0.45rem;
+  display: grid;
+  gap: 0.12rem;
+}
+
+.p4-hero-preview-copy strong,
+.p4-hero-preview-copy small {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.p4-hero-preview-copy strong {
+  font-size: 0.7rem;
+  line-height: 1.05;
+}
+
+.p4-hero-preview-copy small {
+  color: rgba(255, 255, 255, 0.78);
+  font-size: 0.54rem;
+  font-weight: 700;
+  line-height: 1.05;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .p4-hero-image {
     animation: none;
@@ -1756,6 +1852,436 @@ body.p4-public-body .portal-main-flush > .p4-lobby,
   text-align: center;
 }
 
+.p4-data-state {
+  display: grid;
+  width: min(100% - 2rem, 1580px);
+  min-height: 16rem;
+  margin: 1rem auto;
+  place-items: center;
+  padding: 2rem;
+  border: 1px solid rgba(120, 130, 220, 0.18);
+  border-radius: 1rem;
+  background: rgba(255, 255, 255, 0.72);
+  color: #4d55a8;
+  font-weight: 800;
+  text-align: center;
+}
+
+.p4-lobby-skeleton {
+  --p4-skeleton-base: color-mix(in srgb, var(--p4-surface-strong) 78%, var(--p4-accent) 22%);
+  --p4-skeleton-highlight: color-mix(in srgb, var(--p4-surface-strong) 94%, var(--p4-accent) 6%);
+  --p4-skeleton-hero-base: color-mix(in srgb, var(--p4-secondary) 82%, var(--p4-accent) 18%);
+  width: 100%;
+  padding-bottom: clamp(2rem, 3vw, 3.5rem);
+}
+
+.p4-skeleton-block {
+  display: block;
+  border-radius: 0.32rem;
+  background: linear-gradient(
+    105deg,
+    var(--p4-skeleton-base) 0%,
+    var(--p4-skeleton-base) 36%,
+    var(--p4-skeleton-highlight) 50%,
+    var(--p4-skeleton-base) 64%,
+    var(--p4-skeleton-base) 100%
+  );
+  background-size: 240% 100%;
+  animation: p4-skeleton-shimmer 1.45s ease-in-out infinite;
+}
+
+@keyframes p4-skeleton-shimmer {
+  0% {
+    background-position: 120% 0;
+  }
+
+  100% {
+    background-position: -120% 0;
+  }
+}
+
+.p4-skeleton-hero,
+.p4-skeleton-primary,
+.p4-skeleton-activity-band {
+  width: min(100% - 5.75rem, 1580px);
+  margin-inline: auto;
+}
+
+.p4-skeleton-hero {
+  position: relative;
+  aspect-ratio: 2.86 / 1;
+  margin-bottom: 0.9rem;
+  overflow: hidden;
+  border-radius: 0.65rem;
+  background: var(--p4-secondary);
+  box-shadow: var(--p4-shadow);
+}
+
+.p4-skeleton-hero-art {
+  position: absolute;
+  inset: 0 0 0 auto;
+  width: 48%;
+  background:
+    radial-gradient(circle at 65% 42%, var(--p4-accent) 0, transparent 28%),
+    linear-gradient(
+      105deg,
+      var(--p4-skeleton-hero-base) 0%,
+      var(--p4-secondary) 35%,
+      var(--p4-skeleton-hero-base) 52%,
+      var(--p4-secondary) 70%,
+      var(--p4-skeleton-hero-base) 100%
+    );
+  background-size:
+    100% 100%,
+    240% 100%;
+  animation: p4-skeleton-shimmer 1.8s ease-in-out infinite;
+  opacity: 0.85;
+}
+
+.p4-skeleton-hero-copy {
+  position: absolute;
+  z-index: 1;
+  right: 2rem;
+  bottom: 1.5rem;
+  left: 2rem;
+  display: grid;
+  width: min(46%, 30rem);
+  gap: 0.42rem;
+  align-content: end;
+}
+
+.p4-skeleton-block--eyebrow {
+  width: 5.4rem;
+  height: 0.78rem;
+  border-radius: 1rem;
+  opacity: 0.75;
+}
+
+.p4-skeleton-block--title {
+  width: 78%;
+  height: clamp(1.35rem, 3vw, 2.2rem);
+  border-radius: 0.4rem;
+  background: linear-gradient(
+    105deg,
+    color-mix(in srgb, var(--p4-on-secondary) 22%, transparent) 0%,
+    color-mix(in srgb, var(--p4-on-secondary) 22%, transparent) 36%,
+    color-mix(in srgb, var(--p4-on-secondary) 44%, transparent) 50%,
+    color-mix(in srgb, var(--p4-on-secondary) 22%, transparent) 64%,
+    color-mix(in srgb, var(--p4-on-secondary) 22%, transparent) 100%
+  );
+  background-size: 240% 100%;
+}
+
+.p4-skeleton-block--title-short {
+  width: 54%;
+  height: clamp(1.35rem, 3vw, 2.2rem);
+  border-radius: 0.4rem;
+  background: linear-gradient(
+    105deg,
+    color-mix(in srgb, var(--p4-on-secondary) 22%, transparent) 0%,
+    color-mix(in srgb, var(--p4-on-secondary) 22%, transparent) 36%,
+    color-mix(in srgb, var(--p4-on-secondary) 44%, transparent) 50%,
+    color-mix(in srgb, var(--p4-on-secondary) 22%, transparent) 64%,
+    color-mix(in srgb, var(--p4-on-secondary) 22%, transparent) 100%
+  );
+  background-size: 240% 100%;
+}
+
+.p4-skeleton-block--meta {
+  width: 46%;
+  height: 0.52rem;
+  margin-top: 0.08rem;
+  background: linear-gradient(
+    105deg,
+    color-mix(in srgb, var(--p4-on-secondary) 18%, transparent) 0%,
+    color-mix(in srgb, var(--p4-on-secondary) 18%, transparent) 36%,
+    color-mix(in srgb, var(--p4-on-secondary) 36%, transparent) 50%,
+    color-mix(in srgb, var(--p4-on-secondary) 18%, transparent) 64%,
+    color-mix(in srgb, var(--p4-on-secondary) 18%, transparent) 100%
+  );
+  background-size: 240% 100%;
+}
+
+.p4-skeleton-block--description {
+  width: 64%;
+  height: 0.52rem;
+  background: linear-gradient(
+    105deg,
+    color-mix(in srgb, var(--p4-on-secondary) 18%, transparent) 0%,
+    color-mix(in srgb, var(--p4-on-secondary) 18%, transparent) 36%,
+    color-mix(in srgb, var(--p4-on-secondary) 36%, transparent) 50%,
+    color-mix(in srgb, var(--p4-on-secondary) 18%, transparent) 64%,
+    color-mix(in srgb, var(--p4-on-secondary) 18%, transparent) 100%
+  );
+  background-size: 240% 100%;
+}
+
+.p4-skeleton-block--button {
+  width: 7.3rem;
+  height: 2rem;
+  margin-top: 0.25rem;
+  border-radius: 0.42rem;
+  background: linear-gradient(
+    105deg,
+    color-mix(in srgb, var(--p4-accent) 72%, var(--p4-secondary)) 0%,
+    color-mix(in srgb, var(--p4-accent) 72%, var(--p4-secondary)) 36%,
+    color-mix(in srgb, var(--p4-accent) 92%, var(--p4-secondary)) 50%,
+    color-mix(in srgb, var(--p4-accent) 72%, var(--p4-secondary)) 64%,
+    color-mix(in srgb, var(--p4-accent) 72%, var(--p4-secondary)) 100%
+  );
+  background-size: 240% 100%;
+}
+
+.p4-skeleton-dots {
+  position: absolute;
+  right: 1.15rem;
+  bottom: 0.7rem;
+  z-index: 2;
+  display: flex;
+  gap: 0.42rem;
+}
+
+.p4-skeleton-dot {
+  width: 0.48rem;
+  height: 0.48rem;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--p4-on-secondary) 76%, transparent);
+  opacity: 0.8;
+}
+
+.p4-skeleton-dot:first-child {
+  background: var(--p4-on-secondary);
+}
+
+.p4-skeleton-primary {
+  display: grid;
+  grid-template-columns: minmax(0, 1.62fr) minmax(0, 1fr);
+  gap: clamp(0.55rem, 1.6vw, 1rem);
+  padding: 0.15rem 0 0.6rem;
+}
+
+.p4-skeleton-section {
+  min-width: 0;
+}
+
+.p4-skeleton-primary > .p4-skeleton-section:not(.p4-skeleton-section--ranked) {
+  position: relative;
+  padding: 0.15rem 0 0.6rem clamp(1rem, 1.6vw, 1.35rem);
+}
+
+.p4-skeleton-primary > .p4-skeleton-section:not(.p4-skeleton-section--ranked)::before {
+  position: absolute;
+  top: 0.15rem;
+  bottom: 0.6rem;
+  left: 0;
+  width: 1px;
+  background: var(--p4-border);
+  content: "";
+}
+
+.p4-skeleton-heading {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  min-height: 2.15rem;
+  margin-bottom: 0.55rem;
+}
+
+.p4-skeleton-heading-icon {
+  flex: 0 0 auto;
+  width: 2.15rem;
+  height: 2.15rem;
+  border-radius: 0.65rem;
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--p4-accent) 58%, var(--p4-surface-strong)),
+    color-mix(in srgb, var(--p4-accent-strong) 58%, var(--p4-surface-strong))
+  );
+  opacity: 0.78;
+}
+
+.p4-skeleton-heading-copy {
+  display: grid;
+  flex: 1 1 auto;
+  gap: 0.32rem;
+  padding-top: 0.1rem;
+}
+
+.p4-skeleton-block--heading {
+  width: min(10rem, 76%);
+  height: 0.95rem;
+}
+
+.p4-skeleton-block--subheading {
+  width: min(13rem, 88%);
+  height: 0.5rem;
+  opacity: 0.78;
+}
+
+.p4-skeleton-block--view-all {
+  flex: 0 0 auto;
+  width: 4.2rem;
+  height: 0.54rem;
+  margin-top: 0.28rem;
+}
+
+.p4-skeleton-rail {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: clamp(0.55rem, 1.15vw, 0.85rem);
+  min-width: 0;
+  overflow: hidden;
+}
+
+.p4-skeleton-rail--4 {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.p4-skeleton-card {
+  position: relative;
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid var(--p4-border);
+  border-radius: 0.48rem;
+  background: var(--p4-surface-soft);
+  aspect-ratio: 0.76;
+  box-shadow: var(--p4-shadow);
+}
+
+.p4-skeleton-card > .p4-skeleton-block {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  opacity: 0.82;
+}
+
+.p4-skeleton-section--ranked .p4-skeleton-card {
+  aspect-ratio: 0.7;
+}
+
+.p4-skeleton-rank {
+  position: absolute;
+  top: 0.42rem;
+  left: 0.42rem;
+  width: 1.2rem;
+  height: 1.2rem;
+  border-radius: 0.35rem;
+  background: color-mix(in srgb, var(--p4-accent-soft) 86%, var(--p4-surface));
+  opacity: 0.9;
+}
+
+.p4-skeleton-activity-band {
+  display: grid;
+  grid-template-columns: minmax(0, 1.72fr) minmax(19.5rem, 0.62fr);
+  gap: clamp(1.1rem, 3vw, 3rem);
+  margin-top: 0.75rem;
+  margin-bottom: 1.15rem;
+}
+
+.p4-skeleton-activity-rail {
+  min-width: 0;
+}
+
+.p4-skeleton-activity-card {
+  display: flex;
+  flex-direction: column;
+  align-self: stretch;
+  min-height: 0;
+  padding: 0.85rem 0.95rem;
+  border: 1px solid var(--p4-border);
+  border-radius: 1rem;
+  background: var(--p4-surface);
+  box-shadow: var(--p4-shadow);
+}
+
+.p4-skeleton-activity-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.7rem;
+  padding-bottom: 0.55rem;
+  border-bottom: 1px solid var(--p4-border);
+}
+
+.p4-skeleton-block--activity-title {
+  width: 6.2rem;
+  height: 0.95rem;
+}
+
+.p4-skeleton-block--activity-link {
+  width: 3.4rem;
+  height: 0.52rem;
+}
+
+.p4-skeleton-tabs {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.35rem;
+  padding: 0.65rem 0;
+}
+
+.p4-skeleton-tab {
+  height: 1.55rem;
+  border-radius: 1rem;
+}
+
+.p4-skeleton-tab.is-active {
+  background: linear-gradient(
+    105deg,
+    color-mix(in srgb, var(--p4-accent-soft) 78%, var(--p4-surface)) 0%,
+    color-mix(in srgb, var(--p4-accent-soft) 78%, var(--p4-surface)) 36%,
+    color-mix(in srgb, var(--p4-accent-soft) 96%, var(--p4-surface)) 50%,
+    color-mix(in srgb, var(--p4-accent-soft) 78%, var(--p4-surface)) 64%,
+    color-mix(in srgb, var(--p4-accent-soft) 78%, var(--p4-surface)) 100%
+  );
+  background-size: 240% 100%;
+}
+
+.p4-skeleton-table {
+  display: grid;
+  gap: 0.28rem;
+}
+
+.p4-skeleton-table-row {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 0.9fr 0.9fr;
+  gap: 0.5rem;
+  align-items: center;
+  min-height: 2rem;
+  padding: 0.35rem 0.42rem;
+  border-radius: 0.35rem;
+}
+
+.p4-skeleton-table-row:nth-child(odd) {
+  background: var(--p4-surface-soft);
+}
+
+.p4-skeleton-table-row > .p4-skeleton-block {
+  width: 100%;
+  height: 0.48rem;
+}
+
+.p4-skeleton-table-row--heading {
+  min-height: 1.2rem;
+  padding-top: 0;
+  padding-bottom: 0.3rem;
+  border-radius: 0;
+  border-bottom: 1px solid var(--p4-border);
+  background: transparent;
+}
+
+.p4-skeleton-table-row--heading > .p4-skeleton-block {
+  height: 0.38rem;
+  opacity: 0.7;
+}
+
+html[data-p4-theme] .portal.p4-public-shell .p4-data-state {
+  border-color: var(--p4-border);
+  background: var(--p4-surface);
+  box-shadow: var(--p4-shadow);
+  color: var(--p4-text-muted);
+}
+
 .p4-launch-feedback {
   position: fixed;
   z-index: 1060;
@@ -2186,6 +2712,25 @@ body.p4-public-body .portal-main-flush > .p4-lobby,
     aspect-ratio: 2.05 / 1;
   }
 
+  .p4-skeleton-hero,
+  .p4-skeleton-primary,
+  .p4-skeleton-activity-band {
+    width: min(100% - 3rem, 1580px);
+  }
+
+  .p4-skeleton-primary {
+    grid-template-columns: 1fr;
+  }
+
+  .p4-skeleton-primary > .p4-skeleton-section:not(.p4-skeleton-section--ranked) {
+    padding: 1.1rem 0 0.6rem;
+    border-top: 1px solid var(--p4-border);
+  }
+
+  .p4-skeleton-primary > .p4-skeleton-section:not(.p4-skeleton-section--ranked)::before {
+    display: none;
+  }
+
   .p4-top-feature-grid,
   .p4-cta-grid {
     grid-template-columns: 1fr;
@@ -2226,9 +2771,32 @@ body.p4-public-body .portal-main-flush > .p4-lobby,
   }
 
   .p4-activity-card {
+    order: -1;
+  }
+
+  .p4-trending {
+    order: 1;
+  }
+
+  .p4-activity-card {
     contain: none;
     max-height: 20rem;
     overflow: hidden;
+  }
+
+  .p4-skeleton-activity-band {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.3rem;
+  }
+
+  .p4-skeleton-activity-card {
+    order: -1;
+    max-height: 20rem;
+    overflow: hidden;
+  }
+
+  .p4-skeleton-activity-rail {
+    order: 1;
   }
 
   .p4-leaderboard-cta {
@@ -2288,8 +2856,86 @@ body.p4-public-body .portal-main-flush > .p4-lobby,
   }
 
   .p4-hero {
-    min-height: 17.5rem;
-    aspect-ratio: 1.24;
+    height: 10rem;
+    min-height: 10rem;
+    aspect-ratio: auto;
+  }
+
+  .p4-skeleton-hero,
+  .p4-skeleton-primary,
+  .p4-skeleton-activity-band {
+    width: calc(100% - 2rem);
+  }
+
+  .p4-skeleton-hero {
+    height: 10rem;
+    min-height: 10rem;
+    aspect-ratio: auto;
+    border-radius: 0.55rem;
+  }
+
+  .p4-skeleton-hero-art {
+    width: 58%;
+  }
+
+  .p4-skeleton-hero-copy {
+    right: 0.7rem;
+    bottom: 0.55rem;
+    left: 0.7rem;
+    width: calc(100% - 5.35rem);
+    gap: 0.28rem;
+  }
+
+  .p4-skeleton-block--eyebrow {
+    width: 4rem;
+    height: 0.62rem;
+  }
+
+  .p4-skeleton-block--title,
+  .p4-skeleton-block--title-short {
+    height: 1.2rem;
+  }
+
+  .p4-skeleton-block--meta,
+  .p4-skeleton-block--description {
+    height: 0.42rem;
+  }
+
+  .p4-skeleton-block--button {
+    width: 6.2rem;
+    height: 1.8rem;
+    margin-top: 0.18rem;
+  }
+
+  .p4-skeleton-dots {
+    right: 0.7rem;
+    bottom: 0.45rem;
+    gap: 0.3rem;
+  }
+
+  .p4-skeleton-dot {
+    width: 0.42rem;
+    height: 0.42rem;
+  }
+
+  .p4-skeleton-rail {
+    grid-template-columns: none;
+    grid-auto-flow: column;
+    grid-auto-columns: calc((100% - 1.65rem) / 4);
+    gap: 0.55rem;
+  }
+
+  .p4-skeleton-card {
+    aspect-ratio: 0.76;
+  }
+
+  .p4-skeleton-section--ranked .p4-skeleton-card {
+    aspect-ratio: 0.7;
+  }
+
+  .p4-skeleton-activity-card {
+    max-height: 19rem;
+    padding: 0.7rem 0.75rem;
   }
 
   .p4-hero-image {
@@ -2298,6 +2944,8 @@ body.p4-public-body .portal-main-flush > .p4-lobby,
   }
 
   .p4-hero-overlay {
+    backdrop-filter: blur(0.45rem) saturate(0.78);
+    -webkit-backdrop-filter: blur(0.45rem) saturate(0.78);
     background: linear-gradient(
       180deg,
       transparent 20%,
@@ -2308,21 +2956,87 @@ body.p4-public-body .portal-main-flush > .p4-lobby,
   }
 
   .p4-hero-content {
-    right: 1rem;
-    bottom: 1rem;
-    left: 1rem;
+    right: 0.7rem;
+    bottom: 0.55rem;
+    left: 0.7rem;
     color: var(--p4-on-secondary);
   }
 
   .p4-hero-content h1 {
-    max-width: 96%;
+    max-width: calc(100% - 5.35rem);
     color: var(--p4-on-secondary);
-    font-size: clamp(1.85rem, 8.5vw, 2.8rem);
+    font-size: clamp(1.25rem, 6.8vw, 1.75rem);
+    line-height: 0.95;
   }
 
-  .p4-hero-meta,
-  .p4-hero-description {
+  .p4-hero-meta {
+    max-width: calc(100% - 5.35rem);
+    margin: 0.2rem 0 0.12rem;
+    overflow: hidden;
     color: color-mix(in srgb, var(--p4-on-secondary) 88%, transparent);
+    font-size: 0.62rem;
+    line-height: 1.1;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .p4-hero-description {
+    display: -webkit-box;
+    max-width: calc(100% - 5.35rem);
+    margin: 0;
+    overflow: hidden;
+    color: color-mix(in srgb, var(--p4-on-secondary) 88%, transparent);
+    font-size: 0.66rem;
+    line-height: 1.15;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+  }
+
+  .p4-hero-actions {
+    gap: 0.35rem;
+    margin-top: 0.4rem;
+  }
+
+  .p4-hero-actions .p4-button {
+    min-height: 1.8rem;
+    padding-inline: 0.65rem;
+    font-size: 0.62rem;
+  }
+
+  .p4-hero-preview {
+    right: 0.7rem;
+    bottom: 2rem;
+    width: 4.5rem;
+    border-radius: 0.42rem;
+    transform: rotate(1.5deg);
+  }
+
+  .p4-hero-preview-label {
+    top: 0.24rem;
+    left: 0.24rem;
+    padding: 0.14rem 0.2rem;
+    font-size: 0.42rem;
+  }
+
+  .p4-hero-preview-copy {
+    right: 0.25rem;
+    bottom: 0.25rem;
+    left: 0.25rem;
+    gap: 0.08rem;
+  }
+
+  .p4-hero-preview-copy strong {
+    font-size: 0.5rem;
+  }
+
+  .p4-hero-preview-copy small {
+    font-size: 0.43rem;
+  }
+
+  .p4-hero-dots {
+    right: 0.7rem;
+    bottom: 0.45rem;
+    gap: 0.3rem;
   }
 
   /* Mobile shows four cards while the remaining games stay swipeable. */
@@ -2348,6 +3062,15 @@ body.p4-public-body .portal-main-flush > .p4-lobby,
 
   .p4-top-five .p4-game-card--ranked .p4-game-card-art {
     aspect-ratio: 0.76;
+  }
+
+  .p4-top-five .p4-game-card--ranked .p4-game-card-rank {
+    width: clamp(2.05rem, 8vw, 2.45rem);
+    min-height: clamp(2.05rem, 8vw, 2.45rem);
+    padding: 0.28rem 0.34rem 0.34rem;
+    border-radius: 0.38rem 0 0.68rem 0;
+    font-size: clamp(0.95rem, 4.2vw, 1.25rem);
+    opacity: 0.85;
   }
 
   /* The featured rail uses the same four-up rhythm as Top 5. */
@@ -2694,19 +3417,21 @@ body.p4-public-body .portal-main-flush > .p4-lobby,
   }
 
   .p4-hero {
-    min-height: 16.5rem;
+    height: 10rem;
+    min-height: 10rem;
+    aspect-ratio: auto;
     border-radius: 0.55rem;
   }
 
   .p4-hero-actions {
-    gap: 0.45rem;
-    margin-top: 0.7rem;
+    gap: 0.35rem;
+    margin-top: 0.4rem;
   }
 
   .p4-button {
-    min-height: 2.5rem;
-    padding-inline: 0.85rem;
-    font-size: 0.72rem;
+    min-height: 1.8rem;
+    padding-inline: 0.65rem;
+    font-size: 0.62rem;
   }
 
   /* Judul tetap di kiri dan "Lihat Semua" di kanan — satu baris, tidak bertumpuk. */
@@ -2771,6 +3496,11 @@ body.p4-public-body .portal-main-flush > .p4-lobby,
   .p4-header * {
     scroll-behavior: auto !important;
     transition-duration: 0.01ms !important;
+  }
+
+  .p4-lobby-skeleton .p4-skeleton-block,
+  .p4-lobby-skeleton .p4-skeleton-hero-art {
+    animation: none;
   }
 }
 
@@ -2851,16 +3581,6 @@ body.p4-public-body .portal-main-flush > .p4-lobby,
 
 .p4-provider-copy strong {
   font-size: clamp(0.7rem, 0.95vw, 0.88rem);
-}
-
-.p4-provider-active-dot {
-  flex: 0 0 auto;
-  width: 0.55rem;
-  height: 0.55rem;
-  margin-left: auto;
-  border-radius: 50%;
-  background: #f27463;
-  box-shadow: 0 0 0 0.25rem rgba(242, 116, 99, 0.12);
 }
 
 .p4-provider-games {
@@ -4580,11 +5300,6 @@ html[data-p4-theme] .portal.p4-public-shell .p4-provider-card .p4-provider-mark,
 html[data-p4-theme] .portal.p4-public-shell .p4-provider-card.is-featured .p4-provider-mark {
   background: var(--p4-accent-soft);
   color: var(--p4-accent);
-}
-
-html[data-p4-theme] .portal.p4-public-shell .p4-provider-active-dot {
-  background: var(--p4-success);
-  box-shadow: 0 0 0 0.25rem color-mix(in srgb, var(--p4-success) 18%, transparent);
 }
 
 html[data-p4-theme]
