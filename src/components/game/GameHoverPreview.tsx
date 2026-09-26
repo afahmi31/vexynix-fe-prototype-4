@@ -144,7 +144,7 @@ export function GameHoverPreview({
       });
     };
 
-    const track = anchor.closest<HTMLElement>(".nf-row-track");
+    const track = anchor.closest<HTMLElement>(".nf-row-track, .p4-top-five-grid, .p4-rail");
     updatePosition();
     window.addEventListener("resize", updatePosition);
     window.addEventListener("scroll", updatePosition, { capture: true, passive: true });

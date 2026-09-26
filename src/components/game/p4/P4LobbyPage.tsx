@@ -12,6 +12,7 @@ import { MOCK_CATALOG, MOCK_VENDORS } from "@/mocks/p4";
 import type { ActivityFeedsRes, Game, Vendor } from "@/types/api";
 import { NEXT_PARAM, safeNextPath } from "@/lib/auth-redirect";
 import { P4GameCard } from "@/components/game/p4/P4GameCard";
+import { P4HoverPreviewProvider } from "@/components/game/p4/P4HoverPreview";
 
 const HERO_BACKDROP = "/assets/prototype-4/hero/neon-racer-sunset.png";
 
@@ -740,203 +741,216 @@ export default function P4LobbyPage() {
   }
 
   return (
-    <div className="p4-lobby">
-      {isCatalogView ? (
-        <P4CatalogView
-          categoryLabel={categoryLabel}
-          games={paginatedCatalog}
-          totalGameCount={filteredCatalog.length}
-          page={visibleCatalogPage}
-          pageCount={catalogPageCount}
-          search={catalogSearch}
-          category={category}
-          categoryOptions={catalogCategoryOptions}
-          providerOptions={catalogProviderOptions}
-          selectedProviders={selectedCatalogProviders}
-          activityGames={activeGames}
-          vendorName={vendorName}
-          onSearch={setCatalogSearch}
-          onCategoryChange={handleCatalogCategoryChange}
-          onToggleProvider={handleCatalogProviderToggle}
-          onReset={handleCatalogReset}
-          isFilterOpen={isCatalogFilterOpen}
-          onToggleFilter={() => setIsCatalogFilterOpen((isOpen) => !isOpen)}
-          onCloseFilter={() => setIsCatalogFilterOpen(false)}
-          onBrowse={() => scrollTo("p4-catalog-grid")}
-          onViewActivity={() => scrollTo("p4-catalog-activity")}
-          onPageChange={handleCatalogPageChange}
-          activityFeeds={activityFeeds}
-          onSelect={setDetailGame}
-        />
-      ) : (
-        <>
-          <section className="p4-hero" aria-labelledby="p4-hero-title">
-            {heroSlide.backdrop.startsWith("/") ? (
-              <Image
-                key={`hero-image-${heroSlide.gameId}`}
-                src={heroSlide.backdrop}
-                alt={heroSlide.title}
-                fill
-                priority
-                sizes="100vw"
-                className="p4-hero-image"
-              />
-            ) : (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img
-                key={`hero-image-${heroSlide.gameId}`}
-                src={heroSlide.backdrop}
-                alt={heroSlide.title}
-                className="p4-hero-image"
-                decoding="async"
-                style={{
-                  position: "absolute",
-                  inset: 0,
-                  width: "100%",
-                  height: "100%",
-                  objectFit: "contain",
-                  objectPosition: "right center",
+    <P4HoverPreviewProvider
+      disabled={actionDisabled}
+      launching={launching}
+      onInfo={setDetailGame}
+      onLaunch={(id) => void launch(id)}
+      onLaunchDemo={(id) => void launchDemo(id)}
+      vendorName={vendorName}
+    >
+      <div className="p4-lobby">
+        {isCatalogView ? (
+          <P4CatalogView
+            categoryLabel={categoryLabel}
+            games={paginatedCatalog}
+            totalGameCount={filteredCatalog.length}
+            page={visibleCatalogPage}
+            pageCount={catalogPageCount}
+            search={catalogSearch}
+            category={category}
+            categoryOptions={catalogCategoryOptions}
+            providerOptions={catalogProviderOptions}
+            selectedProviders={selectedCatalogProviders}
+            activityGames={activeGames}
+            vendorName={vendorName}
+            onSearch={setCatalogSearch}
+            onCategoryChange={handleCatalogCategoryChange}
+            onToggleProvider={handleCatalogProviderToggle}
+            onReset={handleCatalogReset}
+            isFilterOpen={isCatalogFilterOpen}
+            onToggleFilter={() => setIsCatalogFilterOpen((isOpen) => !isOpen)}
+            onCloseFilter={() => setIsCatalogFilterOpen(false)}
+            onBrowse={() => scrollTo("p4-catalog-grid")}
+            onViewActivity={() => scrollTo("p4-catalog-activity")}
+            onPageChange={handleCatalogPageChange}
+            activityFeeds={activityFeeds}
+            onSelect={setDetailGame}
+          />
+        ) : (
+          <>
+            <section className="p4-hero" aria-labelledby="p4-hero-title">
+              {heroSlide.backdrop.startsWith("/") ? (
+                <Image
+                  key={`hero-image-${heroSlide.gameId}`}
+                  src={heroSlide.backdrop}
+                  alt={heroSlide.title}
+                  fill
+                  priority
+                  sizes="100vw"
+                  className="p4-hero-image"
+                />
+              ) : (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  key={`hero-image-${heroSlide.gameId}`}
+                  src={heroSlide.backdrop}
+                  alt={heroSlide.title}
+                  className="p4-hero-image"
+                  decoding="async"
+                  style={{
+                    position: "absolute",
+                    inset: 0,
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "contain",
+                    objectPosition: "right center",
+                  }}
+                />
+              )}
+              <div className="p4-hero-overlay" aria-hidden="true" />
+              <div
+                className="p4-hero-content"
+                key={`hero-content-${heroSlide.gameId}`}
+                aria-live="polite"
+              >
+                <h1 id="p4-hero-title">{heroSlide.title}</h1>
+                <p className="p4-hero-meta">{heroSlide.meta}</p>
+                <p className="p4-hero-description">{heroSlide.description}</p>
+                <div className="p4-hero-actions">
+                  <button
+                    type="button"
+                    className="p4-button p4-button--primary"
+                    onClick={handleHeroLaunch}
+                  >
+                    <i className="fa-solid fa-play" aria-hidden="true" />
+                    Mainkan Sekarang
+                  </button>
+                </div>
+              </div>
+              {heroPreviewGame?.image_url ? (
+                <button
+                  type="button"
+                  className="p4-hero-preview"
+                  aria-label={`Tampilkan ${heroPreviewGame.name}`}
+                  onClick={() => setHeroSlideIndex((current) => (current + 1) % heroGames.length)}
+                >
+                  <span className="p4-hero-preview-label" aria-hidden="true">
+                    Berikutnya
+                  </span>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={heroPreviewGame.image_url}
+                    alt=""
+                    className="p4-hero-preview-image"
+                    decoding="async"
+                  />
+                  <span className="p4-hero-preview-copy" aria-hidden="true">
+                    <strong>{heroPreviewGame.name}</strong>
+                    <small>{vendorName(heroPreviewGame.vendor_id)}</small>
+                  </span>
+                </button>
+              ) : null}
+              <div className="p4-hero-dots" role="tablist" aria-label="Pilihan hero">
+                {heroGames.map((game, index) => (
+                  <button
+                    key={game.id}
+                    type="button"
+                    role="tab"
+                    aria-label={`Tampilkan ${game.name}`}
+                    aria-selected={heroSlideIndex === index}
+                    className={heroSlideIndex === index ? "is-active" : undefined}
+                    onClick={() => setHeroSlideIndex(index)}
+                  />
+                ))}
+              </div>
+            </section>
+
+            <div className="p4-primary-sections">
+              <section
+                ref={topFeatureGridRef}
+                className="p4-top-feature-grid"
+                aria-label="Game pilihan utama"
+              >
+                <P4TopFiveSection
+                  games={topFive}
+                  vendorName={vendorName}
+                  onSelect={setDetailGame}
+                />
+                <P4FeaturedSection
+                  games={featuredGames}
+                  vendorName={vendorName}
+                  onSelect={setDetailGame}
+                  onViewAll={() => router.push("/lobby?category=all#p4-catalog")}
+                />
+              </section>
+
+              <section className="p4-activity-band" aria-label="Coba gratis dan aktivitas">
+                <P4TrendingSection
+                  games={freeGames}
+                  vendorName={vendorName}
+                  onSelect={setDetailGame}
+                  onViewAll={() => router.push("/lobby?category=all#p4-catalog")}
+                />
+                <P4ActivityCard
+                  games={activeGames}
+                  feeds={activityFeeds}
+                  activeTab={activityTab}
+                  onTabChange={setActivityTab}
+                  onViewAll={() => router.push("/lobby?category=all#p4-catalog")}
+                />
+              </section>
+
+              <P4CtaSection
+                onExplore={() => router.push("/lobby?category=all#p4-catalog")}
+                onRandomPick={() => {
+                  if (!activeGames.length) return;
+                  const randomIndex = Math.floor(Math.random() * activeGames.length);
+                  const game = activeGames[randomIndex];
+                  if (game) setDetailGame(game);
                 }}
               />
-            )}
-            <div className="p4-hero-overlay" aria-hidden="true" />
-            <div
-              className="p4-hero-content"
-              key={`hero-content-${heroSlide.gameId}`}
-              aria-live="polite"
-            >
-              <h1 id="p4-hero-title">{heroSlide.title}</h1>
-              <p className="p4-hero-meta">{heroSlide.meta}</p>
-              <p className="p4-hero-description">{heroSlide.description}</p>
-              <div className="p4-hero-actions">
-                <button
-                  type="button"
-                  className="p4-button p4-button--primary"
-                  onClick={handleHeroLaunch}
-                >
-                  <i className="fa-solid fa-play" aria-hidden="true" />
-                  Mainkan Sekarang
-                </button>
-              </div>
-            </div>
-            {heroPreviewGame?.image_url ? (
-              <button
-                type="button"
-                className="p4-hero-preview"
-                aria-label={`Tampilkan ${heroPreviewGame.name}`}
-                onClick={() => setHeroSlideIndex((current) => (current + 1) % heroGames.length)}
-              >
-                <span className="p4-hero-preview-label" aria-hidden="true">
-                  Berikutnya
-                </span>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={heroPreviewGame.image_url}
-                  alt=""
-                  className="p4-hero-preview-image"
-                  decoding="async"
-                />
-                <span className="p4-hero-preview-copy" aria-hidden="true">
-                  <strong>{heroPreviewGame.name}</strong>
-                  <small>{vendorName(heroPreviewGame.vendor_id)}</small>
-                </span>
-              </button>
-            ) : null}
-            <div className="p4-hero-dots" role="tablist" aria-label="Pilihan hero">
-              {heroGames.map((game, index) => (
-                <button
-                  key={game.id}
-                  type="button"
-                  role="tab"
-                  aria-label={`Tampilkan ${game.name}`}
-                  aria-selected={heroSlideIndex === index}
-                  className={heroSlideIndex === index ? "is-active" : undefined}
-                  onClick={() => setHeroSlideIndex(index)}
-                />
-              ))}
-            </div>
-          </section>
 
-          <div className="p4-primary-sections">
-            <section
-              ref={topFeatureGridRef}
-              className="p4-top-feature-grid"
-              aria-label="Game pilihan utama"
-            >
-              <P4TopFiveSection games={topFive} vendorName={vendorName} onSelect={setDetailGame} />
-              <P4FeaturedSection
-                games={featuredGames}
+              <P4ProviderSection
+                providers={providerFeatures}
+                selectedProvider={selectedProvider}
+                providerGames={providerGames}
+                providerGameCount={providerCatalog.length}
                 vendorName={vendorName}
-                onSelect={setDetailGame}
+                onSelectProvider={(providerId) => {
+                  setSelectedProvider(providerId);
+                  window.requestAnimationFrame(() => scrollTo("p4-provider-games"));
+                }}
+                onSelectGame={setDetailGame}
                 onViewAll={() => router.push("/lobby?category=all#p4-catalog")}
               />
-            </section>
 
-            <section className="p4-activity-band" aria-label="Coba gratis dan aktivitas">
-              <P4TrendingSection
-                games={freeGames}
-                vendorName={vendorName}
-                onSelect={setDetailGame}
-                onViewAll={() => router.push("/lobby?category=all#p4-catalog")}
-              />
-              <P4ActivityCard
-                games={activeGames}
-                feeds={activityFeeds}
-                activeTab={activityTab}
-                onTabChange={setActivityTab}
-                onViewAll={() => router.push("/lobby?category=all#p4-catalog")}
-              />
-            </section>
+              <P4LeaderboardCta onViewRanking={handleLeaderboardCta} />
+            </div>
+          </>
+        )}
 
-            <P4CtaSection
-              onExplore={() => router.push("/lobby?category=all#p4-catalog")}
-              onRandomPick={() => {
-                if (!activeGames.length) return;
-                const randomIndex = Math.floor(Math.random() * activeGames.length);
-                const game = activeGames[randomIndex];
-                if (game) setDetailGame(game);
-              }}
-            />
-
-            <P4ProviderSection
-              providers={providerFeatures}
-              selectedProvider={selectedProvider}
-              providerGames={providerGames}
-              providerGameCount={providerCatalog.length}
-              vendorName={vendorName}
-              onSelectProvider={(providerId) => {
-                setSelectedProvider(providerId);
-                window.requestAnimationFrame(() => scrollTo("p4-provider-games"));
-              }}
-              onSelectGame={setDetailGame}
-              onViewAll={() => router.push("/lobby?category=all#p4-catalog")}
-            />
-
-            <P4LeaderboardCta onViewRanking={handleLeaderboardCta} />
+        {launchError ? (
+          <div className="p4-launch-feedback" role="status">
+            <span>{launchError}</span>
+            <button type="button" onClick={clearError} aria-label="Tutup pesan">
+              <i className="fa-solid fa-xmark" aria-hidden="true" />
+            </button>
           </div>
-        </>
-      )}
+        ) : null}
 
-      {launchError ? (
-        <div className="p4-launch-feedback" role="status">
-          <span>{launchError}</span>
-          <button type="button" onClick={clearError} aria-label="Tutup pesan">
-            <i className="fa-solid fa-xmark" aria-hidden="true" />
-          </button>
-        </div>
-      ) : null}
-
-      {detailGame ? (
-        <P4GameDetail
-          game={detailGame}
-          vendorName={vendorName(detailGame.vendor_id)}
-          launching={launching === detailGame.id}
-          onClose={() => setDetailGame(null)}
-          onLaunch={(game) => void launch(game.id)}
-          onLaunchDemo={(game) => void launchDemo(game.id)}
-        />
-      ) : null}
-    </div>
+        {detailGame ? (
+          <P4GameDetail
+            game={detailGame}
+            vendorName={vendorName(detailGame.vendor_id)}
+            launching={launching === detailGame.id}
+            onClose={() => setDetailGame(null)}
+            onLaunch={(game) => void launch(game.id)}
+            onLaunchDemo={(game) => void launchDemo(game.id)}
+          />
+        ) : null}
+      </div>
+    </P4HoverPreviewProvider>
   );
 }
 
@@ -1265,6 +1279,7 @@ function P4TrendingSection({
   return (
     <div className="p4-trending">
       <P4GameRailSection
+        demoFirst
         games={games}
         title="Coba Gratis"
         description="Mainkan game pilihan secara gratis."
@@ -1287,6 +1302,7 @@ function P4GameRailSection({
   vendorName,
   onSelect,
   onViewAll,
+  demoFirst,
 }: {
   games: Game[];
   title: string;
@@ -1296,6 +1312,7 @@ function P4GameRailSection({
   vendorName: (id: string) => string;
   onSelect: (game: Game) => void;
   onViewAll: () => void;
+  demoFirst?: boolean;
 }) {
   const { railRef, canScrollPrev, canScrollNext, scrollRail } = useP4HorizontalRail(games.length);
 
@@ -1338,6 +1355,7 @@ function P4GameRailSection({
               variant="portrait"
               vendorName={vendorName(game.vendor_id)}
               onSelect={onSelect}
+              demoFirst={demoFirst}
             />
           ))}
         </div>
