@@ -5,14 +5,19 @@ import { useBrandStore } from "@/stores/brand";
 
 export default function P4Footer() {
   const brand = useBrandStore((state) => state.brand);
+  const brandLoaded = useBrandStore((state) => state.loaded);
   const brandLabel = brand.found && brand.label ? brand.label : "VEXYNIX";
 
   return (
     <footer className="p4-footer">
       <div className="p4-footer-inner">
         <div className="p4-footer-brand-block">
-          <Link href="/lobby" className="p4-footer-brand">
-            {brandLabel}
+          <Link
+            href="/lobby"
+            className="p4-footer-brand"
+            aria-label={brandLoaded ? `${brandLabel} Beranda` : "Memuat brand"}
+          >
+            {brandLoaded ? brandLabel : <span className="p4-brand-skeleton" aria-hidden="true" />}
           </Link>
           <p>Main Lebih Seru Setiap Hari</p>
         </div>
@@ -48,7 +53,12 @@ export default function P4Footer() {
               ["fa-brands fa-youtube", "YouTube"],
               ["fa-brands fa-x-twitter", "X"],
             ].map(([icon, label]) => (
-              <a href="#" key={label} aria-label={label} onClick={(event) => event.preventDefault()}>
+              <a
+                href="#"
+                key={label}
+                aria-label={label}
+                onClick={(event) => event.preventDefault()}
+              >
                 <i className={icon} aria-hidden="true" />
               </a>
             ))}

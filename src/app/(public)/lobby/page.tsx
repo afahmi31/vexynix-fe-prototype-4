@@ -1,11 +1,11 @@
 "use client";
 
 import { Suspense } from "react";
-import P4LobbyPage from "@/components/game/p4/P4LobbyPage";
+import P4LobbyPage, { P4LobbySkeleton } from "@/components/game/p4/P4LobbyPage";
 
 export default function LobbyPage() {
   return (
-    <Suspense fallback={null}>
+    <Suspense fallback={<P4LobbySkeleton />}>
       <P4LobbyPage />
     </Suspense>
   );

@@ -1005,7 +1005,7 @@ function P4LeaderboardCta({ onViewRanking }: { onViewRanking: () => void }) {
   );
 }
 
-function P4LobbySkeleton() {
+export function P4LobbySkeleton() {
   return (
     <div
       className="p4-lobby p4-lobby-skeleton"
