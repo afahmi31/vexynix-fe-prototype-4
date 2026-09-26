@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
+import AuthRouteLoading from "@/components/auth/AuthRouteLoading";
 
 /**
  * /register is now a deep-link shim. It redirects to the lobby and signals the
@@ -15,5 +16,5 @@ export default function RegisterPage() {
     router.replace("/lobby?auth=register");
   }, [router]);
 
-  return null;
+  return <AuthRouteLoading mode="register" />;
 }

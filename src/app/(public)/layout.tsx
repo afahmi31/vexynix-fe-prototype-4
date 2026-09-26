@@ -23,7 +23,7 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
   // and P4 game-play surface are full-bleed too so their themed canvas can run
   // edge to edge.
   const isAuthRoute = pathname === "/login" || pathname === "/register";
-  const isP4Surface = pathname === "/lobby" || pathname.startsWith("/mock-game/");
+  const isP4Surface = isAuthRoute || pathname === "/lobby" || pathname.startsWith("/mock-game/");
   const isFlushRoute = isAuthRoute || isP4Surface;
 
   useEffect(() => {

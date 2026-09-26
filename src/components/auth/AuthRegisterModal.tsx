@@ -88,128 +88,130 @@ export default function AuthRegisterModal() {
   });
 
   return (
-    <div
-      className="modal d-block auth-modal"
-      tabIndex={-1}
-      role="dialog"
-      aria-modal="true"
-      aria-label="Daftar"
-    >
-      <div className="modal-dialog modal-dialog-centered auth-modal-dialog">
-        <div className="modal-content auth-modal-content">
-          <form className="auth-form" onSubmit={onSubmit}>
-            <div className="auth-modal-header">
-              <button
-                type="button"
-                className="auth-back-button"
-                aria-label="Kembali"
-                onClick={close}
-                disabled={submitting}
-              >
-                <i className="fa-solid fa-arrow-left" aria-hidden="true" />
-              </button>
-              <h5 className="modal-title auth-modal-title">Buat Akun dengan {brandLabel}</h5>
-            </div>
-            <div className="auth-modal-body">
-              <div className="auth-divider" />
-              <div className="auth-brand-lockup" aria-label={brandLabel}>
-                <strong>{brandLabel}</strong>
-                <small>GAME PORTAL</small>
-              </div>
-              <div className="auth-switch-copy">
-                <span>Sudah punya akun?</span>
-                <button type="button" onClick={() => openLogin()}>
-                  Masuk
-                </button>
-              </div>
-
-              {formError && <div className="auth-error">{formError}</div>}
-
-              <div className="auth-field">
-                <label htmlFor="register-username" className="visually-hidden">
-                  Username
-                </label>
-                <input
-                  id="register-username"
-                  type="text"
-                  className="form-control"
-                  placeholder="Username"
-                  autoComplete="username"
-                  aria-label="Username"
-                  {...registerField("username")}
-                />
-                {errors.username && (
-                  <div className="text-danger small mt-1">{errors.username.message}</div>
-                )}
-              </div>
-
-              <div className="auth-field">
-                <label htmlFor="register-phone" className="visually-hidden">
-                  No. HP
-                </label>
-                <input
-                  id="register-phone"
-                  type="tel"
-                  className="form-control"
-                  placeholder="No. HP"
-                  autoComplete="tel"
-                  aria-label="No. HP"
-                  {...registerField("phone_number")}
-                />
-                {errors.phone_number && (
-                  <div className="text-danger small mt-1">{errors.phone_number.message}</div>
-                )}
-              </div>
-
-              <PasswordField
-                id="register-password"
-                label="Password"
-                placeholder="Password"
-                autoComplete="new-password"
-                aria-label="Password"
-                hideLabel
-                error={errors.password?.message}
-                {...registerField("password")}
-              />
-
-              <PasswordField
-                id="register-confirm"
-                label="Konfirmasi Password"
-                placeholder="Konfirmasi Password"
-                autoComplete="new-password"
-                aria-label="Konfirmasi Password"
-                hideLabel
-                error={errors.confirmPassword?.message}
-                {...registerField("confirmPassword")}
-              />
-
-              <input type="hidden" {...registerField("currency")} />
-              <p className="auth-terms-note">
-                Dengan melanjutkan, kamu menyetujui Syarat &amp; Ketentuan dan Kebijakan Privasi
-                VEXYNIX.
-              </p>
-            </div>
-            <div className="auth-modal-footer">
-              <button type="submit" className="auth-submit" disabled={submitting}>
-                {submitting ? (
-                  <>
-                    <span className="spinner-border spinner-border-sm me-2" />
-                    Membuat akun...
-                  </>
-                ) : (
-                  "Buat Akun"
-                )}
-              </button>
-            </div>
-          </form>
-        </div>
-      </div>
+    <>
       <div
-        className="modal-backdrop show"
+        className="modal-backdrop show auth-modal-backdrop"
         onClick={() => {
           if (!submitting) close();
         }}
       />
-    </div>
+      <div
+        className="modal d-block auth-modal"
+        tabIndex={-1}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Daftar"
+      >
+        <div className="modal-dialog modal-dialog-centered auth-modal-dialog">
+          <div className="modal-content auth-modal-content">
+            <form className="auth-form" onSubmit={onSubmit}>
+              <div className="auth-modal-header">
+                <button
+                  type="button"
+                  className="auth-back-button"
+                  aria-label="Kembali"
+                  onClick={close}
+                  disabled={submitting}
+                >
+                  <i className="fa-solid fa-arrow-left" aria-hidden="true" />
+                </button>
+                <h5 className="modal-title auth-modal-title">Buat Akun dengan {brandLabel}</h5>
+              </div>
+              <div className="auth-modal-body">
+                <div className="auth-divider" />
+                <div className="auth-brand-lockup" aria-label={brandLabel}>
+                  <strong>{brandLabel}</strong>
+                  <small>GAME PORTAL</small>
+                </div>
+                <div className="auth-switch-copy">
+                  <span>Sudah punya akun?</span>
+                  <button type="button" onClick={() => openLogin()}>
+                    Masuk
+                  </button>
+                </div>
+
+                {formError && <div className="auth-error">{formError}</div>}
+
+                <div className="auth-field">
+                  <label htmlFor="register-username" className="visually-hidden">
+                    Username
+                  </label>
+                  <input
+                    id="register-username"
+                    type="text"
+                    className="form-control"
+                    placeholder="Username"
+                    autoComplete="username"
+                    aria-label="Username"
+                    {...registerField("username")}
+                  />
+                  {errors.username && (
+                    <div className="text-danger small mt-1">{errors.username.message}</div>
+                  )}
+                </div>
+
+                <div className="auth-field">
+                  <label htmlFor="register-phone" className="visually-hidden">
+                    No. HP
+                  </label>
+                  <input
+                    id="register-phone"
+                    type="tel"
+                    className="form-control"
+                    placeholder="No. HP"
+                    autoComplete="tel"
+                    aria-label="No. HP"
+                    {...registerField("phone_number")}
+                  />
+                  {errors.phone_number && (
+                    <div className="text-danger small mt-1">{errors.phone_number.message}</div>
+                  )}
+                </div>
+
+                <PasswordField
+                  id="register-password"
+                  label="Password"
+                  placeholder="Password"
+                  autoComplete="new-password"
+                  aria-label="Password"
+                  hideLabel
+                  error={errors.password?.message}
+                  {...registerField("password")}
+                />
+
+                <PasswordField
+                  id="register-confirm"
+                  label="Konfirmasi Password"
+                  placeholder="Konfirmasi Password"
+                  autoComplete="new-password"
+                  aria-label="Konfirmasi Password"
+                  hideLabel
+                  error={errors.confirmPassword?.message}
+                  {...registerField("confirmPassword")}
+                />
+
+                <input type="hidden" {...registerField("currency")} />
+                <p className="auth-terms-note">
+                  Dengan melanjutkan, kamu menyetujui Syarat &amp; Ketentuan dan Kebijakan Privasi
+                  VEXYNIX.
+                </p>
+              </div>
+              <div className="auth-modal-footer">
+                <button type="submit" className="auth-submit" disabled={submitting}>
+                  {submitting ? (
+                    <>
+                      <span className="spinner-border spinner-border-sm me-2" />
+                      Membuat akun...
+                    </>
+                  ) : (
+                    "Buat Akun"
+                  )}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </>
   );
 }

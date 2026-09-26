@@ -12,7 +12,7 @@ import { MOCK_CATALOG, MOCK_VENDORS } from "@/mocks/p4";
 import type { ActivityFeedsRes, Game, Vendor } from "@/types/api";
 import { NEXT_PARAM, safeNextPath } from "@/lib/auth-redirect";
 import { P4GameCard } from "@/components/game/p4/P4GameCard";
-import { P4HoverPreviewProvider } from "@/components/game/p4/P4HoverPreview";
+import { P4HoverPreviewProvider, useP4HoverPreview } from "@/components/game/p4/P4HoverPreview";
 
 const HERO_BACKDROP = "/assets/prototype-4/hero/neon-racer-sunset.png";
 
@@ -336,6 +336,39 @@ function gamesByStagingPopularOrder(games: Game[], vendors: Vendor[], limit: num
 }
 
 type RailDirection = "previous" | "next";
+
+interface P4RailArrowProps {
+  direction: "prev" | "next";
+  label: string;
+  onClick: () => void;
+}
+
+function P4RailArrow({ direction, label, onClick }: P4RailArrowProps) {
+  const hoverPreview = useP4HoverPreview();
+  const dismissHoverPreview = () => hoverPreview?.dismissPreview();
+
+  return (
+    <button
+      type="button"
+      className={`p4-rail-arrow p4-rail-${direction}`}
+      aria-label={label}
+      onClick={(event) => {
+        event.stopPropagation();
+        onClick();
+      }}
+      onPointerEnter={dismissHoverPreview}
+      onPointerDown={(event) => {
+        event.stopPropagation();
+        dismissHoverPreview();
+      }}
+    >
+      <i
+        className={`fa-solid fa-chevron-${direction === "prev" ? "left" : "right"}`}
+        aria-hidden="true"
+      />
+    </button>
+  );
+}
 
 function useP4HorizontalRail(itemCount: number) {
   const railRef = useRef<HTMLDivElement>(null);
@@ -1159,14 +1192,11 @@ function P4TopFiveSection({
         }`}
       >
         {canScrollPrev ? (
-          <button
-            type="button"
-            className="p4-rail-arrow p4-rail-prev"
-            aria-label="Lihat peringkat sebelumnya"
+          <P4RailArrow
+            direction="prev"
+            label="Lihat peringkat sebelumnya"
             onClick={() => scrollRail("previous")}
-          >
-            <i className="fa-solid fa-chevron-left" aria-hidden="true" />
-          </button>
+          />
         ) : null}
         <div ref={railRef} className="p4-top-five-grid" tabIndex={0} aria-label="Top 5 minggu ini">
           {games.map((game, index) => (
@@ -1181,14 +1211,11 @@ function P4TopFiveSection({
           ))}
         </div>
         {canScrollNext ? (
-          <button
-            type="button"
-            className="p4-rail-arrow p4-rail-next"
-            aria-label="Lihat peringkat berikutnya"
+          <P4RailArrow
+            direction="next"
+            label="Lihat peringkat berikutnya"
             onClick={() => scrollRail("next")}
-          >
-            <i className="fa-solid fa-chevron-right" aria-hidden="true" />
-          </button>
+          />
         ) : null}
       </div>
     </section>
@@ -1225,14 +1252,11 @@ function P4FeaturedSection({
         }`}
       >
         {canScrollPrev ? (
-          <button
-            type="button"
-            className="p4-rail-arrow p4-rail-prev"
-            aria-label="Lihat game paling hot sebelumnya"
+          <P4RailArrow
+            direction="prev"
+            label="Lihat game paling hot sebelumnya"
             onClick={() => scrollRail("previous")}
-          >
-            <i className="fa-solid fa-chevron-left" aria-hidden="true" />
-          </button>
+          />
         ) : null}
         <div
           ref={railRef}
@@ -1251,14 +1275,11 @@ function P4FeaturedSection({
           ))}
         </div>
         {canScrollNext ? (
-          <button
-            type="button"
-            className="p4-rail-arrow p4-rail-next"
-            aria-label="Lihat game paling hot berikutnya"
+          <P4RailArrow
+            direction="next"
+            label="Lihat game paling hot berikutnya"
             onClick={() => scrollRail("next")}
-          >
-            <i className="fa-solid fa-chevron-right" aria-hidden="true" />
-          </button>
+          />
         ) : null}
       </div>
     </section>
@@ -1333,14 +1354,11 @@ function P4GameRailSection({
         }`}
       >
         {canScrollPrev ? (
-          <button
-            type="button"
-            className="p4-rail-arrow p4-rail-prev"
-            aria-label={`Lihat ${title.toLowerCase()} sebelumnya`}
+          <P4RailArrow
+            direction="prev"
+            label={`Lihat ${title.toLowerCase()} sebelumnya`}
             onClick={() => scrollRail("previous")}
-          >
-            <i className="fa-solid fa-chevron-left" aria-hidden="true" />
-          </button>
+          />
         ) : null}
         <div
           ref={railRef}
@@ -1360,14 +1378,11 @@ function P4GameRailSection({
           ))}
         </div>
         {canScrollNext ? (
-          <button
-            type="button"
-            className="p4-rail-arrow p4-rail-next"
-            aria-label={`Lihat ${title.toLowerCase()} berikutnya`}
+          <P4RailArrow
+            direction="next"
+            label={`Lihat ${title.toLowerCase()} berikutnya`}
             onClick={() => scrollRail("next")}
-          >
-            <i className="fa-solid fa-chevron-right" aria-hidden="true" />
-          </button>
+          />
         ) : null}
       </div>
     </section>

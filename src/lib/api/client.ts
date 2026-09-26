@@ -117,7 +117,7 @@ async function apiFetchInternal<T>(
     }
 
     // Global auth-failure handling: if this is a session-expiry 401
-    // (not step-up, not invalid credentials), trigger the redirect.
+    // (not step-up, not invalid credentials), invoke the registered handler.
     if (
       response.status === 401 &&
       code !== "STEP_UP_REQUIRED" &&
