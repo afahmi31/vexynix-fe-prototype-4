@@ -8,6 +8,7 @@
     "dev:up": "bash scripts/dev.sh",
     "dev:down": "bash scripts/dev.sh stop",
     "mock-bff": "node scripts/mock-bff.js",
+    "assets:spinner": "node scripts/generate-p4-spinner-assets.mjs",
     "build": "next build",
     "build:analyze": "ANALYZE=true next build",
     "build:check-bundle": "next build && bash scripts/check-bundle-size.sh",

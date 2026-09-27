@@ -1,0 +1,130 @@
+{
+  "package": "p4-game-spin",
+  "canvas": {
+    "width": 1024,
+    "height": 1024,
+    "pivot": {
+      "x": 512,
+      "y": 512
+    }
+  },
+  "selector": {
+    "segmentCount": 8,
+    "pointerAngle": -90,
+    "initialWinningCenterAngle": -90,
+    "direction": "clockwise",
+    "targetOffset": 0,
+    "games": [
+      {
+        "id": "neon-racer",
+        "name": "Neon Racer"
+      },
+      {
+        "id": "solar-riches",
+        "name": "Solar Riches"
+      },
+      {
+        "id": "velvet-roulette",
+        "name": "Velvet Roulette"
+      },
+      {
+        "id": "deep-sea-odyssey",
+        "name": "Deep Sea Odyssey"
+      },
+      {
+        "id": "sweet-bonanza",
+        "name": "Sweet Bonanza"
+      },
+      {
+        "id": "gates-of-olympus",
+        "name": "Gates of Olympus"
+      },
+      {
+        "id": "mahjong-ways-2",
+        "name": "Mahjong Ways 2"
+      },
+      {
+        "id": "lucky-fortune-cat",
+        "name": "Lucky Fortune Cat"
+      }
+    ]
+  },
+  "layerOrder": [
+    "shadow",
+    "glow",
+    "frame",
+    "selector",
+    "pointer",
+    "button",
+    "particles"
+  ],
+  "layers": [
+    {
+      "name": "shadow",
+      "svg": "p4-spinner-shadow.svg",
+      "png": "p4-spinner-shadow.png",
+      "transparent": true,
+      "animatedByFrontend": false
+    },
+    {
+      "name": "glow",
+      "svg": "p4-spinner-glow.svg",
+      "png": "p4-spinner-glow.png",
+      "transparent": true,
+      "animatedByFrontend": true
+    },
+    {
+      "name": "frame",
+      "svg": "p4-spinner-frame.svg",
+      "png": "p4-spinner-frame.png",
+      "transparent": true,
+      "animatedByFrontend": false
+    },
+    {
+      "name": "selector",
+      "svg": "p4-spinner-selector.svg",
+      "png": "p4-spinner-selector.png",
+      "transparent": true,
+      "animatedByFrontend": true
+    },
+    {
+      "name": "pointer",
+      "svg": "p4-spinner-pointer.svg",
+      "png": "p4-spinner-pointer.png",
+      "transparent": true,
+      "animatedByFrontend": false
+    },
+    {
+      "name": "button",
+      "svg": "p4-spinner-button.svg",
+      "png": "p4-spinner-button.png",
+      "transparent": true,
+      "animatedByFrontend": true
+    },
+    {
+      "name": "particles",
+      "svg": "p4-spinner-particles.svg",
+      "png": "p4-spinner-particles.png",
+      "transparent": true,
+      "animatedByFrontend": true
+    },
+    {
+      "name": "win-glow",
+      "svg": "p4-spinner-win-glow.svg",
+      "png": "p4-spinner-win-glow.png",
+      "transparent": true,
+      "animatedByFrontend": true
+    }
+  ],
+  "previews": [
+    "p4-spinner-preview.png",
+    "p4-spinner-preview-win.png"
+  ],
+  "hero": {
+    "foreground": "p4-spinner-hero-art.png",
+    "banner": "p4-spinner-hero-banner.png",
+    "copySafeArea": "left 44%"
+  },
+  "generator": "scripts/generate-p4-spinner-assets.mjs",
+  "generatedAt": "2026-09-26T03:38:50.434Z"
+}
