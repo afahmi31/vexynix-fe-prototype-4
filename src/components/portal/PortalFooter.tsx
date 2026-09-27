@@ -2,21 +2,21 @@
 
 import { usePathname } from "next/navigation";
 import { useBrandStore } from "@/stores/brand";
-import P4Footer from "./P4Footer";
+import MemberFooter from "./MemberFooter";
 
-/** P4 surfaces and auth deep-link shims share the discovery footer. */
+/** Member surfaces and auth deep-link shims share the discovery footer. */
 export default function PortalFooter() {
   const brand = useBrandStore((state) => state.brand);
   const pathname = usePathname();
   const brandLabel = brand.label || "Game Portal";
 
-  const isP4Surface =
+  const isMemberSurface =
     pathname === "/login" ||
     pathname === "/register" ||
     pathname === "/lobby" ||
     pathname.startsWith("/mock-game/");
 
-  if (isP4Surface) return <P4Footer />;
+  if (isMemberSurface) return <MemberFooter />;
 
   return (
     <footer className="portal-footer">

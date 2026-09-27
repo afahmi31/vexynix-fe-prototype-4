@@ -8,7 +8,7 @@ import { useSessionStore } from "@/stores/session";
 import { authApi } from "@/lib/api/auth";
 import { useAuthModalStore } from "@/stores/auth-modal";
 import PortalBalancePill from "./PortalBalancePill";
-import P4Header from "./P4Header";
+import MemberHeader from "./MemberHeader";
 
 const NAV_LINKS = [
   { href: "/lobby", label: "Game", icon: "fa-solid fa-dice" },
@@ -32,11 +32,11 @@ export default function PortalHeader() {
 
   const isLoggedIn = !!token;
 
-  // The public lobby and game-play pages share the P4 discovery header.
+  // The public lobby and game-play pages share the Member discovery header.
   const isAuthRoute = pathname === "/login" || pathname === "/register";
-  const isP4Surface = isAuthRoute || pathname === "/lobby" || pathname.startsWith("/mock-game/");
+  const isMemberSurface = isAuthRoute || pathname === "/lobby" || pathname.startsWith("/mock-game/");
   const isLobby = pathname === "/lobby";
-  const showNav = isLoggedIn && !isP4Surface;
+  const showNav = isLoggedIn && !isMemberSurface;
   const isVexynix = brand.label.trim().toUpperCase() === "VEXYNIX";
   const [scrolled, setScrolled] = useState(false);
 
@@ -51,10 +51,10 @@ export default function PortalHeader() {
     return () => window.removeEventListener("scroll", onScroll);
   }, [isLobby]);
 
-  if (isP4Surface) {
+  if (isMemberSurface) {
     return (
       <Suspense fallback={null}>
-        <P4Header />
+        <MemberHeader />
       </Suspense>
     );
   }

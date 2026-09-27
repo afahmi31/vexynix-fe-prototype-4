@@ -8,18 +8,18 @@ import { useActivityFeeds } from "@/hooks/useActivityFeeds";
 import { useLaunchGame } from "@/hooks/useLaunchGame";
 import { useActionDisabled } from "@/hooks/useTransactionLock";
 import { useAuthModalStore } from "@/stores/auth-modal";
-import { MOCK_CATALOG, MOCK_VENDORS } from "@/mocks/p4";
+import { MOCK_CATALOG, MOCK_VENDORS } from "@/mocks/member";
 import type { ActivityFeedsRes, Game, Vendor } from "@/types/api";
 import { NEXT_PARAM, safeNextPath } from "@/lib/auth-redirect";
-import { P4GameCard } from "@/components/game/p4/P4GameCard";
-import { P4HoverPreviewProvider, useP4HoverPreview } from "@/components/game/p4/P4HoverPreview";
+import { MemberGameCard } from "@/components/game/member/MemberGameCard";
+import { MemberHoverPreviewProvider, useMemberHoverPreview } from "@/components/game/member/MemberHoverPreview";
 
-const HERO_BACKDROP = "/assets/prototype-4/hero/neon-racer-sunset.png";
+const HERO_BACKDROP = "/assets/member/heroes/neon-racer-sunset.png";
 
 const CTA_ARTWORK = {
-  discover: "/assets/prototype-4/cta/discover-games.png",
-  random: "/assets/prototype-4/cta/random-game.png",
-  catalog: "/assets/prototype-4/cta/new-games-banner.png",
+  discover: "/assets/member/promotions/discover-games.png",
+  random: "/assets/member/promotions/random-game.png",
+  catalog: "/assets/member/promotions/new-games-banner.png",
 } as const;
 
 const HERO_FALLBACK_SLIDES = [
@@ -33,21 +33,21 @@ const HERO_FALLBACK_SLIDES = [
   {
     gameId: "solar-riches",
     title: "Solar Riches",
-    backdrop: "/assets/p4/heroes/solar-riches-backdrop.png",
+    backdrop: "/assets/member/heroes/solar-riches-backdrop.png",
     meta: "Slot  ·  PG Soft  ·  Gratis Demo",
     description: "Temukan kuil emas dan nikmati putaran bertema matahari.",
   },
   {
     gameId: "velvet-roulette",
     title: "Velvet Roulette",
-    backdrop: "/assets/p4/heroes/velvet-roulette-backdrop.png",
+    backdrop: "/assets/member/heroes/velvet-roulette-backdrop.png",
     meta: "Live Casino  ·  Evolution  ·  Live Play",
     description: "Nikmati suasana meja malam yang elegan.",
   },
   {
     gameId: "deep-sea-odyssey",
     title: "Deep Sea Odyssey",
-    backdrop: "/assets/p4/heroes/deep-sea-odyssey-backdrop.png",
+    backdrop: "/assets/member/heroes/deep-sea-odyssey-backdrop.png",
     meta: "Tembak Ikan  ·  Naga Games  ·  Gratis Demo",
     description: "Mulai petualangan di kedalaman yang penuh warna.",
   },
@@ -122,7 +122,7 @@ const PROVIDER_FEATURES = [
   },
 ] as const;
 
-type P4ProviderFeature = (typeof PROVIDER_FEATURES)[number] & {
+type MemberProviderFeature = (typeof PROVIDER_FEATURES)[number] & {
   image?: string;
 };
 
@@ -337,20 +337,20 @@ function gamesByStagingPopularOrder(games: Game[], vendors: Vendor[], limit: num
 
 type RailDirection = "previous" | "next";
 
-interface P4RailArrowProps {
+interface MemberRailArrowProps {
   direction: "prev" | "next";
   label: string;
   onClick: () => void;
 }
 
-function P4RailArrow({ direction, label, onClick }: P4RailArrowProps) {
-  const hoverPreview = useP4HoverPreview();
+function MemberRailArrow({ direction, label, onClick }: MemberRailArrowProps) {
+  const hoverPreview = useMemberHoverPreview();
   const dismissHoverPreview = () => hoverPreview?.dismissPreview();
 
   return (
     <button
       type="button"
-      className={`p4-rail-arrow p4-rail-${direction}`}
+      className={`member-rail-arrow member-rail-${direction}`}
       aria-label={label}
       onClick={(event) => {
         event.stopPropagation();
@@ -370,7 +370,7 @@ function P4RailArrow({ direction, label, onClick }: P4RailArrowProps) {
   );
 }
 
-function useP4HorizontalRail(itemCount: number) {
+function useMemberHorizontalRail(itemCount: number) {
   const railRef = useRef<HTMLDivElement>(null);
   const [canScrollPrev, setCanScrollPrev] = useState(false);
   const [canScrollNext, setCanScrollNext] = useState(false);
@@ -425,7 +425,7 @@ const TOP_FIVE_VENDOR_OVERRIDES: Record<string, string> = {
   "wanted-dead-or-a-wild": "Hacksaw Gaming",
 };
 
-export default function P4LobbyPage() {
+export default function MemberLobbyPage() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const catalogQuery = useCatalog();
@@ -466,7 +466,7 @@ export default function P4LobbyPage() {
       activeGames.find((game) => game.id === slide.gameId)
     ).filter((game): game is Game => Boolean(game));
   }, [activeGames, hasLiveCatalog, stagingPopularGames]);
-  const providerFeatures = useMemo<P4ProviderFeature[]>(
+  const providerFeatures = useMemo<MemberProviderFeature[]>(
     () =>
       PROVIDER_FEATURES.map((provider) => ({
         ...provider,
@@ -500,19 +500,19 @@ export default function P4LobbyPage() {
     if (isCatalogView) return;
 
     const topFeatureGrid = topFeatureGridRef.current;
-    const topFiveGrid = topFeatureGrid?.querySelector<HTMLElement>(".p4-top-five-grid");
+    const topFiveGrid = topFeatureGrid?.querySelector<HTMLElement>(".member-top-five-grid");
     if (!topFeatureGrid || !topFiveGrid) return;
 
     let frame = 0;
     const syncPosterHeight = () => {
-      topFeatureGrid.style.removeProperty("--p4-poster-height");
+      topFeatureGrid.style.removeProperty("--member-poster-height");
       window.cancelAnimationFrame(frame);
       frame = window.requestAnimationFrame(() => {
-        const topFiveCard = topFiveGrid.querySelector<HTMLElement>(".p4-game-card-art");
+        const topFiveCard = topFiveGrid.querySelector<HTMLElement>(".member-game-card-art");
         if (!topFiveCard) return;
 
         topFeatureGrid.style.setProperty(
-          "--p4-poster-height",
+          "--member-poster-height",
           `${topFiveCard.getBoundingClientRect().height}px`
         );
       });
@@ -524,7 +524,7 @@ export default function P4LobbyPage() {
     return () => {
       window.cancelAnimationFrame(frame);
       window.removeEventListener("resize", syncPosterHeight);
-      topFeatureGrid.style.removeProperty("--p4-poster-height");
+      topFeatureGrid.style.removeProperty("--member-poster-height");
     };
   }, [isCatalogView, activeGames.length]);
 
@@ -724,12 +724,12 @@ export default function P4LobbyPage() {
     const page = Math.max(1, Math.min(nextPage, catalogPageCount));
     setCatalogPage(page);
     window.requestAnimationFrame(() => {
-      document.getElementById("p4-catalog")?.scrollIntoView({ behavior: "auto", block: "start" });
+      document.getElementById("member-catalog")?.scrollIntoView({ behavior: "auto", block: "start" });
     });
   };
 
   const handleCatalogCategoryChange = (nextCategory: string) => {
-    router.push(`/lobby?category=${nextCategory}#p4-catalog`);
+    router.push(`/lobby?category=${nextCategory}#member-catalog`);
   };
 
   const handleCatalogProviderToggle = (providerId: string) => {
@@ -748,7 +748,7 @@ export default function P4LobbyPage() {
 
   const handleLeaderboardCta = () => {
     setActivityTab("leaderboard");
-    window.requestAnimationFrame(() => scrollTo("p4-activity-title"));
+    window.requestAnimationFrame(() => scrollTo("member-activity-title"));
   };
 
   const handleHeroLaunch = () => {
@@ -761,20 +761,20 @@ export default function P4LobbyPage() {
     return (
       <>
         {hasExternalDataError ? (
-          <div className="p4-lobby">
-            <div className="p4-data-state" role="alert">
+          <div className="member-lobby">
+            <div className="member-data-state" role="alert">
               Data game staging belum dapat dimuat.
             </div>
           </div>
         ) : (
-          <P4LobbySkeleton />
+          <MemberLobbySkeleton />
         )}
       </>
     );
   }
 
   return (
-    <P4HoverPreviewProvider
+    <MemberHoverPreviewProvider
       disabled={actionDisabled}
       launching={launching}
       onInfo={setDetailGame}
@@ -782,9 +782,9 @@ export default function P4LobbyPage() {
       onLaunchDemo={(id) => void launchDemo(id)}
       vendorName={vendorName}
     >
-      <div className="p4-lobby">
+      <div className="member-lobby">
         {isCatalogView ? (
-          <P4CatalogView
+          <MemberCatalogView
             categoryLabel={categoryLabel}
             games={paginatedCatalog}
             totalGameCount={filteredCatalog.length}
@@ -804,15 +804,15 @@ export default function P4LobbyPage() {
             isFilterOpen={isCatalogFilterOpen}
             onToggleFilter={() => setIsCatalogFilterOpen((isOpen) => !isOpen)}
             onCloseFilter={() => setIsCatalogFilterOpen(false)}
-            onBrowse={() => scrollTo("p4-catalog-grid")}
-            onViewActivity={() => scrollTo("p4-catalog-activity")}
+            onBrowse={() => scrollTo("member-catalog-grid")}
+            onViewActivity={() => scrollTo("member-catalog-activity")}
             onPageChange={handleCatalogPageChange}
             activityFeeds={activityFeeds}
             onSelect={setDetailGame}
           />
         ) : (
           <>
-            <section className="p4-hero" aria-labelledby="p4-hero-title">
+            <section className="member-hero" aria-labelledby="member-hero-title">
               {heroSlide.backdrop.startsWith("/") ? (
                 <Image
                   key={`hero-image-${heroSlide.gameId}`}
@@ -821,7 +821,7 @@ export default function P4LobbyPage() {
                   fill
                   priority
                   sizes="100vw"
-                  className="p4-hero-image"
+                  className="member-hero-image"
                 />
               ) : (
                 // eslint-disable-next-line @next/next/no-img-element
@@ -829,7 +829,7 @@ export default function P4LobbyPage() {
                   key={`hero-image-${heroSlide.gameId}`}
                   src={heroSlide.backdrop}
                   alt={heroSlide.title}
-                  className="p4-hero-image"
+                  className="member-hero-image"
                   decoding="async"
                   style={{
                     position: "absolute",
@@ -841,19 +841,19 @@ export default function P4LobbyPage() {
                   }}
                 />
               )}
-              <div className="p4-hero-overlay" aria-hidden="true" />
+              <div className="member-hero-overlay" aria-hidden="true" />
               <div
-                className="p4-hero-content"
+                className="member-hero-content"
                 key={`hero-content-${heroSlide.gameId}`}
                 aria-live="polite"
               >
-                <h1 id="p4-hero-title">{heroSlide.title}</h1>
-                <p className="p4-hero-meta">{heroSlide.meta}</p>
-                <p className="p4-hero-description">{heroSlide.description}</p>
-                <div className="p4-hero-actions">
+                <h1 id="member-hero-title">{heroSlide.title}</h1>
+                <p className="member-hero-meta">{heroSlide.meta}</p>
+                <p className="member-hero-description">{heroSlide.description}</p>
+                <div className="member-hero-actions">
                   <button
                     type="button"
-                    className="p4-button p4-button--primary"
+                    className="member-button member-button--primary"
                     onClick={handleHeroLaunch}
                   >
                     <i className="fa-solid fa-play" aria-hidden="true" />
@@ -864,27 +864,27 @@ export default function P4LobbyPage() {
               {heroPreviewGame?.image_url ? (
                 <button
                   type="button"
-                  className="p4-hero-preview"
+                  className="member-hero-preview"
                   aria-label={`Tampilkan ${heroPreviewGame.name}`}
                   onClick={() => setHeroSlideIndex((current) => (current + 1) % heroGames.length)}
                 >
-                  <span className="p4-hero-preview-label" aria-hidden="true">
+                  <span className="member-hero-preview-label" aria-hidden="true">
                     Berikutnya
                   </span>
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={heroPreviewGame.image_url}
                     alt=""
-                    className="p4-hero-preview-image"
+                    className="member-hero-preview-image"
                     decoding="async"
                   />
-                  <span className="p4-hero-preview-copy" aria-hidden="true">
+                  <span className="member-hero-preview-copy" aria-hidden="true">
                     <strong>{heroPreviewGame.name}</strong>
                     <small>{vendorName(heroPreviewGame.vendor_id)}</small>
                   </span>
                 </button>
               ) : null}
-              <div className="p4-hero-dots" role="tablist" aria-label="Pilihan hero">
+              <div className="member-hero-dots" role="tablist" aria-label="Pilihan hero">
                 {heroGames.map((game, index) => (
                   <button
                     key={game.id}
@@ -899,43 +899,43 @@ export default function P4LobbyPage() {
               </div>
             </section>
 
-            <div className="p4-primary-sections">
+            <div className="member-primary-sections">
               <section
                 ref={topFeatureGridRef}
-                className="p4-top-feature-grid"
+                className="member-top-feature-grid"
                 aria-label="Game pilihan utama"
               >
-                <P4TopFiveSection
+                <MemberTopFiveSection
                   games={topFive}
                   vendorName={vendorName}
                   onSelect={setDetailGame}
                 />
-                <P4FeaturedSection
+                <MemberFeaturedSection
                   games={featuredGames}
                   vendorName={vendorName}
                   onSelect={setDetailGame}
-                  onViewAll={() => router.push("/lobby?category=all#p4-catalog")}
+                  onViewAll={() => router.push("/lobby?category=all#member-catalog")}
                 />
               </section>
 
-              <section className="p4-activity-band" aria-label="Coba gratis dan aktivitas">
-                <P4TrendingSection
+              <section className="member-activity-band" aria-label="Coba gratis dan aktivitas">
+                <MemberTrendingSection
                   games={freeGames}
                   vendorName={vendorName}
                   onSelect={setDetailGame}
-                  onViewAll={() => router.push("/lobby?category=all#p4-catalog")}
+                  onViewAll={() => router.push("/lobby?category=all#member-catalog")}
                 />
-                <P4ActivityCard
+                <MemberActivityCard
                   games={activeGames}
                   feeds={activityFeeds}
                   activeTab={activityTab}
                   onTabChange={setActivityTab}
-                  onViewAll={() => router.push("/lobby?category=all#p4-catalog")}
+                  onViewAll={() => router.push("/lobby?category=all#member-catalog")}
                 />
               </section>
 
-              <P4CtaSection
-                onExplore={() => router.push("/lobby?category=all#p4-catalog")}
+              <MemberCtaSection
+                onExplore={() => router.push("/lobby?category=all#member-catalog")}
                 onRandomPick={() => {
                   if (!activeGames.length) return;
                   const randomIndex = Math.floor(Math.random() * activeGames.length);
@@ -944,7 +944,7 @@ export default function P4LobbyPage() {
                 }}
               />
 
-              <P4ProviderSection
+              <MemberProviderSection
                 providers={providerFeatures}
                 selectedProvider={selectedProvider}
                 providerGames={providerGames}
@@ -952,19 +952,19 @@ export default function P4LobbyPage() {
                 vendorName={vendorName}
                 onSelectProvider={(providerId) => {
                   setSelectedProvider(providerId);
-                  window.requestAnimationFrame(() => scrollTo("p4-provider-games"));
+                  window.requestAnimationFrame(() => scrollTo("member-provider-games"));
                 }}
                 onSelectGame={setDetailGame}
-                onViewAll={() => router.push("/lobby?category=all#p4-catalog")}
+                onViewAll={() => router.push("/lobby?category=all#member-catalog")}
               />
 
-              <P4LeaderboardCta onViewRanking={handleLeaderboardCta} />
+              <MemberLeaderboardCta onViewRanking={handleLeaderboardCta} />
             </div>
           </>
         )}
 
         {launchError ? (
-          <div className="p4-launch-feedback" role="status">
+          <div className="member-launch-feedback" role="status">
             <span>{launchError}</span>
             <button type="button" onClick={clearError} aria-label="Tutup pesan">
               <i className="fa-solid fa-xmark" aria-hidden="true" />
@@ -973,7 +973,7 @@ export default function P4LobbyPage() {
         ) : null}
 
         {detailGame ? (
-          <P4GameDetail
+          <MemberGameDetail
             game={detailGame}
             vendorName={vendorName(detailGame.vendor_id)}
             launching={launching === detailGame.id}
@@ -983,11 +983,11 @@ export default function P4LobbyPage() {
           />
         ) : null}
       </div>
-    </P4HoverPreviewProvider>
+    </MemberHoverPreviewProvider>
   );
 }
 
-function P4CtaSection({
+function MemberCtaSection({
   onExplore,
   onRandomPick,
 }: {
@@ -995,28 +995,28 @@ function P4CtaSection({
   onRandomPick: () => void;
 }) {
   return (
-    <section id="p4-cta" className="p4-cta-grid" aria-label="Pilihan permainan">
-      <article className="p4-action-card p4-action-card--discover">
-        <div className="p4-action-card-art" aria-hidden="true">
+    <section id="member-cta" className="member-cta-grid" aria-label="Pilihan permainan">
+      <article className="member-action-card member-action-card--discover">
+        <div className="member-action-card-art" aria-hidden="true">
           <Image src={CTA_ARTWORK.discover} alt="" fill sizes="(max-width: 900px) 100vw, 50vw" />
         </div>
-        <div className="p4-action-card-copy">
+        <div className="member-action-card-copy">
           <h2>Temukan game baru hari ini</h2>
           <p>Jelajahi pilihan game yang dibuat untuk menemani waktumu.</p>
-          <button type="button" className="p4-button p4-button--secondary" onClick={onExplore}>
+          <button type="button" className="member-button member-button--secondary" onClick={onExplore}>
             Jelajahi Game
           </button>
         </div>
       </article>
 
-      <article className="p4-action-card p4-action-card--random">
-        <div className="p4-action-card-art" aria-hidden="true">
+      <article className="member-action-card member-action-card--random">
+        <div className="member-action-card-art" aria-hidden="true">
           <Image src={CTA_ARTWORK.random} alt="" fill sizes="(max-width: 900px) 100vw, 50vw" />
         </div>
-        <div className="p4-action-card-copy">
+        <div className="member-action-card-copy">
           <h2>Putar Pilihan</h2>
           <p>Belum tahu mau pilih yang mana? Kami pilihkan satu untukmu.</p>
-          <button type="button" className="p4-button p4-button--secondary" onClick={onRandomPick}>
+          <button type="button" className="member-button member-button--secondary" onClick={onRandomPick}>
             Pilih Satu Game
           </button>
         </div>
@@ -1025,19 +1025,19 @@ function P4CtaSection({
   );
 }
 
-function P4LeaderboardCta({ onViewRanking }: { onViewRanking: () => void }) {
+function MemberLeaderboardCta({ onViewRanking }: { onViewRanking: () => void }) {
   return (
-    <section className="p4-leaderboard-cta" aria-label="Papan peringkat">
-      <div className="p4-leaderboard-cta-art" aria-hidden="true">
+    <section className="member-leaderboard-cta" aria-label="Papan peringkat">
+      <div className="member-leaderboard-cta-art" aria-hidden="true">
         <Image
-          src="/assets/prototype-4/cta/leaderboard-banner.png"
+          src="/assets/member/promotions/leaderboard-banner.png"
           alt=""
           fill
           sizes="(max-width: 900px) 100vw, 1580px"
         />
       </div>
-      <div className="p4-leaderboard-cta-copy">
-        <span className="p4-leaderboard-cta-icon" aria-hidden="true">
+      <div className="member-leaderboard-cta-copy">
+        <span className="member-leaderboard-cta-icon" aria-hidden="true">
           <i className="fa-solid fa-trophy" />
         </span>
         <div>
@@ -1045,52 +1045,52 @@ function P4LeaderboardCta({ onViewRanking }: { onViewRanking: () => void }) {
           <p>Lihat pilihan game yang sedang ramai minggu ini.</p>
         </div>
       </div>
-      <button type="button" className="p4-button p4-button--dark" onClick={onViewRanking}>
+      <button type="button" className="member-button member-button--dark" onClick={onViewRanking}>
         Lihat Peringkat
       </button>
     </section>
   );
 }
 
-export function P4LobbySkeleton() {
+export function MemberLobbySkeleton() {
   return (
     <div
-      className="p4-lobby p4-lobby-skeleton"
+      className="member-lobby member-lobby-skeleton"
       role="status"
       aria-busy="true"
       aria-label="Memuat data game staging"
     >
-      <section className="p4-skeleton-hero" aria-hidden="true">
-        <div className="p4-skeleton-hero-art" />
-        <div className="p4-skeleton-hero-copy">
-          <span className="p4-skeleton-block p4-skeleton-block--eyebrow" />
-          <span className="p4-skeleton-block p4-skeleton-block--title" />
-          <span className="p4-skeleton-block p4-skeleton-block--title-short" />
-          <span className="p4-skeleton-block p4-skeleton-block--meta" />
-          <span className="p4-skeleton-block p4-skeleton-block--description" />
-          <span className="p4-skeleton-block p4-skeleton-block--button" />
+      <section className="member-skeleton-hero" aria-hidden="true">
+        <div className="member-skeleton-hero-art" />
+        <div className="member-skeleton-hero-copy">
+          <span className="member-skeleton-block member-skeleton-block--eyebrow" />
+          <span className="member-skeleton-block member-skeleton-block--title" />
+          <span className="member-skeleton-block member-skeleton-block--title-short" />
+          <span className="member-skeleton-block member-skeleton-block--meta" />
+          <span className="member-skeleton-block member-skeleton-block--description" />
+          <span className="member-skeleton-block member-skeleton-block--button" />
         </div>
-        <div className="p4-skeleton-dots">
+        <div className="member-skeleton-dots">
           {Array.from({ length: 5 }, (_, index) => (
-            <span key={index} className="p4-skeleton-dot" />
+            <span key={index} className="member-skeleton-dot" />
           ))}
         </div>
       </section>
 
-      <section className="p4-skeleton-primary" aria-hidden="true">
-        <P4SkeletonRail cardCount={5} isRanked showIcon />
-        <P4SkeletonRail cardCount={4} showViewAll />
+      <section className="member-skeleton-primary" aria-hidden="true">
+        <MemberSkeletonRail cardCount={5} isRanked showIcon />
+        <MemberSkeletonRail cardCount={4} showViewAll />
       </section>
 
-      <section className="p4-skeleton-activity-band" aria-hidden="true">
-        <P4SkeletonRail cardCount={4} showViewAll className="p4-skeleton-activity-rail" />
-        <P4SkeletonActivity />
+      <section className="member-skeleton-activity-band" aria-hidden="true">
+        <MemberSkeletonRail cardCount={4} showViewAll className="member-skeleton-activity-rail" />
+        <MemberSkeletonActivity />
       </section>
     </div>
   );
 }
 
-function P4SkeletonRail({
+function MemberSkeletonRail({
   cardCount,
   className,
   isRanked = false,
@@ -1107,23 +1107,23 @@ function P4SkeletonRail({
 
   return (
     <section
-      className={`p4-skeleton-section${isRanked ? " p4-skeleton-section--ranked" : ""}${
+      className={`member-skeleton-section${isRanked ? " member-skeleton-section--ranked" : ""}${
         className ? ` ${className}` : ""
       }`}
     >
-      <div className="p4-skeleton-heading">
-        {showIcon ? <span className="p4-skeleton-heading-icon" /> : null}
-        <div className="p4-skeleton-heading-copy">
-          <span className="p4-skeleton-block p4-skeleton-block--heading" />
-          <span className="p4-skeleton-block p4-skeleton-block--subheading" />
+      <div className="member-skeleton-heading">
+        {showIcon ? <span className="member-skeleton-heading-icon" /> : null}
+        <div className="member-skeleton-heading-copy">
+          <span className="member-skeleton-block member-skeleton-block--heading" />
+          <span className="member-skeleton-block member-skeleton-block--subheading" />
         </div>
-        {showViewAll ? <span className="p4-skeleton-block p4-skeleton-block--view-all" /> : null}
+        {showViewAll ? <span className="member-skeleton-block member-skeleton-block--view-all" /> : null}
       </div>
-      <div className={`p4-skeleton-rail p4-skeleton-rail--${cardCount}`}>
+      <div className={`member-skeleton-rail member-skeleton-rail--${cardCount}`}>
         {cards.map((card) => (
-          <div className="p4-skeleton-card" key={card}>
-            <span className="p4-skeleton-block" />
-            {isRanked ? <span className="p4-skeleton-rank" /> : null}
+          <div className="member-skeleton-card" key={card}>
+            <span className="member-skeleton-block" />
+            {isRanked ? <span className="member-skeleton-rank" /> : null}
           </div>
         ))}
       </div>
@@ -1131,31 +1131,31 @@ function P4SkeletonRail({
   );
 }
 
-function P4SkeletonActivity() {
+function MemberSkeletonActivity() {
   return (
-    <aside className="p4-skeleton-activity-card">
-      <div className="p4-skeleton-activity-heading">
-        <span className="p4-skeleton-block p4-skeleton-block--activity-title" />
-        <span className="p4-skeleton-block p4-skeleton-block--activity-link" />
+    <aside className="member-skeleton-activity-card">
+      <div className="member-skeleton-activity-heading">
+        <span className="member-skeleton-block member-skeleton-block--activity-title" />
+        <span className="member-skeleton-block member-skeleton-block--activity-link" />
       </div>
-      <div className="p4-skeleton-tabs">
+      <div className="member-skeleton-tabs">
         {Array.from({ length: 3 }, (_, index) => (
           <span
             key={index}
-            className={`p4-skeleton-block p4-skeleton-tab${index === 0 ? " is-active" : ""}`}
+            className={`member-skeleton-block member-skeleton-tab${index === 0 ? " is-active" : ""}`}
           />
         ))}
       </div>
-      <div className="p4-skeleton-table">
-        <div className="p4-skeleton-table-row p4-skeleton-table-row--heading">
+      <div className="member-skeleton-table">
+        <div className="member-skeleton-table-row member-skeleton-table-row--heading">
           {Array.from({ length: 4 }, (_, index) => (
-            <span key={index} className="p4-skeleton-block" />
+            <span key={index} className="member-skeleton-block" />
           ))}
         </div>
         {Array.from({ length: 3 }, (_, row) => (
-          <div className="p4-skeleton-table-row" key={row}>
+          <div className="member-skeleton-table-row" key={row}>
             {Array.from({ length: 4 }, (_, column) => (
-              <span key={column} className="p4-skeleton-block" />
+              <span key={column} className="member-skeleton-block" />
             ))}
           </div>
         ))}
@@ -1164,7 +1164,7 @@ function P4SkeletonActivity() {
   );
 }
 
-function P4TopFiveSection({
+function MemberTopFiveSection({
   games,
   vendorName,
   onSelect,
@@ -1173,34 +1173,34 @@ function P4TopFiveSection({
   vendorName: (id: string) => string;
   onSelect: (game: Game) => void;
 }) {
-  const { railRef, canScrollPrev, canScrollNext, scrollRail } = useP4HorizontalRail(games.length);
+  const { railRef, canScrollPrev, canScrollNext, scrollRail } = useMemberHorizontalRail(games.length);
 
   return (
-    <section className="p4-top-five" aria-labelledby="p4-top-five-title">
-      <div className="p4-section-heading p4-top-five-heading">
-        <span className="p4-top-five-mark" aria-hidden="true">
+    <section className="member-top-five" aria-labelledby="member-top-five-title">
+      <div className="member-section-heading member-top-five-heading">
+        <span className="member-top-five-mark" aria-hidden="true">
           <i className="fa-solid fa-ranking-star" />
         </span>
         <div>
-          <h2 id="p4-top-five-title">Top 5 Minggu Ini</h2>
+          <h2 id="member-top-five-title">Top 5 Minggu Ini</h2>
           <p>Game yang paling sering dimainkan.</p>
         </div>
       </div>
       <div
-        className={`p4-rail-wrap${canScrollPrev ? " has-previous" : ""}${
+        className={`member-rail-wrap${canScrollPrev ? " has-previous" : ""}${
           canScrollNext ? " has-next" : ""
         }`}
       >
         {canScrollPrev ? (
-          <P4RailArrow
+          <MemberRailArrow
             direction="prev"
             label="Lihat peringkat sebelumnya"
             onClick={() => scrollRail("previous")}
           />
         ) : null}
-        <div ref={railRef} className="p4-top-five-grid" tabIndex={0} aria-label="Top 5 minggu ini">
+        <div ref={railRef} className="member-top-five-grid" tabIndex={0} aria-label="Top 5 minggu ini">
           {games.map((game, index) => (
-            <P4GameCard
+            <MemberGameCard
               key={game.id}
               game={game}
               rank={index + 1}
@@ -1211,7 +1211,7 @@ function P4TopFiveSection({
           ))}
         </div>
         {canScrollNext ? (
-          <P4RailArrow
+          <MemberRailArrow
             direction="next"
             label="Lihat peringkat berikutnya"
             onClick={() => scrollRail("next")}
@@ -1222,7 +1222,7 @@ function P4TopFiveSection({
   );
 }
 
-function P4FeaturedSection({
+function MemberFeaturedSection({
   games,
   vendorName,
   onSelect,
@@ -1233,26 +1233,26 @@ function P4FeaturedSection({
   onSelect: (game: Game) => void;
   onViewAll: () => void;
 }) {
-  const { railRef, canScrollPrev, canScrollNext, scrollRail } = useP4HorizontalRail(games.length);
+  const { railRef, canScrollPrev, canScrollNext, scrollRail } = useMemberHorizontalRail(games.length);
 
   return (
-    <section className="p4-featured" aria-labelledby="p4-featured-title">
-      <div className="p4-section-heading p4-section-heading--inline">
+    <section className="member-featured" aria-labelledby="member-featured-title">
+      <div className="member-section-heading member-section-heading--inline">
         <div>
-          <h2 id="p4-featured-title">Game Paling Hot</h2>
+          <h2 id="member-featured-title">Game Paling Hot</h2>
           <p>Koleksi game favorit untuk semua pemain.</p>
         </div>
-        <button type="button" className="p4-text-link" onClick={onViewAll}>
+        <button type="button" className="member-text-link" onClick={onViewAll}>
           Lihat Semua <i className="fa-solid fa-arrow-right" aria-hidden="true" />
         </button>
       </div>
       <div
-        className={`p4-rail-wrap${canScrollPrev ? " has-previous" : ""}${
+        className={`member-rail-wrap${canScrollPrev ? " has-previous" : ""}${
           canScrollNext ? " has-next" : ""
         }`}
       >
         {canScrollPrev ? (
-          <P4RailArrow
+          <MemberRailArrow
             direction="prev"
             label="Lihat game paling hot sebelumnya"
             onClick={() => scrollRail("previous")}
@@ -1260,12 +1260,12 @@ function P4FeaturedSection({
         ) : null}
         <div
           ref={railRef}
-          className="p4-rail p4-rail--featured"
+          className="member-rail member-rail--featured"
           tabIndex={0}
           aria-label="Game paling hot"
         >
           {games.map((game) => (
-            <P4GameCard
+            <MemberGameCard
               key={game.id}
               game={game}
               variant="portrait"
@@ -1275,7 +1275,7 @@ function P4FeaturedSection({
           ))}
         </div>
         {canScrollNext ? (
-          <P4RailArrow
+          <MemberRailArrow
             direction="next"
             label="Lihat game paling hot berikutnya"
             onClick={() => scrollRail("next")}
@@ -1286,7 +1286,7 @@ function P4FeaturedSection({
   );
 }
 
-function P4TrendingSection({
+function MemberTrendingSection({
   games,
   vendorName,
   onSelect,
@@ -1298,13 +1298,13 @@ function P4TrendingSection({
   onViewAll: () => void;
 }) {
   return (
-    <div className="p4-trending">
-      <P4GameRailSection
+    <div className="member-trending">
+      <MemberGameRailSection
         demoFirst
         games={games}
         title="Coba Gratis"
         description="Mainkan game pilihan secara gratis."
-        titleId="p4-free-title"
+        titleId="member-free-title"
         railLabel="Coba gratis"
         vendorName={vendorName}
         onSelect={onSelect}
@@ -1314,7 +1314,7 @@ function P4TrendingSection({
   );
 }
 
-function P4GameRailSection({
+function MemberGameRailSection({
   games,
   title,
   description,
@@ -1335,26 +1335,26 @@ function P4GameRailSection({
   onViewAll: () => void;
   demoFirst?: boolean;
 }) {
-  const { railRef, canScrollPrev, canScrollNext, scrollRail } = useP4HorizontalRail(games.length);
+  const { railRef, canScrollPrev, canScrollNext, scrollRail } = useMemberHorizontalRail(games.length);
 
   return (
-    <section className="p4-game-rail-section" aria-labelledby={titleId}>
-      <div className="p4-section-heading p4-section-heading--inline">
+    <section className="member-game-rail-section" aria-labelledby={titleId}>
+      <div className="member-section-heading member-section-heading--inline">
         <div>
           <h2 id={titleId}>{title}</h2>
           <p>{description}</p>
         </div>
-        <button type="button" className="p4-text-link" onClick={onViewAll}>
+        <button type="button" className="member-text-link" onClick={onViewAll}>
           Lihat Semua <i className="fa-solid fa-arrow-right" aria-hidden="true" />
         </button>
       </div>
       <div
-        className={`p4-rail-wrap${canScrollPrev ? " has-previous" : ""}${
+        className={`member-rail-wrap${canScrollPrev ? " has-previous" : ""}${
           canScrollNext ? " has-next" : ""
         }`}
       >
         {canScrollPrev ? (
-          <P4RailArrow
+          <MemberRailArrow
             direction="prev"
             label={`Lihat ${title.toLowerCase()} sebelumnya`}
             onClick={() => scrollRail("previous")}
@@ -1362,12 +1362,12 @@ function P4GameRailSection({
         ) : null}
         <div
           ref={railRef}
-          className="p4-rail p4-rail--featured"
+          className="member-rail member-rail--featured"
           tabIndex={0}
           aria-label={railLabel}
         >
           {games.map((game) => (
-            <P4GameCard
+            <MemberGameCard
               key={game.id}
               game={game}
               variant="portrait"
@@ -1378,7 +1378,7 @@ function P4GameRailSection({
           ))}
         </div>
         {canScrollNext ? (
-          <P4RailArrow
+          <MemberRailArrow
             direction="next"
             label={`Lihat ${title.toLowerCase()} berikutnya`}
             onClick={() => scrollRail("next")}
@@ -1389,7 +1389,7 @@ function P4GameRailSection({
   );
 }
 
-function P4ActivityCard({
+function MemberActivityCard({
   games,
   feeds,
   activeTab,
@@ -1413,14 +1413,14 @@ function P4ActivityCard({
   const gameImage = (name: string) => games.find((game) => game.name === name)?.image_url;
 
   return (
-    <section className="p4-activity-card" aria-labelledby="p4-activity-title">
-      <div className="p4-activity-heading">
-        <h2 id="p4-activity-title">Aktivitas</h2>
-        <button type="button" className="p4-activity-view-all" onClick={onViewAll}>
+    <section className="member-activity-card" aria-labelledby="member-activity-title">
+      <div className="member-activity-heading">
+        <h2 id="member-activity-title">Aktivitas</h2>
+        <button type="button" className="member-activity-view-all" onClick={onViewAll}>
           <i className="fa-solid fa-circle" aria-hidden="true" /> Lihat Semua
         </button>
       </div>
-      <div className="p4-activity-tabs" role="tablist" aria-label="Jenis aktivitas">
+      <div className="member-activity-tabs" role="tablist" aria-label="Jenis aktivitas">
         {(Object.keys(labels) as ActivityTab[]).map((tab) => (
           <button
             key={tab}
@@ -1435,24 +1435,24 @@ function P4ActivityCard({
         ))}
       </div>
       <div
-        className={`p4-activity-table p4-activity-table--${activeTab}`}
+        className={`member-activity-table member-activity-table--${activeTab}`}
         role="table"
         aria-label={labels[activeTab]}
       >
-        <div className="p4-activity-row p4-activity-row--head" role="row">
-          <span className="p4-activity-column-game">{gameColumn}</span>
-          <span className="p4-activity-column-player">{playerColumn}</span>
-          <span className="p4-activity-column-metric">{metricColumn}</span>
-          <span className="p4-activity-column-result">{resultColumn}</span>
+        <div className="member-activity-row member-activity-row--head" role="row">
+          <span className="member-activity-column-game">{gameColumn}</span>
+          <span className="member-activity-column-player">{playerColumn}</span>
+          <span className="member-activity-column-metric">{metricColumn}</span>
+          <span className="member-activity-column-result">{resultColumn}</span>
         </div>
         {rows.length ? (
           rows.map((row) => {
             const image = isLeaderboard ? undefined : gameImage(row.primary);
             const isProfit = row.result.startsWith("+") || row.result.startsWith("-");
             return (
-              <div className="p4-activity-row" role="row" key={`${row.primary}-${row.player}`}>
-                <span className="p4-activity-game">
-                  <span className="p4-activity-icon" aria-hidden="true">
+              <div className="member-activity-row" role="row" key={`${row.primary}-${row.player}`}>
+                <span className="member-activity-game">
+                  <span className="member-activity-icon" aria-hidden="true">
                     {image ? (
                       // eslint-disable-next-line @next/next/no-img-element
                       <img src={image} alt="" loading="lazy" decoding="async" />
@@ -1464,24 +1464,24 @@ function P4ActivityCard({
                   </span>
                   <strong>{row.primary}</strong>
                 </span>
-                <span className="p4-activity-column-player">{row.player}</span>
-                <span className="p4-activity-column-metric">{row.metric}</span>
+                <span className="member-activity-column-player">{row.player}</span>
+                <span className="member-activity-column-metric">{row.metric}</span>
                 {isProfit ? (
                   <span
-                    className={`p4-activity-column-result p4-activity-profit${
+                    className={`member-activity-column-result member-activity-profit${
                       row.result.startsWith("-") ? " is-loss" : " is-win"
                     }`}
                   >
                     {row.result}
                   </span>
                 ) : (
-                  <em className="p4-activity-column-result">{row.result}</em>
+                  <em className="member-activity-column-result">{row.result}</em>
                 )}
               </div>
             );
           })
         ) : (
-          <div className="p4-activity-row p4-activity-empty" role="row">
+          <div className="member-activity-row member-activity-empty" role="row">
             Belum ada data untuk aktivitas ini.
           </div>
         )}
@@ -1490,7 +1490,7 @@ function P4ActivityCard({
   );
 }
 
-function P4ProviderSection({
+function MemberProviderSection({
   providers,
   selectedProvider,
   providerGames,
@@ -1500,7 +1500,7 @@ function P4ProviderSection({
   onSelectGame,
   onViewAll,
 }: {
-  providers: readonly P4ProviderFeature[];
+  providers: readonly MemberProviderFeature[];
   selectedProvider: string;
   providerGames: Game[];
   providerGameCount: number;
@@ -1512,50 +1512,50 @@ function P4ProviderSection({
   const hasMoreProviderGames = providerGameCount > providerGames.length;
 
   return (
-    <section className="p4-provider-section" id="p4-providers" aria-labelledby="p4-provider-title">
-      <div className="p4-section-heading p4-section-heading--inline">
+    <section className="member-provider-section" id="member-providers" aria-labelledby="member-provider-title">
+      <div className="member-section-heading member-section-heading--inline">
         <div>
-          <h2 id="p4-provider-title">Provider Pilihan</h2>
+          <h2 id="member-provider-title">Provider Pilihan</h2>
           <p>Pilih provider favorit untuk melihat koleksi gamenya.</p>
         </div>
-        <button type="button" className="p4-text-link" onClick={onViewAll}>
+        <button type="button" className="member-text-link" onClick={onViewAll}>
           Lihat Semua <i className="fa-solid fa-arrow-right" aria-hidden="true" />
         </button>
       </div>
-      <div className="p4-provider-selector">
+      <div className="member-provider-selector">
         {providers.map((provider) => (
           <button
             type="button"
             key={provider.id}
             aria-label={`${provider.name}: ${provider.description}`}
             aria-pressed={selectedProvider === provider.id}
-            className={`p4-provider-card ${provider.featured ? "is-featured" : ""} ${
+            className={`member-provider-card ${provider.featured ? "is-featured" : ""} ${
               selectedProvider === provider.id ? "is-selected" : ""
             }`}
             onClick={() => onSelectProvider(provider.id)}
           >
-            <span className="p4-provider-mark" aria-hidden="true">
+            <span className="member-provider-mark" aria-hidden="true">
               <i className={provider.icon} />
             </span>
-            <span className="p4-provider-copy">
+            <span className="member-provider-copy">
               <strong>{provider.name}</strong>
             </span>
           </button>
         ))}
       </div>
-      <div className="p4-provider-games" id="p4-provider-games">
-        <div className="p4-provider-games-heading">
-          <span className="p4-provider-rule" aria-hidden="true" />
+      <div className="member-provider-games" id="member-provider-games">
+        <div className="member-provider-games-heading">
+          <span className="member-provider-rule" aria-hidden="true" />
           <strong>
             {providers.find((provider) => provider.id === selectedProvider)?.name ??
               selectedProvider}
           </strong>
-          <span className="p4-provider-rule" aria-hidden="true" />
+          <span className="member-provider-rule" aria-hidden="true" />
         </div>
-        <div className="p4-provider-games-grid-wrap">
-          <div className="p4-provider-games-grid">
+        <div className="member-provider-games-grid-wrap">
+          <div className="member-provider-games-grid">
             {providerGames.map((game, index) => (
-              <P4GameCard
+              <MemberGameCard
                 key={`${game.id}-${index}`}
                 game={game}
                 variant="landscape"
@@ -1565,8 +1565,8 @@ function P4ProviderSection({
             ))}
           </div>
           {hasMoreProviderGames ? (
-            <div className="p4-provider-games-overlay">
-              <button type="button" className="p4-provider-games-more" onClick={onViewAll}>
+            <div className="member-provider-games-overlay">
+              <button type="button" className="member-provider-games-more" onClick={onViewAll}>
                 Lihat Semua <i className="fa-solid fa-arrow-right" aria-hidden="true" />
               </button>
             </div>
@@ -1577,7 +1577,7 @@ function P4ProviderSection({
   );
 }
 
-function P4CatalogView({
+function MemberCatalogView({
   categoryLabel,
   games,
   totalGameCount,
@@ -1631,13 +1631,13 @@ function P4CatalogView({
   const activeFilterCount = (category !== "all" ? 1 : 0) + selectedProviders.length;
 
   return (
-    <section className="p4-catalog" id="p4-catalog" aria-labelledby="p4-catalog-title">
-      <div className="p4-catalog-heading">
+    <section className="member-catalog" id="member-catalog" aria-labelledby="member-catalog-title">
+      <div className="member-catalog-heading">
         <div>
-          <h1 id="p4-catalog-title">{categoryLabel}</h1>
+          <h1 id="member-catalog-title">{categoryLabel}</h1>
           <p>{totalGameCount} game tersedia untuk kamu.</p>
         </div>
-        <label className="p4-catalog-search">
+        <label className="member-catalog-search">
           <i className="fa-solid fa-magnifying-glass" aria-hidden="true" />
           <input
             value={search}
@@ -1648,38 +1648,38 @@ function P4CatalogView({
           />
         </label>
       </div>
-      <div className="p4-catalog-body">
-        <div className="p4-catalog-filter-shell">
+      <div className="member-catalog-body">
+        <div className="member-catalog-filter-shell">
           <button
             type="button"
-            className="p4-catalog-filter-trigger"
-            aria-controls="p4-catalog-filter-dialog"
+            className="member-catalog-filter-trigger"
+            aria-controls="member-catalog-filter-dialog"
             aria-expanded={isFilterOpen}
             onClick={onToggleFilter}
           >
-            <span className="p4-catalog-filter-trigger-label">
+            <span className="member-catalog-filter-trigger-label">
               <i className="fa-solid fa-filter" aria-hidden="true" /> Filter Game
             </span>
-            <span className="p4-catalog-filter-trigger-meta">
+            <span className="member-catalog-filter-trigger-meta">
               {activeFilterCount ? `${activeFilterCount} filter aktif` : "Semua game"}
             </span>
             <i className="fa-solid fa-chevron-down" aria-hidden="true" />
           </button>
           <div
-            id="p4-catalog-filter-dialog"
-            className={`p4-catalog-filter-popover${isFilterOpen ? " is-open" : ""}`}
+            id="member-catalog-filter-dialog"
+            className={`member-catalog-filter-popover${isFilterOpen ? " is-open" : ""}`}
             role={isFilterOpen ? "dialog" : undefined}
             aria-modal={isFilterOpen ? true : undefined}
-            aria-labelledby="p4-catalog-filter-title"
+            aria-labelledby="member-catalog-filter-title"
           >
             <button
               type="button"
-              className="p4-catalog-filter-backdrop"
+              className="member-catalog-filter-backdrop"
               aria-label="Tutup filter"
               onClick={onCloseFilter}
             />
-            <div className="p4-catalog-filter-sheet">
-              <P4CatalogFilter
+            <div className="member-catalog-filter-sheet">
+              <MemberCatalogFilter
                 category={category}
                 categoryOptions={categoryOptions}
                 providerOptions={providerOptions}
@@ -1692,22 +1692,22 @@ function P4CatalogView({
             </div>
           </div>
         </div>
-        <div className="p4-catalog-main">
-          <div className="p4-catalog-results-heading">
+        <div className="member-catalog-main">
+          <div className="member-catalog-results-heading">
             <span>
               Menampilkan <strong>{totalGameCount}</strong> game
             </span>
             {selectedProviders.length ? (
-              <span className="p4-catalog-filter-note">
+              <span className="member-catalog-filter-note">
                 {selectedProviders.length} provider dipilih
               </span>
             ) : null}
           </div>
           {games.length ? (
             <>
-              <div className="p4-catalog-grid" id="p4-catalog-grid">
+              <div className="member-catalog-grid" id="member-catalog-grid">
                 {games.map((game) => (
-                  <P4GameCard
+                  <MemberGameCard
                     key={game.id}
                     game={game}
                     variant="landscape"
@@ -1716,17 +1716,17 @@ function P4CatalogView({
                   />
                 ))}
               </div>
-              <P4CatalogPagination page={page} pageCount={pageCount} onPageChange={onPageChange} />
+              <MemberCatalogPagination page={page} pageCount={pageCount} onPageChange={onPageChange} />
             </>
           ) : (
-            <div className="p4-empty-state">
+            <div className="member-empty-state">
               Belum ada game yang sesuai dengan filter pilihanmu.
             </div>
           )}
         </div>
       </div>
-      <P4CatalogCta onExplore={onBrowse} />
-      <P4CatalogActivity
+      <MemberCatalogCta onExplore={onBrowse} />
+      <MemberCatalogActivity
         feeds={activityFeeds}
         games={activityGames}
         onSelect={onSelect}
@@ -1736,7 +1736,7 @@ function P4CatalogView({
   );
 }
 
-function P4CatalogFilter({
+function MemberCatalogFilter({
   category,
   categoryOptions,
   providerOptions,
@@ -1756,20 +1756,20 @@ function P4CatalogFilter({
   onClose?: () => void;
 }) {
   return (
-    <aside className="p4-catalog-filter" aria-labelledby="p4-catalog-filter-title">
-      <div className="p4-catalog-filter-heading">
-        <h2 id="p4-catalog-filter-title">
+    <aside className="member-catalog-filter" aria-labelledby="member-catalog-filter-title">
+      <div className="member-catalog-filter-heading">
+        <h2 id="member-catalog-filter-title">
           <i className="fa-solid fa-filter" aria-hidden="true" /> Filter Game
         </h2>
         {onClose ? (
-          <button type="button" className="p4-catalog-filter-close" onClick={onClose}>
+          <button type="button" className="member-catalog-filter-close" onClick={onClose}>
             Tutup <i className="fa-solid fa-xmark" aria-hidden="true" />
           </button>
         ) : null}
       </div>
-      <fieldset className="p4-catalog-filter-group">
+      <fieldset className="member-catalog-filter-group">
         <legend>Kategori Game</legend>
-        <div className="p4-catalog-filter-pills">
+        <div className="member-catalog-filter-pills">
           {categoryOptions.map((option) => (
             <button
               type="button"
@@ -1783,11 +1783,11 @@ function P4CatalogFilter({
           ))}
         </div>
       </fieldset>
-      <fieldset className="p4-catalog-filter-group">
+      <fieldset className="member-catalog-filter-group">
         <legend>Provider</legend>
-        <div className="p4-catalog-provider-list">
+        <div className="member-catalog-provider-list">
           {providerOptions.map((provider) => (
-            <label className="p4-catalog-provider-option" key={provider.id}>
+            <label className="member-catalog-provider-option" key={provider.id}>
               <input
                 type="checkbox"
                 checked={selectedProviders.includes(provider.id)}
@@ -1799,27 +1799,27 @@ function P4CatalogFilter({
           ))}
         </div>
       </fieldset>
-      <button type="button" className="p4-catalog-filter-reset" onClick={onReset}>
+      <button type="button" className="member-catalog-filter-reset" onClick={onReset}>
         <i className="fa-solid fa-rotate-left" aria-hidden="true" /> Reset filter
       </button>
     </aside>
   );
 }
 
-function P4CatalogCta({ onExplore }: { onExplore: () => void }) {
+function MemberCatalogCta({ onExplore }: { onExplore: () => void }) {
   return (
-    <section className="p4-catalog-cta" aria-label="Temukan game baru">
+    <section className="member-catalog-cta" aria-label="Temukan game baru">
       <Image
         src={CTA_ARTWORK.catalog}
         alt=""
         fill
         sizes="(max-width: 900px) 100vw, 1580px"
-        className="p4-catalog-cta-image"
+        className="member-catalog-cta-image"
       />
-      <div className="p4-catalog-cta-copy">
+      <div className="member-catalog-cta-copy">
         <h2>Temukan game baru hari ini</h2>
         <p>Jelajahi pilihan game yang dibuat untuk menemani waktumu.</p>
-        <button type="button" className="p4-button p4-button--primary" onClick={onExplore}>
+        <button type="button" className="member-button member-button--primary" onClick={onExplore}>
           Jelajahi Game <i className="fa-solid fa-arrow-right" aria-hidden="true" />
         </button>
       </div>
@@ -1827,7 +1827,7 @@ function P4CatalogCta({ onExplore }: { onExplore: () => void }) {
   );
 }
 
-function P4CatalogActivity({
+function MemberCatalogActivity({
   feeds,
   games,
   onSelect,
@@ -1844,48 +1844,48 @@ function P4CatalogActivity({
 
   return (
     <section
-      className="p4-catalog-activity"
-      id="p4-catalog-activity"
-      aria-labelledby="p4-catalog-activity-title"
+      className="member-catalog-activity"
+      id="member-catalog-activity"
+      aria-labelledby="member-catalog-activity-title"
     >
-      <div className="p4-catalog-activity-heading">
-        <div className="p4-catalog-activity-title">
-          <span className="p4-catalog-activity-icon" aria-hidden="true">
+      <div className="member-catalog-activity-heading">
+        <div className="member-catalog-activity-title">
+          <span className="member-catalog-activity-icon" aria-hidden="true">
             <i className="fa-solid fa-gamepad" />
           </span>
           <div>
-            <h2 id="p4-catalog-activity-title">Aktivitas &amp; Peringkat</h2>
+            <h2 id="member-catalog-activity-title">Aktivitas &amp; Peringkat</h2>
             <p>Lihat game terbaru yang dimainkan dan pemain dengan skor tertinggi.</p>
           </div>
         </div>
       </div>
-      <div className="p4-catalog-activity-grid">
-        <article className="p4-catalog-activity-panel">
-          <div className="p4-catalog-activity-panel-heading">
+      <div className="member-catalog-activity-grid">
+        <article className="member-catalog-activity-panel">
+          <div className="member-catalog-activity-panel-heading">
             <h3>
               <i className="fa-regular fa-clock" aria-hidden="true" /> Game terbaru
             </h3>
           </div>
-          <div className="p4-catalog-latest-table" role="table" aria-label="Game terbaru">
-            <div className="p4-catalog-latest-header" role="row">
+          <div className="member-catalog-latest-table" role="table" aria-label="Game terbaru">
+            <div className="member-catalog-latest-header" role="row">
               <span>Game</span>
               <span>Player</span>
               <span>Multiplier</span>
               <span>Profit</span>
             </div>
-            <div className="p4-catalog-latest-list">
+            <div className="member-catalog-latest-list">
               {latestRows.map((row) => {
                 const game = gameByName(row.primary);
                 return (
                   <button
                     type="button"
-                    className="p4-catalog-latest-row"
+                    className="member-catalog-latest-row"
                     key={`${row.primary}-${row.player}`}
                     onClick={() => game && onSelect(game)}
                     disabled={!game}
                   >
-                    <span className="p4-catalog-latest-game">
-                      <span className="p4-catalog-latest-art" aria-hidden="true">
+                    <span className="member-catalog-latest-game">
+                      <span className="member-catalog-latest-art" aria-hidden="true">
                         {game?.image_url ? (
                           // eslint-disable-next-line @next/next/no-img-element
                           <img src={game.image_url} alt="" loading="lazy" decoding="async" />
@@ -1895,10 +1895,10 @@ function P4CatalogActivity({
                       </span>
                       <strong>{row.primary}</strong>
                     </span>
-                    <span className="p4-catalog-latest-player">{row.player}</span>
-                    <span className="p4-catalog-latest-multiplier">{row.metric}</span>
+                    <span className="member-catalog-latest-player">{row.player}</span>
+                    <span className="member-catalog-latest-multiplier">{row.metric}</span>
                     <span
-                      className={`p4-catalog-latest-profit${
+                      className={`member-catalog-latest-profit${
                         row.result.startsWith("-") ? " is-loss" : " is-win"
                       }`}
                     >
@@ -1910,16 +1910,16 @@ function P4CatalogActivity({
             </div>
           </div>
         </article>
-        <article className="p4-catalog-activity-panel">
-          <div className="p4-catalog-activity-panel-heading">
+        <article className="member-catalog-activity-panel">
+          <div className="member-catalog-activity-panel-heading">
             <h3>
               <i className="fa-solid fa-trophy" aria-hidden="true" /> Papan peringkat
             </h3>
-            <button type="button" className="p4-text-link" onClick={onViewAll}>
+            <button type="button" className="member-text-link" onClick={onViewAll}>
               Lihat papan peringkat <i className="fa-solid fa-arrow-right" aria-hidden="true" />
             </button>
           </div>
-          <div className="p4-catalog-ranking-list">
+          <div className="member-catalog-ranking-list">
             {rankingRows.map((row) => {
               const gameName = feeds ? "" : row.primary;
               const game = gameName ? gameByName(gameName) : undefined;
@@ -1928,22 +1928,22 @@ function P4CatalogActivity({
               return (
                 <button
                   type="button"
-                  className="p4-catalog-ranking-row"
+                  className="member-catalog-ranking-row"
                   key={`${row.primary}-${row.player}`}
                   onClick={() => game && onSelect(game)}
                   disabled={!game}
                 >
-                  <span className="p4-catalog-ranking-medal" aria-hidden="true">
+                  <span className="member-catalog-ranking-medal" aria-hidden="true">
                     <i className="fa-solid fa-crown" />
                   </span>
-                  <span className="p4-catalog-ranking-avatar" aria-hidden="true">
+                  <span className="member-catalog-ranking-avatar" aria-hidden="true">
                     {row.player.charAt(0)}
                   </span>
-                  <span className="p4-catalog-ranking-copy">
+                  <span className="member-catalog-ranking-copy">
                     <strong>{row.player}</strong>
                     <small>{feeds ? "Top pemain" : gameName}</small>
                   </span>
-                  <span className="p4-catalog-ranking-score">{rankNumber}</span>
+                  <span className="member-catalog-ranking-score">{rankNumber}</span>
                 </button>
               );
             })}
@@ -1954,7 +1954,7 @@ function P4CatalogActivity({
   );
 }
 
-function getP4PaginationItems(page: number, pageCount: number): Array<number | "ellipsis"> {
+function getMemberPaginationItems(page: number, pageCount: number): Array<number | "ellipsis"> {
   if (pageCount <= 7) {
     return Array.from({ length: pageCount }, (_, index) => index + 1);
   }
@@ -1970,7 +1970,7 @@ function getP4PaginationItems(page: number, pageCount: number): Array<number | "
   return [1, "ellipsis", page - 1, page, page + 1, "ellipsis", pageCount];
 }
 
-function P4CatalogPagination({
+function MemberCatalogPagination({
   page,
   pageCount,
   onPageChange,
@@ -1982,27 +1982,27 @@ function P4CatalogPagination({
   if (pageCount <= 1) return null;
 
   return (
-    <nav className="p4-pagination" aria-label="Navigasi halaman game">
+    <nav className="member-pagination" aria-label="Navigasi halaman game">
       <button
         type="button"
-        className="p4-pagination-button p4-pagination-button--arrow"
+        className="member-pagination-button member-pagination-button--arrow"
         aria-label="Halaman sebelumnya"
         disabled={page === 1}
         onClick={() => onPageChange(page - 1)}
       >
         <i className="fa-solid fa-chevron-left" aria-hidden="true" />
       </button>
-      <div className="p4-pagination-pages">
-        {getP4PaginationItems(page, pageCount).map((item, index) =>
+      <div className="member-pagination-pages">
+        {getMemberPaginationItems(page, pageCount).map((item, index) =>
           item === "ellipsis" ? (
-            <span key={`ellipsis-${index}`} className="p4-pagination-ellipsis" aria-hidden="true">
+            <span key={`ellipsis-${index}`} className="member-pagination-ellipsis" aria-hidden="true">
               …
             </span>
           ) : (
             <button
               type="button"
               key={item}
-              className={`p4-pagination-button${item === page ? " is-active" : ""}`}
+              className={`member-pagination-button${item === page ? " is-active" : ""}`}
               aria-label={`Buka halaman ${item}`}
               aria-current={item === page ? "page" : undefined}
               onClick={() => onPageChange(item)}
@@ -2014,21 +2014,21 @@ function P4CatalogPagination({
       </div>
       <button
         type="button"
-        className="p4-pagination-button p4-pagination-button--arrow"
+        className="member-pagination-button member-pagination-button--arrow"
         aria-label="Halaman berikutnya"
         disabled={page === pageCount}
         onClick={() => onPageChange(page + 1)}
       >
         <i className="fa-solid fa-chevron-right" aria-hidden="true" />
       </button>
-      <span className="p4-pagination-summary" aria-live="polite">
+      <span className="member-pagination-summary" aria-live="polite">
         Halaman {page} dari {pageCount}
       </span>
     </nav>
   );
 }
 
-function P4GameDetail({
+function MemberGameDetail({
   game,
   vendorName,
   eyebrow,
@@ -2047,27 +2047,27 @@ function P4GameDetail({
 }) {
   return (
     <div
-      className="p4-game-modal"
+      className="member-game-modal"
       role="dialog"
       aria-modal="true"
       aria-label={`Detail ${game.name}`}
     >
       <button
         type="button"
-        className="p4-game-modal-backdrop"
+        className="member-game-modal-backdrop"
         onClick={onClose}
         aria-label="Tutup detail"
       />
-      <div className="p4-game-dialog">
+      <div className="member-game-dialog">
         <button
           type="button"
-          className="p4-game-modal-close"
+          className="member-game-modal-close"
           onClick={onClose}
           aria-label="Tutup detail"
         >
           <i className="fa-solid fa-xmark" aria-hidden="true" />
         </button>
-        <div className="p4-game-dialog-art">
+        <div className="member-game-dialog-art">
           {game.image_url?.startsWith("/") ? (
             <Image
               src={game.image_url}
@@ -2080,17 +2080,17 @@ function P4GameDetail({
             <img src={game.image_url} alt={game.name} decoding="async" />
           ) : null}
         </div>
-        <div className="p4-game-dialog-content">
-          <span className="p4-dialog-eyebrow">{eyebrow ?? "Pilihan game"}</span>
+        <div className="member-game-dialog-content">
+          <span className="member-dialog-eyebrow">{eyebrow ?? "Pilihan game"}</span>
           <h2>{game.name}</h2>
-          <p className="p4-dialog-meta">
+          <p className="member-dialog-meta">
             {vendorName} <span aria-hidden="true">·</span> {game.category}
           </p>
           <p>{game.description ?? "Pilihan permainan untuk menemani sesi bermainmu."}</p>
-          <div className="p4-dialog-actions">
+          <div className="member-dialog-actions">
             <button
               type="button"
-              className="p4-button p4-button--primary"
+              className="member-button member-button--primary"
               disabled={launching}
               onClick={() => onLaunch(game)}
             >
@@ -2100,7 +2100,7 @@ function P4GameDetail({
             {game.demo_supported ? (
               <button
                 type="button"
-                className="p4-button p4-button--secondary"
+                className="member-button member-button--secondary"
                 disabled={launching}
                 onClick={() => onLaunchDemo(game)}
               >

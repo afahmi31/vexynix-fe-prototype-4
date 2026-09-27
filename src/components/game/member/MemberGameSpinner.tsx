@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { Game } from "@/types/api";
 
-const ASSET_ROOT = "/assets/prototype-4/spinner";
+const ASSET_ROOT = "/assets/member/spinner";
 const SPINNER_GAME_IDS = [
   "neon-racer",
   "solar-riches",
@@ -22,7 +22,7 @@ const SPIN_DURATION = 4800;
 
 type SpinnerState = "idle" | "spinning" | "win";
 
-interface P4GameSpinnerProps {
+interface MemberGameSpinnerProps {
   games: Game[];
   onSelect: (game: Game) => void;
 }
@@ -56,7 +56,7 @@ function SpinnerLayer({
   priority?: boolean;
 }) {
   return (
-    <div className={`p4-game-spinner__layer ${className}`} aria-hidden={!alt}>
+    <div className={`member-game-spinner__layer ${className}`} aria-hidden={!alt}>
       <Image
         src={`${ASSET_ROOT}/${fileName}`}
         alt={alt}
@@ -68,7 +68,7 @@ function SpinnerLayer({
   );
 }
 
-export function P4GameSpinner({ games, onSelect }: P4GameSpinnerProps) {
+export function MemberGameSpinner({ games, onSelect }: MemberGameSpinnerProps) {
   const selectorRef = useRef<HTMLDivElement>(null);
   const animationRef = useRef<Animation | null>(null);
   const completionTimeoutRef = useRef<number | null>(null);
@@ -190,57 +190,57 @@ export function P4GameSpinner({ games, onSelect }: P4GameSpinnerProps) {
 
   return (
     <section
-      className={`p4-game-spinner p4-game-spinner--${spinnerState}`}
-      aria-labelledby="p4-game-spinner-title"
+      className={`member-game-spinner member-game-spinner--${spinnerState}`}
+      aria-labelledby="member-game-spinner-title"
       aria-busy={spinnerState === "spinning"}
     >
-      <div className="p4-game-spinner__copy">
-        <span className="p4-game-spinner__eyebrow">
+      <div className="member-game-spinner__copy">
+        <span className="member-game-spinner__eyebrow">
           <i className="fa-solid fa-wand-magic-sparkles" aria-hidden="true" />
           Temukan game
         </span>
-        <h2 id="p4-game-spinner-title">Putar untuk menemukan game baru</h2>
+        <h2 id="member-game-spinner-title">Putar untuk menemukan game baru</h2>
         <p>
           Biarkan selector memilih satu game untukmu. Setiap putaran membawa kejutan baru dari
           koleksi Vexynix.
         </p>
-        <div className="p4-game-spinner__result" aria-live="polite">
+        <div className="member-game-spinner__result" aria-live="polite">
           <span>{selectedGame ? "Game terpilih" : "Siap dimainkan"}</span>
           <strong>{selectedGame?.name ?? "Pilih satu secara acak"}</strong>
         </div>
-        <div className="p4-game-spinner__actions">
+        <div className="member-game-spinner__actions">
           {selectedGame ? (
             <button
               type="button"
-              className="p4-game-spinner__result-button"
+              className="member-game-spinner__result-button"
               onClick={handleResultSelect}
             >
               Lihat Game <i className="fa-solid fa-arrow-right" aria-hidden="true" />
             </button>
           ) : null}
-          <span className="p4-game-spinner__hint">{availableSegments.length} game tersedia</span>
+          <span className="member-game-spinner__hint">{availableSegments.length} game tersedia</span>
         </div>
         <span className="visually-hidden" role="status">
           {announcement}
         </span>
       </div>
 
-      <div className="p4-game-spinner__stage-wrap">
-        <div className="p4-game-spinner__stage" aria-label="Spinner pemilih game">
-          <SpinnerLayer fileName="p4-spinner-shadow.png" className="p4-game-spinner__shadow" />
-          <SpinnerLayer fileName="p4-spinner-glow.png" className="p4-game-spinner__glow" />
+      <div className="member-game-spinner__stage-wrap">
+        <div className="member-game-spinner__stage" aria-label="Spinner pemilih game">
+          <SpinnerLayer fileName="spinner-shadow.png" className="member-game-spinner__shadow" />
+          <SpinnerLayer fileName="spinner-glow.png" className="member-game-spinner__glow" />
           <SpinnerLayer
-            fileName="p4-spinner-frame.png"
-            className="p4-game-spinner__frame"
+            fileName="spinner-frame.png"
+            className="member-game-spinner__frame"
             priority
           />
           <div
             ref={selectorRef}
-            className="p4-game-spinner__layer p4-game-spinner__selector"
+            className="member-game-spinner__layer member-game-spinner__selector"
             style={{ transform: `rotate(${rotation}deg)` }}
           >
             <Image
-              src={`${ASSET_ROOT}/p4-spinner-selector.png`}
+              src={`${ASSET_ROOT}/spinner-selector.png`}
               alt=""
               fill
               sizes="(max-width: 760px) 92vw, (max-width: 1100px) 44vw, 520px"
@@ -249,19 +249,19 @@ export function P4GameSpinner({ games, onSelect }: P4GameSpinnerProps) {
           </div>
           {spinnerState === "win" ? (
             <SpinnerLayer
-              fileName="p4-spinner-win-glow.png"
-              className="p4-game-spinner__win-glow"
+              fileName="spinner-win-glow.png"
+              className="member-game-spinner__win-glow"
             />
           ) : null}
-          <SpinnerLayer fileName="p4-spinner-pointer.png" className="p4-game-spinner__pointer" />
+          <SpinnerLayer fileName="spinner-pointer.png" className="member-game-spinner__pointer" />
           <SpinnerLayer
-            fileName="p4-spinner-particles.png"
-            className="p4-game-spinner__particles"
+            fileName="spinner-particles.png"
+            className="member-game-spinner__particles"
           />
-          <div className="p4-game-spinner__control">
+          <div className="member-game-spinner__control">
             <button
               type="button"
-              className="p4-game-spinner__action"
+              className="member-game-spinner__action"
               aria-label={selectedGame ? "Putar lagi" : "Putar game"}
               disabled={spinnerState === "spinning" || !availableSegments.length}
               onClick={spin}
@@ -270,7 +270,7 @@ export function P4GameSpinner({ games, onSelect }: P4GameSpinnerProps) {
                 {spinnerState === "spinning" ? "Sedang memutar" : "Putar"}
               </span>
             </button>
-            <SpinnerLayer fileName="p4-spinner-button.png" className="p4-game-spinner__button" />
+            <SpinnerLayer fileName="spinner-button.png" className="member-game-spinner__button" />
           </div>
         </div>
       </div>

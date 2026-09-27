@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { MOCK_VENDORS } from "@/mocks/p4";
+import { MOCK_VENDORS } from "@/mocks/member";
 import { isExternalBffMode, proxyBff } from "@/lib/bff-proxy";
 import type { NextRequest } from "next/server";
 

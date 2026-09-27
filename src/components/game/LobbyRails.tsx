@@ -2,8 +2,8 @@
 
 import { useEffect, useRef, useState } from "react";
 import type { Game } from "@/types/api";
-import type { P4GamePresentation } from "@/types/p4";
-import { MOCK_P4_TOP10_RANKS } from "@/mocks/p4";
+import type { MemberGamePresentation } from "@/types/member";
+import { MOCK_MEMBER_TOP10_RANKS } from "@/mocks/member";
 import { GameCard } from "@/components/game/GameCard";
 import { GameHoverPreview } from "@/components/game/GameHoverPreview";
 
@@ -16,7 +16,7 @@ interface LobbyRailProps {
   onLaunch: (id: string) => void;
   onLaunchDemo: (id: string) => void;
   onInfo: (game: Game) => void;
-  presentationFor: (game: Game) => P4GamePresentation | undefined;
+  presentationFor: (game: Game) => MemberGamePresentation | undefined;
   demoFirst?: boolean;
   limit?: number;
   launching: string | null;
@@ -174,7 +174,7 @@ interface HoverPreviewLayerProps {
   onLaunch: (id: string) => void;
   onLaunchDemo: (id: string) => void;
   onInfo: (game: Game) => void;
-  presentationFor: (game: Game) => P4GamePresentation | undefined;
+  presentationFor: (game: Game) => MemberGamePresentation | undefined;
   demoFirst?: boolean;
   launching: string | null;
   disabled: boolean;
@@ -297,7 +297,7 @@ interface GameGridProps {
   onLaunch: (id: string) => void;
   onLaunchDemo: (id: string) => void;
   onInfo: (game: Game) => void;
-  presentationFor: (game: Game) => P4GamePresentation | undefined;
+  presentationFor: (game: Game) => MemberGamePresentation | undefined;
   launching: string | null;
   disabled: boolean;
 }
@@ -391,7 +391,7 @@ export function Top10Row({
       <div className="nf-row-body">
         <div className="top10-track" ref={scrollRef}>
           {games.slice(0, 10).map((game, index) => {
-            const rank = MOCK_P4_TOP10_RANKS[game.id] ?? index + 1;
+            const rank = MOCK_MEMBER_TOP10_RANKS[game.id] ?? index + 1;
             const isDoubleDigitRank = rank >= 10;
 
             return (

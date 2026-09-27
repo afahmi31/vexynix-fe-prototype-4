@@ -5,9 +5,9 @@ import { mkdir, readdir, writeFile } from "node:fs/promises";
 import { existsSync } from "node:fs";
 import {
   layerSvg,
-} from "./p4-spinner/layers.mjs";
-import { GAME_SEGMENTS } from "./p4-spinner/icons.mjs";
-import { CENTER, SIZE } from "./p4-spinner/geometry.mjs";
+} from "./spinner-assets/layers.mjs";
+import { GAME_SEGMENTS } from "./spinner-assets/icons.mjs";
+import { CENTER, SIZE } from "./spinner-assets/geometry.mjs";
 
 const scriptDirectory = dirname(fileURLToPath(import.meta.url));
 const projectRoot = resolve(scriptDirectory, "..");
@@ -15,7 +15,7 @@ const outputDirectory = join(
   projectRoot,
   "public",
   "assets",
-  "prototype-4",
+  "member",
   "spinner",
 );
 
@@ -118,8 +118,8 @@ function heroSvg(withBackground = false) {
 }
 
 async function renderLayer(sharp, name, svg) {
-  const svgPath = join(outputDirectory, `p4-spinner-${name}.svg`);
-  const pngPath = join(outputDirectory, `p4-spinner-${name}.png`);
+  const svgPath = join(outputDirectory, `spinner-${name}.svg`);
+  const pngPath = join(outputDirectory, `spinner-${name}.png`);
   const buffer = Buffer.from(svg);
 
   await writeFile(svgPath, svg, "utf8");
@@ -174,12 +174,12 @@ async function renderHeroAssets(sharp, layers) {
   await sharp(Buffer.from(heroSvg(false)))
     .composite(composite)
     .png({ compressionLevel: 9, adaptiveFiltering: true })
-    .toFile(join(outputDirectory, "p4-spinner-hero-art.png"));
+    .toFile(join(outputDirectory, "spinner-hero-art.png"));
 
   await sharp(Buffer.from(heroSvg(true)))
     .composite(composite)
     .png({ compressionLevel: 9, adaptiveFiltering: true })
-    .toFile(join(outputDirectory, "p4-spinner-hero-banner.png"));
+    .toFile(join(outputDirectory, "spinner-hero-banner.png"));
 }
 
 async function main() {
@@ -212,21 +212,21 @@ async function main() {
   await renderPreview(
     sharp,
     idleLayers,
-    "p4-spinner-preview.png",
-    "P4 · GAME SPIN",
+    "spinner-preview.png",
+    "GAME SPIN",
     "Idle composition · 8-game selector · transparent layers",
   );
   await renderPreview(
     sharp,
     winLayers,
-    "p4-spinner-preview-win.png",
-    "P4 · GAME SPIN",
+    "spinner-preview-win.png",
+    "GAME SPIN",
     "Win-state composition · fixed pointer target highlight",
   );
   await renderHeroAssets(sharp, renderedLayers);
 
   const manifest = {
-    package: "p4-game-spin",
+    package: "game-spinner",
     canvas: {
       width: SIZE,
       height: SIZE,
@@ -243,8 +243,8 @@ async function main() {
     layerOrder,
     layers: manifestLayerOrder.map((name) => ({
       name,
-      svg: `p4-spinner-${name}.svg`,
-      png: `p4-spinner-${name}.png`,
+      svg: `spinner-${name}.svg`,
+      png: `spinner-${name}.png`,
       transparent: true,
       animatedByFrontend: [
         "selector",
@@ -255,25 +255,25 @@ async function main() {
       ].includes(name),
     })),
     previews: [
-      "p4-spinner-preview.png",
-      "p4-spinner-preview-win.png",
+      "spinner-preview.png",
+      "spinner-preview-win.png",
     ],
     hero: {
-      foreground: "p4-spinner-hero-art.png",
-      banner: "p4-spinner-hero-banner.png",
+      foreground: "spinner-hero-art.png",
+      banner: "spinner-hero-banner.png",
       copySafeArea: "left 44%",
     },
-    generator: "scripts/generate-p4-spinner-assets.mjs",
+    generator: "scripts/generate-spinner-assets.mjs",
     generatedAt: new Date().toISOString(),
   };
 
   await writeFile(
-    join(outputDirectory, "p4-spinner-manifest.json"),
+    join(outputDirectory, "spinner-manifest.json"),
     `${JSON.stringify(manifest, null, 2)}\n`,
     "utf8",
   );
 
-  if (!existsSync(join(outputDirectory, "p4-spinner-frame.png"))) {
+  if (!existsSync(join(outputDirectory, "spinner-frame.png"))) {
     throw new Error("Spinner PNG output was not created.");
   }
 

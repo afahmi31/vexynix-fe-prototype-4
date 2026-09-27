@@ -1,12 +1,17 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { DEFAULT_P4_THEME_ID, getP4Theme, P4_THEMES, resolveP4ThemeId } from "@/lib/p4-themes";
+import {
+  DEFAULT_MEMBER_THEME_ID,
+  getMemberTheme,
+  MEMBER_THEMES,
+  resolveMemberThemeId,
+} from "@/lib/member-themes";
 
-const STORAGE_KEY = "p4-theme";
+const STORAGE_KEY = "member-theme";
 
 function applyTheme(themeId: string): void {
-  document.documentElement.dataset.p4Theme = themeId;
+  document.documentElement.dataset.memberTheme = themeId;
 }
 
 function readStoredTheme(): string | null {
@@ -25,13 +30,13 @@ function writeStoredTheme(themeId: string): void {
   }
 }
 
-export default function P4ThemeSwitcher() {
-  const [activeThemeId, setActiveThemeId] = useState(DEFAULT_P4_THEME_ID);
+export default function MemberThemeSwitcher() {
+  const [activeThemeId, setActiveThemeId] = useState(DEFAULT_MEMBER_THEME_ID);
   const [open, setOpen] = useState(false);
   const switcherRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const themeId = resolveP4ThemeId(readStoredTheme());
+    const themeId = resolveMemberThemeId(readStoredTheme());
 
     setActiveThemeId(themeId);
     applyTheme(themeId);
@@ -56,10 +61,10 @@ export default function P4ThemeSwitcher() {
     };
   }, []);
 
-  const activeTheme = getP4Theme(activeThemeId);
+  const activeTheme = getMemberTheme(activeThemeId);
 
   const selectTheme = (themeId: string) => {
-    const resolvedThemeId = resolveP4ThemeId(themeId);
+    const resolvedThemeId = resolveMemberThemeId(themeId);
 
     setActiveThemeId(resolvedThemeId);
     applyTheme(resolvedThemeId);
@@ -68,47 +73,47 @@ export default function P4ThemeSwitcher() {
   };
 
   return (
-    <div className="p4-theme-switcher" ref={switcherRef}>
+    <div className="member-theme-switcher" ref={switcherRef}>
       <button
         type="button"
-        className="p4-theme-switcher-toggle"
+        className="member-theme-switcher-toggle"
         aria-expanded={open}
         aria-haspopup="menu"
         aria-label={"Tema aktif: " + activeTheme.label}
         onClick={() => setOpen((value) => !value)}
       >
         <i className="fa-solid fa-palette" aria-hidden="true" />
-        <span className="p4-theme-switcher-label">{activeTheme.label}</span>
+        <span className="member-theme-switcher-label">{activeTheme.label}</span>
         <i className={"fa-solid fa-chevron-" + (open ? "up" : "down")} aria-hidden="true" />
       </button>
 
       {open && (
-        <div className="p4-theme-switcher-menu" role="menu" aria-label="Pilih tema">
-          <div className="p4-theme-switcher-heading">
+        <div className="member-theme-switcher-menu" role="menu" aria-label="Pilih tema">
+          <div className="member-theme-switcher-heading">
             <strong>Pilih tema</strong>
             <span>5 pilihan visual</span>
           </div>
-          {P4_THEMES.map((theme) => (
+          {MEMBER_THEMES.map((theme) => (
             <button
               type="button"
               key={theme.id}
               className={
-                "p4-theme-switcher-option" + (theme.id === activeThemeId ? " is-active" : "")
+                "member-theme-switcher-option" + (theme.id === activeThemeId ? " is-active" : "")
               }
               role="menuitemradio"
               aria-checked={theme.id === activeThemeId}
               onClick={() => selectTheme(theme.id)}
             >
               <span
-                className="p4-theme-switcher-swatch"
+                className="member-theme-switcher-swatch"
                 style={{ background: theme.swatch }}
                 aria-hidden="true"
               />
-              <span className="p4-theme-switcher-copy">
+              <span className="member-theme-switcher-copy">
                 <strong>{theme.label}</strong>
                 <small>{theme.description}</small>
               </span>
-              <span className="p4-theme-switcher-mode">{theme.mode}</span>
+              <span className="member-theme-switcher-mode">{theme.mode}</span>
               {theme.id === activeThemeId && <i className="fa-solid fa-check" aria-hidden="true" />}
             </button>
           ))}

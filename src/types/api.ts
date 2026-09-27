@@ -171,7 +171,7 @@ export interface DepositStatusRes extends DepositRes {
 
 export type DepositStatus = "PENDING" | "SUBMITTED" | "PAID" | "FAILED" | "EXPIRED" | "CANCELLED";
 
-// --- P4: Games catalog & launch ---
+// --- Public games catalog & launch ---
 // Verified live (2026-08-09): GET /api/games/catalog →
 // {games:[{id,vendor_id,game_code,name,category,min_bet,max_bet,status}]}
 

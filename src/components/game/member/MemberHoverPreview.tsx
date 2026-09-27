@@ -14,19 +14,19 @@ import {
 import type { Game } from "@/types/api";
 import { GameHoverPreview } from "@/components/game/GameHoverPreview";
 
-interface ActiveP4Preview {
+interface ActiveMemberPreview {
   anchor: HTMLDivElement;
   demoFirst: boolean;
   game: Game;
 }
 
-interface P4HoverPreviewContextValue {
+interface MemberHoverPreviewContextValue {
   closePreview: () => void;
   dismissPreview: () => void;
   openPreview: (game: Game, anchor: HTMLDivElement, demoFirst?: boolean) => void;
 }
 
-interface P4HoverPreviewProviderProps {
+interface MemberHoverPreviewProviderProps {
   children: ReactNode;
   disabled: boolean;
   launching: string | null;
@@ -36,13 +36,13 @@ interface P4HoverPreviewProviderProps {
   vendorName: (id: string) => string;
 }
 
-const P4HoverPreviewContext = createContext<P4HoverPreviewContextValue | null>(null);
+const MemberHoverPreviewContext = createContext<MemberHoverPreviewContextValue | null>(null);
 
-export function useP4HoverPreview(): P4HoverPreviewContextValue | null {
-  return useContext(P4HoverPreviewContext);
+export function useMemberHoverPreview(): MemberHoverPreviewContextValue | null {
+  return useContext(MemberHoverPreviewContext);
 }
 
-export function P4HoverPreviewProvider({
+export function MemberHoverPreviewProvider({
   children,
   disabled,
   launching,
@@ -50,13 +50,13 @@ export function P4HoverPreviewProvider({
   onLaunch,
   onLaunchDemo,
   vendorName,
-}: P4HoverPreviewProviderProps): ReactElement {
-  const [activePreview, setActivePreview] = useState<ActiveP4Preview | null>(null);
+}: MemberHoverPreviewProviderProps): ReactElement {
+  const [activePreview, setActivePreview] = useState<ActiveMemberPreview | null>(null);
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
   const closeTimer = useRef<number | null>(null);
   const unmountTimer = useRef<number | null>(null);
   const frame = useRef<number | null>(null);
-  const queuedPreview = useRef<ActiveP4Preview | null>(null);
+  const queuedPreview = useRef<ActiveMemberPreview | null>(null);
   const previewInstance = useRef({});
 
   const clearPreviewTimers = useCallback(() => {
@@ -174,7 +174,7 @@ export function P4HoverPreviewProvider({
   );
 
   return (
-    <P4HoverPreviewContext.Provider value={contextValue}>
+    <MemberHoverPreviewContext.Provider value={contextValue}>
       {children}
       {activePreview ? (
         <GameHoverPreview
@@ -201,6 +201,6 @@ export function P4HoverPreviewProvider({
           vendorName={vendorName(activePreview.game.vendor_id)}
         />
       ) : null}
-    </P4HoverPreviewContext.Provider>
+    </MemberHoverPreviewContext.Provider>
   );
 }

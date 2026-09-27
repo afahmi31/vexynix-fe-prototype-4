@@ -11,12 +11,12 @@ import {
 import { createPortal } from "react-dom";
 import Image from "next/image";
 import type { Game } from "@/types/api";
-import type { P4GameBadge } from "@/types/p4";
+import type { MemberGameBadge } from "@/types/member";
 
 interface GameHoverPreviewProps {
   game: Game;
   vendorName?: string;
-  badges?: P4GameBadge[];
+  badges?: MemberGameBadge[];
   anchor: HTMLElement;
   isOpen: boolean;
   demoFirst?: boolean;
@@ -144,7 +144,7 @@ export function GameHoverPreview({
       });
     };
 
-    const track = anchor.closest<HTMLElement>(".nf-row-track, .p4-top-five-grid, .p4-rail");
+    const track = anchor.closest<HTMLElement>(".nf-row-track, .member-top-five-grid, .member-rail");
     updatePosition();
     window.addEventListener("resize", updatePosition);
     window.addEventListener("scroll", updatePosition, { capture: true, passive: true });

@@ -3,31 +3,31 @@
 import Link from "next/link";
 import { useBrandStore } from "@/stores/brand";
 
-export default function P4Footer() {
+export default function MemberFooter() {
   const brand = useBrandStore((state) => state.brand);
   const brandLoaded = useBrandStore((state) => state.loaded);
   const brandLabel = brand.found && brand.label ? brand.label : "Game Portal";
 
   return (
-    <footer className="p4-footer">
-      <div className="p4-footer-inner">
-        <div className="p4-footer-brand-block">
+    <footer className="member-footer">
+      <div className="member-footer-inner">
+        <div className="member-footer-brand-block">
           <Link
             href="/lobby"
-            className="p4-footer-brand"
+            className="member-footer-brand"
             aria-label={brandLoaded ? `${brandLabel} Beranda` : "Memuat brand"}
           >
-            {brandLoaded ? brandLabel : <span className="p4-brand-skeleton" aria-hidden="true" />}
+            {brandLoaded ? brandLabel : <span className="member-brand-skeleton" aria-hidden="true" />}
           </Link>
           <p>Main Lebih Seru Setiap Hari</p>
         </div>
-        <div className="p4-footer-links">
+        <div className="member-footer-links">
           <div>
             <h2>Permainan</h2>
             <Link href="/lobby?category=all">Semua Game</Link>
             <Link href="/lobby?category=slot">Slot</Link>
             <Link href="/lobby?category=live">Live Casino</Link>
-            <Link href="/lobby#p4-providers">Provider</Link>
+            <Link href="/lobby#member-providers">Provider</Link>
           </div>
           <div>
             <h2>Bantuan</h2>
@@ -45,8 +45,8 @@ export default function P4Footer() {
             <Link href="/lobby#bantuan">Privasi</Link>
           </div>
         </div>
-        <div className="p4-footer-side">
-          <div className="p4-footer-socials" aria-label={`Media sosial ${brandLabel}`}>
+        <div className="member-footer-side">
+          <div className="member-footer-socials" aria-label={`Media sosial ${brandLabel}`}>
             {[
               ["fa-brands fa-facebook", "Facebook"],
               ["fa-brands fa-instagram", "Instagram"],
@@ -63,7 +63,7 @@ export default function P4Footer() {
               </a>
             ))}
           </div>
-          <div className="p4-footer-bottom">© 2024 {brandLabel}. Semua Hak Dilindungi.</div>
+          <div className="member-footer-bottom">© 2024 {brandLabel}. Semua Hak Dilindungi.</div>
         </div>
       </div>
     </footer>

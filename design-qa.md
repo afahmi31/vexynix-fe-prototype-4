@@ -1,4 +1,4 @@
-# Design QA — P4 category catalog redesign
+# Design QA — member category catalog redesign
 
 ## Source visual truth
 
@@ -8,7 +8,7 @@
 
 ## Rendered implementation evidence
 
-- Local route: `http://localhost:3004/lobby?category=all#p4-catalog`
+- Local route: `http://localhost:3004/lobby?category=all#member-catalog`
 - Browser evidence: screenshots captured from the live Chrome tab through CUA at desktop, tablet, and mobile viewports. The browser adapter returned the captures inline and did not expose a persisted screenshot file path.
 - Desktop CSS viewport: `2560 x 1215`, device scale factor 1; full-page capture was also inspected after the lazy-loaded CTA/activity regions were brought into view.
 - Tablet CSS viewport: `1024 x 800`, device scale factor 1.
@@ -27,22 +27,22 @@
 ## Interaction checks
 
 - Provider checkbox filtering: verified `Evolution` changes the result count from 106 to 7.
-- Category filtering: verified `Slot` navigates to `/lobby?category=slot#p4-catalog` and combines with the selected provider to show the matching result.
+- Category filtering: verified `Slot` navigates to `/lobby?category=slot#member-catalog` and combines with the selected provider to show the matching result.
 - Reset filter: verified provider/search/sort state resets and returns to `category=all`.
 - Pagination controls remain present and update the catalog page.
-- Hero action, quick-pick actions, CTA action, game cards, latest activity rows, and ranking rows remain wired to the existing P4 prototype interactions.
+- Hero action, quick-pick actions, CTA action, game cards, latest activity rows, and ranking rows remain wired to the existing member prototype interactions.
 
 ## Required fidelity surfaces
 
-- Fonts and typography: hierarchy, weight, wrapping, and line-height were reviewed at desktop/tablet/mobile. The existing P4 type system is retained; compact labels reduce at narrow widths without clipping.
+- Fonts and typography: hierarchy, weight, wrapping, and line-height were reviewed at desktop/tablet/mobile. The existing member type system is retained; compact labels reduce at narrow widths without clipping.
 - Spacing and layout rhythm: category hero, filter rail, 5-column grid, CTA, activity panels, and footer use consistent gutters and section gaps. The mobile CTA and activity panels remain within the viewport width.
-- Colors and visual tokens: lavender page canvas, indigo type, pink active states, white glass panels, dark navy hero copy area, and navy footer remain aligned with the selected P4 theme.
+- Colors and visual tokens: lavender page canvas, indigo type, pink active states, white glass panels, dark navy hero copy area, and navy footer remain aligned with the selected member theme.
 - Image quality and asset fidelity: existing game artwork is reused. Only the two missing visual slots use generated raster assets: the catalog hero and new-games CTA. No inline SVG or placeholder artwork was introduced.
 - Copy and content: all visible labels are user-facing Indonesian copy; no development or generation prefixes appear in the UI.
 
 ## Comparison history
 
-- Initial implementation pass: no actionable P0/P1/P2 visual difference remained after the desktop, tablet, and mobile review. The only build blocker was the existing P4 header `useSearchParams()` prerender requirement; a `Suspense` boundary was added in `PortalHeader.tsx`, then the production build passed.
+- Initial implementation pass: no actionable P0/P1/P2 visual difference remained after the desktop, tablet, and mobile review. The only build blocker was the existing member header `useSearchParams()` prerender requirement; a `Suspense` boundary was added in `PortalHeader.tsx`, then the production build passed.
 - Post-fix evidence: `next build` completed successfully, and the live route continued to render the category page with the same tested interactions.
 
 ## Findings
@@ -57,7 +57,7 @@
 - [x] Five-column desktop catalog with responsive tablet/mobile layouts.
 - [x] Full-image new-games CTA below pagination.
 - [x] Activity and ranking panels below the CTA.
-- [x] Existing P4 game detail/launch interactions preserved.
+- [x] Existing member game detail/launch interactions preserved.
 - [x] Desktop, tablet, and mobile browser QA completed.
 - [x] TypeScript, ESLint, formatting, and production build passed.
 
@@ -93,11 +93,11 @@ final result: passed
 
 final result: passed
 
-## Post-comment revision — P4 game-play redesign
+## Post-comment revision — member game-play redesign
 
 ### Source visual truth
 
-- User request: redesign `http://localhost:3004/mock-game/mahjong-ways-2?mode=demo` so the game-play page follows the current Prototype 4 public theme instead of the legacy dark game screen.
+- User request: redesign `http://localhost:3004/mock-game/mahjong-ways-2?mode=demo` so the game-play page follows the current member-facing app public theme instead of the legacy dark game screen.
 - Existing Mahjong Ways 2 artwork was reused from the project catalog; no new raster asset was required.
 
 ### Rendered implementation evidence
@@ -110,7 +110,7 @@ final result: passed
 ### Comparison and interaction checks
 
 - The legacy dark header, local preview label, dark console row, and `Classic Cinema` template dock are no longer shown on the game-play route.
-- The P4 header and footer are shared with the lobby, including the lavender canvas, indigo typography, pink mode badge, white glass surfaces, and purple primary action.
+- The member header and footer are shared with the lobby, including the lavender canvas, indigo typography, pink mode badge, white glass surfaces, and purple primary action.
 - The game image remains the visual anchor; title and metadata stay readable over a left-to-bottom dark gradient.
 - `Putar Sekali` was clicked in the live browser and the displayed round count changed from `0` to `1`.
 - `Kembali ke Lobby` and `Jelajahi game lainnya` remain available as real links.
@@ -136,7 +136,7 @@ final result: passed
 ## Post-comment revision — catalog filter typography and panel width
 
 - Widened the desktop catalog filter column to `248px` so the sidebar no longer reads as a narrow strip beside the five-column game grid.
-- Increased the filter heading, group labels, category pills, provider/sort options, counts, and reset action to the same readable scale used by the P4 navigation and footer.
+- Increased the filter heading, group labels, category pills, provider/sort options, counts, and reset action to the same readable scale used by the member navigation and footer.
 - Browser verification at `1920px`: filter panel width measured `248px`; heading `17.28px`, group label `12.8px`, provider option `12.16px`, and category pill `11.52px`.
 - Browser verification at `412px`: the filter remains a centered modal with a `567px` sheet height and no horizontal overflow.
 
@@ -146,19 +146,19 @@ final result: passed
 
 ## Historical QA records
 
-The earlier P4 provider and lobby QA records are retained below for traceability.
+The earlier member provider and lobby QA records are retained below for traceability.
 
-# Design QA — P4 Provider game grid parity
+# Design QA — member Provider game grid parity
 
 ## Comparison target
 
 - Source visual truth: `C:/Users/user/AppData/Local/Temp/codex-clipboard-a83ef2c3-c7dd-4f0a-b4b9-1fca1c36cbe5.png`
 - Implementation URL: `http://localhost:3004/lobby`
-- Implementation focus: `#p4-provider-games`
+- Implementation focus: `#member-provider-games`
 - Implementation screenshots:
-  - `output/playwright/p4-provider-games-desktop.png`
-  - `output/playwright/p4-provider-games-tablet.png`
-  - `output/playwright/p4-provider-games-mobile.png`
+  - `output/playwright/member-provider-games-desktop.png`
+  - `output/playwright/member-provider-games-tablet.png`
+  - `output/playwright/member-provider-games-mobile.png`
 
 The requested visual is the existing provider game-list treatment: a six-column desktop grid with three rows, a soft fade over the last row, and a centered `Lihat Semua` action layered over the fade.
 
@@ -177,7 +177,7 @@ The focused captures use the same game-list component boundary so the source and
 
 - Desktop now renders 18 provider games in 6 columns × 3 rows, matching the reference composition.
 - The final row is covered by the lavender bottom fade and the centered white `Lihat Semua` button is layered above it.
-- Tablet preserves the six-column list used by the previous P4 treatment; mobile switches to three columns so cards remain usable without horizontal overflow.
+- Tablet preserves the six-column list used by the previous member treatment; mobile switches to three columns so cards remain usable without horizontal overflow.
 - No placeholder imagery or new interaction was introduced; the existing provider selection and `Lihat Semua` navigation remain intact.
 
 ## Findings
@@ -190,9 +190,9 @@ No actionable P0, P1, or P2 findings remain for this requested parity change.
 - Responsive width check: `document.body.scrollWidth` equals the viewport width at all three tested widths.
 - Browser console: 0 errors and 0 warnings in the final Playwright pass.
 - Prettier: passed for the changed TSX and SCSS files.
-- ESLint: passed for `src/components/game/p4/P4LobbyPage.tsx`.
+- ESLint: passed for `src/components/game/member/memberLobbyPage.tsx`.
 - TypeScript: `node_modules/.bin/tsc.cmd --noEmit` passed.
-- Dev server: running at `http://localhost:3004` from `D:/xproject/oches/fe-prototype-4`.
+- Dev server: running at `http://localhost:3004` from `D:/xproject/oches/fe-member`.
 
 ## Implementation checklist
 
@@ -204,19 +204,19 @@ No actionable P0, P1, or P2 findings remain for this requested parity change.
 
 final result: passed
 
-# Design QA — P4 Provider Pilihan Option 3
+# Design QA — member Provider Pilihan Option 3
 
 ## Comparison target
 
 - Source visual truth: `C:/Users/user/.codex/generated_images/01a0bf6d-e7ea-74f1-ac79-1b911463af15/exec-aa7110d4-cf82-4577-9876-53f6cd95331c.png`
 - Implementation URL: `http://localhost:3004/lobby`
-- Implementation focus: `#p4-providers`
+- Implementation focus: `#member-providers`
 - Implementation screenshots:
-  - `output/playwright/p4-provider-option3-desktop.png`
-  - `output/playwright/p4-provider-option3-tablet.png`
-  - `output/playwright/p4-provider-option3-mobile.png`
+  - `output/playwright/member-provider-option3-desktop.png`
+  - `output/playwright/member-provider-option3-tablet.png`
+  - `output/playwright/member-provider-option3-mobile.png`
 
-The source visual is an isolated Provider Pilihan section. The implementation was compared as the same section inside the unauthenticated P4 public lobby so the surrounding shell was not treated as part of the target.
+The source visual is an isolated Provider Pilihan section. The implementation was compared as the same section inside the unauthenticated member public lobby so the surrounding shell was not treated as part of the target.
 
 ## Capture and normalization
 
@@ -227,7 +227,7 @@ The source visual is an isolated Provider Pilihan section. The implementation wa
 | Tablet implementation  |   768 × 1024 |         720 × 913 | 1x CSS screenshot | `/lobby`, Pragmatic Play selected |
 | Mobile implementation  |    390 × 844 |         374 × 701 | 1x CSS screenshot | `/lobby`, Pragmatic Play selected |
 
-The implementation captures are element screenshots of `#p4-providers`; their pixels exclude the surrounding page gutter. Comparison was made on the content region rather than by stretching the two different canvas sizes to identical dimensions.
+The implementation captures are element screenshots of `#member-providers`; their pixels exclude the surrounding page gutter. Comparison was made on the content region rather than by stretching the two different canvas sizes to identical dimensions.
 
 ## Visual review
 
@@ -245,15 +245,15 @@ No actionable P0, P1, or P2 findings remain after the final pass.
 
 ### Comparison history
 
-1. Initial implementation review — fixed: the provider component rendered the complete provider catalog instead of the six cards shown by the selected design, which added extra rows and exposed mock assets that were not part of the target. Fix: render `providerGames.slice(0, 6)` in `P4ProviderSection`. Post-fix desktop, tablet, and mobile captures show exactly six cards.
+1. Initial implementation review — fixed: the provider component rendered the complete provider catalog instead of the six cards shown by the selected design, which added extra rows and exposed mock assets that were not part of the target. Fix: render `providerGames.slice(0, 6)` in `memberProviderSection`. Post-fix desktop, tablet, and mobile captures show exactly six cards.
 2. Final review — no P0/P1/P2 findings. The provider selector, selected state, game count, responsive columns, copy, imagery, and spacing were rechecked after the fix.
 
 ## Required fidelity surfaces
 
 - Fonts and typography: heading hierarchy, italic provider label, compact selector labels, and game metadata remain readable at all three tested widths; no text collision or unexpected wrapping was observed in the provider section.
 - Spacing and layout rhythm: five selector cards are evenly distributed on desktop, collapse to three columns on tablet and two columns on mobile, and the game grid uses three columns on desktop/tablet and two columns on mobile. Final checks reported no horizontal overflow (`body.scrollWidth === innerWidth`).
-- Colors and visual tokens: the selected provider uses the warm coral outline, pale peach surface, orange mark, and active dot from the target direction; inactive cards retain the quiet lavender/white P4 palette.
-- Image quality and asset fidelity: the six displayed game cards use the existing P4 mock game imagery and landscape crop; no new placeholder imagery or CSS image substitute was introduced.
+- Colors and visual tokens: the selected provider uses the warm coral outline, pale peach surface, orange mark, and active dot from the target direction; inactive cards retain the quiet lavender/white member palette.
+- Image quality and asset fidelity: the six displayed game cards use the existing member mock game imagery and landscape crop; no new placeholder imagery or CSS image substitute was introduced.
 - Copy and content: the target-facing copy remains `Provider Pilihan`, `Pilih provider favorit untuk melihat koleksi gamenya.`, provider names, and the existing `Lihat Semua` action.
 - Icons: existing Font Awesome provider marks are used consistently and remain visible at the tested breakpoints.
 - States and interactions: provider selector buttons are semantic buttons with `aria-pressed`; clicking Evolution changed the selected state, heading, and six displayed games to Evolution data. Existing game-card click behavior and the top `Lihat Semua` action remain available.
@@ -261,12 +261,12 @@ No actionable P0, P1, or P2 findings remain after the final pass.
 
 ## Verification
 
-- Prettier: passed for `src/components/game/p4/P4LobbyPage.tsx` and `src/styles/portal/_p4-lobby.scss`.
-- ESLint: passed for `src/components/game/p4/P4LobbyPage.tsx`.
+- Prettier: passed for `src/components/game/member/memberLobbyPage.tsx` and `src/styles/portal/_member-lobby.scss`.
+- ESLint: passed for `src/components/game/member/memberLobbyPage.tsx`.
 - TypeScript: `node_modules/.bin/tsc.cmd --noEmit` passed.
 - Production build: `node_modules/.bin/next.cmd build` passed.
 - Browser console: final Playwright pass reported 0 errors. One existing warning concerns the below-the-fold leaderboard CTA image being an LCP candidate; it is outside this provider redesign.
-- Dev server: running at `http://localhost:3004` from `D:/xproject/oches/fe-prototype-4`.
+- Dev server: running at `http://localhost:3004` from `D:/xproject/oches/fe-member`.
 
 ## Implementation checklist
 
@@ -286,9 +286,9 @@ final result: passed
 
 ## Previous QA record retained
 
-The preceding P4 lobby QA record is retained below; the latest provider Option 3 pass follows it.
+The preceding member lobby QA record is retained below; the latest provider Option 3 pass follows it.
 
-# FE Prototype 4 Top 5 Design QA
+# member-facing app Top 5 Design QA
 
 ## Source visual truth
 
@@ -433,10 +433,10 @@ section bounds and visual proportions rather than raw pixel dimensions.
   divider lines and the provider-themed color.
 - Provider game collections now use the selected vendor's catalog and show up to
   18 cards (three desktop rows). Larger collections fade over the bottom of the
-  third row and expose a `Lihat Semua` action; P4 has no provider-specific
+  third row and expose a `Lihat Semua` action; member has no provider-specific
   catalog route yet, so the action falls back to the existing all-games route.
 - The provider overflow overlay now follows `height: clamp(3.25rem, 10vw, 50rem)`;
-  the P4 flush main also has responsive top and bottom padding to separate the
+  the member flush main also has responsive top and bottom padding to separate the
   lobby content from the sticky navbar and footer.
 - Deepened the lower overlay tint with a semi-transparent lavender gradient so
   the third-row fade reads more clearly without becoming fully opaque.
@@ -462,12 +462,12 @@ section bounds and visual proportions rather than raw pixel dimensions.
 - The detail surface closes through `Tutup detail`.
 - `Jelajahi Game` navigates to the existing all-games catalog.
 - `Pilih Satu Game` opens the existing detail surface for one random active game.
-- The P4 header remains accessible at the viewport top while the lobby is
+- The member header remains accessible at the viewport top while the lobby is
   scrolled; the shell clips horizontal overflow without creating a competing
   scroll context.
 - No application-origin runtime error was introduced. The current Chrome tab
   still reports the known Scribe extension-injected `data-scribe-recorder-ready`
-  hydration mismatch; this is external to the P4 source tree.
+  hydration mismatch; this is external to the member source tree.
 - TypeScript check passed.
 - ESLint check passed.
 - Vitest passed: 23 files, 269 tests.
@@ -480,7 +480,7 @@ and does not invalidate the browser-rendered visual result.
 ## Follow-up polish
 
 - The exact poster artwork in the supplied design is not part of the existing
-  P4 local asset baseline. Replacing that artwork would require an explicit
+  member local asset baseline. Replacing that artwork would require an explicit
   asset decision; this pass keeps the documented mock asset boundary.
 
 final result: passed
@@ -495,14 +495,14 @@ final result: passed
 
 ---
 
-## P4 namespace cleanup
+## member namespace cleanup
 
 - Migrated active lobby mock data, presentation types, and runtime asset paths
-  from legacy prototype naming into the P4 namespace.
+  from legacy prototype naming into the member namespace.
 - Removed the unused Prototype 2 mock source and 25 orphaned image assets.
 - Verified tracked source and asset paths contain no Prototype 1, Prototype 2,
   or Prototype 3 references.
-- Verified the local lobby, game-play route, catalog endpoint, and P4 image
+- Verified the local lobby, game-play route, catalog endpoint, and member image
   assets return HTTP 200. Legacy Prototype 3 asset paths now return HTTP 404.
 - TypeScript, ESLint, scoped Prettier, and Vitest checks passed. Vitest:
   23 files and 269 tests.

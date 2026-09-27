@@ -20,11 +20,11 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
 
   // Auth screens are full-bleed — they skip the 1400px centered shell so their
   // background covers the whole viewport instead of leaving gutters. The lobby
-  // and P4 game-play surface are full-bleed too so their themed canvas can run
+  // and Member game-play surface are full-bleed too so their themed canvas can run
   // edge to edge.
   const isAuthRoute = pathname === "/login" || pathname === "/register";
-  const isP4Surface = isAuthRoute || pathname === "/lobby" || pathname.startsWith("/mock-game/");
-  const isFlushRoute = isAuthRoute || isP4Surface;
+  const isMemberSurface = isAuthRoute || pathname === "/lobby" || pathname.startsWith("/mock-game/");
+  const isFlushRoute = isAuthRoute || isMemberSurface;
 
   useEffect(() => {
     hydrate();
@@ -49,7 +49,7 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
   }, [clear, openLogin, pathname, isAuthRoute]);
 
   return (
-    <div className={`portal${isP4Surface ? " p4-public-shell" : ""}`}>
+    <div className={`portal${isMemberSurface ? " member-public-shell" : ""}`}>
       <PortalHeader />
       <main className={isFlushRoute ? "portal-main portal-main-flush" : "portal-main"}>
         {children}

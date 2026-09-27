@@ -1,40 +1,40 @@
 import type { Game } from "@/types/api";
 
-export type P4BadgeKind = "new" | "top10" | "popular" | "demo" | "editorial";
+export type MemberBadgeKind = "new" | "top10" | "popular" | "demo" | "editorial";
 
-export type P4BadgeTone = "accent" | "success" | "warning" | "neutral";
+export type MemberBadgeTone = "accent" | "success" | "warning" | "neutral";
 
-export interface P4GameBadge {
-  kind: P4BadgeKind;
+export interface MemberGameBadge {
+  kind: MemberBadgeKind;
   label: string;
-  tone: P4BadgeTone;
+  tone: MemberBadgeTone;
   rank?: number;
   source: "catalog" | "mock-editorial";
 }
 
-export interface P4GamePresentation {
+export interface MemberGamePresentation {
   game_id: string;
   poster_url?: string;
   backdrop_url?: string;
   tagline?: string;
   synopsis?: string;
-  badges?: P4GameBadge[];
+  badges?: MemberGameBadge[];
   related_game_ids?: string[];
 }
 
-export type P4ShelfType = "top10" | "demo" | "category" | "vendor" | "editorial";
+export type MemberShelfType = "top10" | "demo" | "category" | "vendor" | "editorial";
 
-export interface P4Shelf {
+export interface MemberShelf {
   id: string;
   title: string;
   icon: string;
-  type: P4ShelfType;
+  type: MemberShelfType;
   category?: string;
   vendor_id?: string;
   limit: number;
 }
 
-export interface P4Promo {
+export interface MemberPromo {
   id: string;
   eyebrow: string;
   title: string;
@@ -45,7 +45,7 @@ export interface P4Promo {
   image_url?: string;
 }
 
-export interface P4FeatureConfig {
+export interface MemberFeatureConfig {
   id: "spinner" | "lucky-pick";
   title: string;
   description: string;
@@ -54,7 +54,7 @@ export interface P4FeatureConfig {
   enabled: boolean;
 }
 
-export interface P4Theme {
+export interface MemberTheme {
   name: string;
   background: string;
   surface: string;
@@ -62,25 +62,25 @@ export interface P4Theme {
   accent_soft: string;
 }
 
-export interface P4LobbyConfig {
+export interface MemberLobbyConfig {
   hero_game_ids: string[];
-  shelves: P4Shelf[];
-  promos: P4Promo[];
+  shelves: MemberShelf[];
+  promos: MemberPromo[];
   features: {
-    spinner: P4FeatureConfig;
-    lucky_pick: P4FeatureConfig;
+    spinner: MemberFeatureConfig;
+    lucky_pick: MemberFeatureConfig;
   };
-  theme: P4Theme;
+  theme: MemberTheme;
 }
 
-export interface P4MockData {
+export interface MemberMockData {
   games: Game[];
-  presentations: Record<string, P4GamePresentation>;
+  presentations: Record<string, MemberGamePresentation>;
   vendors: Array<{
     id: string;
     name: string;
     status: string;
     enabled: boolean;
   }>;
-  lobby: P4LobbyConfig;
+  lobby: MemberLobbyConfig;
 }

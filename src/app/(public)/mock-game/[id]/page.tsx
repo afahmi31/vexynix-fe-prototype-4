@@ -3,14 +3,14 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useParams, useSearchParams } from "next/navigation";
-import { MOCK_CATALOG, MOCK_P4_PRESENTATIONS, MOCK_VENDORS } from "@/mocks/p4";
+import { MOCK_CATALOG, MOCK_MEMBER_PRESENTATIONS, MOCK_VENDORS } from "@/mocks/member";
 
 export default function MockGamePage() {
   const params = useParams<{ id: string }>();
   const searchParams = useSearchParams();
   const [rounds, setRounds] = useState(0);
   const game = MOCK_CATALOG.find((item) => item.id === params.id);
-  const presentation = game ? MOCK_P4_PRESENTATIONS[game.id] : undefined;
+  const presentation = game ? MOCK_MEMBER_PRESENTATIONS[game.id] : undefined;
   const vendor = game
     ? (MOCK_VENDORS.find((item) => item.id === game.vendor_id)?.name ?? game.vendor_id)
     : "";
@@ -22,13 +22,13 @@ export default function MockGamePage() {
 
   if (!game) {
     return (
-      <main className="p4-game-page p4-game-page--empty">
-        <div className="p4-game-page-inner">
-          <div className="p4-game-empty">
+      <main className="member-game-page member-game-page--empty">
+        <div className="member-game-page-inner">
+          <div className="member-game-empty">
             <i className="fa fa-gamepad" aria-hidden="true" />
             <h1>Game tidak ditemukan</h1>
             <p>Pilihan game ini sudah tidak tersedia di katalog.</p>
-            <Link href="/lobby" className="p4-game-primary">
+            <Link href="/lobby" className="member-game-primary">
               Kembali ke Lobby
             </Link>
           </div>
@@ -38,46 +38,46 @@ export default function MockGamePage() {
   }
 
   return (
-    <main className="p4-game-page">
-      <div className="p4-game-page-inner">
-        <div className="p4-game-toolbar">
-          <Link href="/lobby" className="p4-game-back">
+    <main className="member-game-page">
+      <div className="member-game-page-inner">
+        <div className="member-game-toolbar">
+          <Link href="/lobby" className="member-game-back">
             <i className="fa fa-arrow-left" aria-hidden="true" /> Kembali ke Lobby
           </Link>
-          <span className="p4-game-context">
+          <span className="member-game-context">
             <i className="fa fa-gamepad" aria-hidden="true" /> Game Play
           </span>
         </div>
 
-        <section className="p4-game-hero" aria-labelledby="p4-game-title">
-          <div className="p4-game-art">
+        <section className="member-game-hero" aria-labelledby="member-game-title">
+          <div className="member-game-art">
             {(presentation?.backdrop_url ?? game.image_url) && (
               // eslint-disable-next-line @next/next/no-img-element
               <img src={presentation?.backdrop_url ?? game.image_url} alt={`${game.name} cover`} />
             )}
-            <div className="p4-game-art-shade" />
-            <div className="p4-game-art-copy">
-              <span className="p4-game-art-badge">
+            <div className="member-game-art-shade" />
+            <div className="member-game-art-copy">
+              <span className="member-game-art-badge">
                 <i className="fa fa-sparkles" aria-hidden="true" /> Pilihan untukmu
               </span>
-              <h1 id="p4-game-title">{game.name}</h1>
+              <h1 id="member-game-title">{game.name}</h1>
               <p>
                 {vendor} <span aria-hidden="true">·</span> {categoryLabel}
               </p>
             </div>
           </div>
 
-          <aside className="p4-game-play-panel">
-            <div className="p4-game-panel-heading">
-              <span className="p4-game-kicker">{isDemo ? "Mode Coba Gratis" : "Mode Bermain"}</span>
-              <span className="p4-game-status">
+          <aside className="member-game-play-panel">
+            <div className="member-game-panel-heading">
+              <span className="member-game-kicker">{isDemo ? "Mode Coba Gratis" : "Mode Bermain"}</span>
+              <span className="member-game-status">
                 <i className="fa fa-circle" aria-hidden="true" /> Siap dimainkan
               </span>
             </div>
             <h2>Mulai putaranmu</h2>
             <p>{gameDescription}</p>
 
-            <div className="p4-game-stats" aria-label="Informasi permainan">
+            <div className="member-game-stats" aria-label="Informasi permainan">
               <div>
                 <span>Saldo demo</span>
                 <strong>Rp 1.000.000</strong>
@@ -90,20 +90,20 @@ export default function MockGamePage() {
 
             <button
               type="button"
-              className="p4-game-primary p4-game-spin"
+              className="member-game-primary member-game-spin"
               onClick={() => setRounds((value) => value + 1)}
             >
               <i className="fa fa-play" aria-hidden="true" /> Putar Sekali
             </button>
-            <Link href="/lobby?category=all#p4-catalog" className="p4-game-secondary">
+            <Link href="/lobby?category=all#member-catalog" className="member-game-secondary">
               Jelajahi game lainnya <i className="fa fa-arrow-right" aria-hidden="true" />
             </Link>
           </aside>
         </section>
 
-        <section className="p4-game-info-grid" aria-label="Informasi mode demo">
-          <article className="p4-game-info-card">
-            <span className="p4-game-info-icon" aria-hidden="true">
+        <section className="member-game-info-grid" aria-label="Informasi mode demo">
+          <article className="member-game-info-card">
+            <span className="member-game-info-icon" aria-hidden="true">
               <i className="fa fa-gamepad" />
             </span>
             <div>
@@ -111,8 +111,8 @@ export default function MockGamePage() {
               <p>Coba satu putaran untuk melihat pengalaman game sebelum memilih game lain.</p>
             </div>
           </article>
-          <article className="p4-game-info-card">
-            <span className="p4-game-info-icon" aria-hidden="true">
+          <article className="member-game-info-card">
+            <span className="member-game-info-icon" aria-hidden="true">
               <i className="fa fa-wallet" />
             </span>
             <div>
@@ -120,8 +120,8 @@ export default function MockGamePage() {
               <p>Saldo yang tampil hanya untuk kebutuhan prototype dan tidak dapat digunakan.</p>
             </div>
           </article>
-          <article className="p4-game-info-card">
-            <span className="p4-game-info-icon" aria-hidden="true">
+          <article className="member-game-info-card">
+            <span className="member-game-info-icon" aria-hidden="true">
               <i className="fa fa-shield-halved" />
             </span>
             <div>
@@ -131,7 +131,7 @@ export default function MockGamePage() {
           </article>
         </section>
 
-        <div className="p4-game-note">
+        <div className="member-game-note">
           <i className="fa fa-circle-info" aria-hidden="true" />
           <span>Mode demo aktif — seluruh interaksi di halaman ini bersifat simulasi.</span>
         </div>

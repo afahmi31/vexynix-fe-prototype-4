@@ -1,5 +1,5 @@
 {
-  "package": "p4-game-spin",
+  "package": "game-spinner",
   "canvas": {
     "width": 1024,
     "height": 1024,
@@ -61,70 +61,70 @@
   "layers": [
     {
       "name": "shadow",
-      "svg": "p4-spinner-shadow.svg",
-      "png": "p4-spinner-shadow.png",
+      "svg": "spinner-shadow.svg",
+      "png": "spinner-shadow.png",
       "transparent": true,
       "animatedByFrontend": false
     },
     {
       "name": "glow",
-      "svg": "p4-spinner-glow.svg",
-      "png": "p4-spinner-glow.png",
+      "svg": "spinner-glow.svg",
+      "png": "spinner-glow.png",
       "transparent": true,
       "animatedByFrontend": true
     },
     {
       "name": "frame",
-      "svg": "p4-spinner-frame.svg",
-      "png": "p4-spinner-frame.png",
+      "svg": "spinner-frame.svg",
+      "png": "spinner-frame.png",
       "transparent": true,
       "animatedByFrontend": false
     },
     {
       "name": "selector",
-      "svg": "p4-spinner-selector.svg",
-      "png": "p4-spinner-selector.png",
+      "svg": "spinner-selector.svg",
+      "png": "spinner-selector.png",
       "transparent": true,
       "animatedByFrontend": true
     },
     {
       "name": "pointer",
-      "svg": "p4-spinner-pointer.svg",
-      "png": "p4-spinner-pointer.png",
+      "svg": "spinner-pointer.svg",
+      "png": "spinner-pointer.png",
       "transparent": true,
       "animatedByFrontend": false
     },
     {
       "name": "button",
-      "svg": "p4-spinner-button.svg",
-      "png": "p4-spinner-button.png",
+      "svg": "spinner-button.svg",
+      "png": "spinner-button.png",
       "transparent": true,
       "animatedByFrontend": true
     },
     {
       "name": "particles",
-      "svg": "p4-spinner-particles.svg",
-      "png": "p4-spinner-particles.png",
+      "svg": "spinner-particles.svg",
+      "png": "spinner-particles.png",
       "transparent": true,
       "animatedByFrontend": true
     },
     {
       "name": "win-glow",
-      "svg": "p4-spinner-win-glow.svg",
-      "png": "p4-spinner-win-glow.png",
+      "svg": "spinner-win-glow.svg",
+      "png": "spinner-win-glow.png",
       "transparent": true,
       "animatedByFrontend": true
     }
   ],
   "previews": [
-    "p4-spinner-preview.png",
-    "p4-spinner-preview-win.png"
+    "spinner-preview.png",
+    "spinner-preview-win.png"
   ],
   "hero": {
-    "foreground": "p4-spinner-hero-art.png",
-    "banner": "p4-spinner-hero-banner.png",
+    "foreground": "spinner-hero-art.png",
+    "banner": "spinner-hero-banner.png",
     "copySafeArea": "left 44%"
   },
-  "generator": "scripts/generate-p4-spinner-assets.mjs",
-  "generatedAt": "2026-09-26T03:38:50.434Z"
+  "generator": "scripts/generate-spinner-assets.mjs",
+  "generatedAt": "2026-09-27T14:07:36.682Z"
 }

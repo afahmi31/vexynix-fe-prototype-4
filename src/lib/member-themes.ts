@@ -1,14 +1,14 @@
-export type P4ThemeMode = "dark" | "light";
+export type MemberThemeMode = "dark" | "light";
 
-export interface P4ThemeDefinition {
+export interface MemberThemeDefinition {
   id: string;
   label: string;
-  mode: P4ThemeMode;
+  mode: MemberThemeMode;
   description: string;
   swatch: string;
 }
 
-export const P4_THEMES: readonly P4ThemeDefinition[] = [
+export const MEMBER_THEMES: readonly MemberThemeDefinition[] = [
   {
     id: "vexynix-aurora",
     label: "Vexynix Aurora",
@@ -46,16 +46,16 @@ export const P4_THEMES: readonly P4ThemeDefinition[] = [
   },
 ] as const;
 
-export const DEFAULT_P4_THEME_ID = "vexynix-aurora";
+export const DEFAULT_MEMBER_THEME_ID = "vexynix-aurora";
 
-export function resolveP4ThemeId(value: string | null | undefined): string {
-  const theme = P4_THEMES.find((item) => item.id === value);
-  return theme?.id ?? DEFAULT_P4_THEME_ID;
+export function resolveMemberThemeId(value: string | null | undefined): string {
+  const theme = MEMBER_THEMES.find((item) => item.id === value);
+  return theme?.id ?? DEFAULT_MEMBER_THEME_ID;
 }
 
-export function getP4Theme(value: string | null | undefined): P4ThemeDefinition {
-  const themeId = resolveP4ThemeId(value);
-  const theme = P4_THEMES.find((item) => item.id === themeId);
-  if (!theme) throw new Error(`Unknown P4 theme: ${themeId}`);
+export function getMemberTheme(value: string | null | undefined): MemberThemeDefinition {
+  const themeId = resolveMemberThemeId(value);
+  const theme = MEMBER_THEMES.find((item) => item.id === themeId);
+  if (!theme) throw new Error(`Unknown member theme: ${themeId}`);
   return theme;
 }

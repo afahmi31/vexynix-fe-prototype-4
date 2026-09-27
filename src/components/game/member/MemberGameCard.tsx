@@ -3,9 +3,9 @@
 import Image from "next/image";
 import { useEffect, useRef, type KeyboardEvent } from "react";
 import type { Game } from "@/types/api";
-import { useP4HoverPreview } from "@/components/game/p4/P4HoverPreview";
+import { useMemberHoverPreview } from "@/components/game/member/MemberHoverPreview";
 
-type P4GameCardProps = {
+type MemberGameCardProps = {
   demoFirst?: boolean;
   game: Game;
   vendorName: string;
@@ -21,16 +21,16 @@ function handleKeyDown(event: KeyboardEvent<HTMLDivElement>, onSelect: () => voi
   }
 }
 
-export function P4GameCard({
+export function MemberGameCard({
   demoFirst,
   game,
   vendorName,
   onSelect,
   variant = "portrait",
   rank,
-}: P4GameCardProps) {
+}: MemberGameCardProps) {
   const image = game.image_url;
-  const hoverPreview = useP4HoverPreview();
+  const hoverPreview = useMemberHoverPreview();
   const touchInteractionRef = useRef(false);
   const touchPreviewTimer = useRef<number | null>(null);
   const touchStartPoint = useRef<{ x: number; y: number } | null>(null);
@@ -54,7 +54,7 @@ export function P4GameCard({
 
   return (
     <div
-      className={`p4-game-card p4-game-card--${variant}`}
+      className={`member-game-card member-game-card--${variant}`}
       onClick={() => {
         if (touchInteractionRef.current) {
           touchInteractionRef.current = false;
@@ -116,12 +116,12 @@ export function P4GameCard({
       aria-label={`Buka detail ${game.name}`}
     >
       {rank ? (
-        <span className="p4-game-card-rank" aria-hidden="true">
+        <span className="member-game-card-rank" aria-hidden="true">
           {rank === 1 ? <i className="fa-solid fa-crown" /> : null}
           <span>{rank}</span>
         </span>
       ) : null}
-      <div className="p4-game-card-art">
+      <div className="member-game-card-art">
         {image?.startsWith("/") ? (
           <Image
             src={image}
@@ -136,8 +136,8 @@ export function P4GameCard({
         ) : (
           <span aria-hidden="true">{game.name.charAt(0)}</span>
         )}
-        <span className="p4-game-card-shade" aria-hidden="true" />
-        <span className="p4-game-card-copy">
+        <span className="member-game-card-shade" aria-hidden="true" />
+        <span className="member-game-card-copy">
           <strong>{game.name}</strong>
           <small>{vendorName}</small>
         </span>
