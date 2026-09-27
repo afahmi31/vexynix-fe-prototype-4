@@ -1,21 +1,21 @@
-# P4 Staging BE Data Inventory
+# Backend Data Inventory
 
 Snapshot date: 2026-09-25
 
 Environment: `https://app.vexynix.com`
 
-This is a read-only snapshot of the public responses used by the P4 frontend. It
-is an inventory, not a replacement for the backend contract. Counts can change
-when the staging catalog is refreshed.
+This is a read-only snapshot of the public responses used by the member-facing
+frontend. It is an inventory, not a replacement for the backend contract.
+Counts can change when the staging catalog is refreshed.
 
 ## Public endpoints checked
 
-| Endpoint | Response observed | P4 usage |
+| Endpoint | Response observed | Frontend usage |
 | --- | --- | --- |
 | `GET /api/brand` | Brand label, logo URL, merchant ID, and theme values | Brand and theme bootstrap |
 | `GET /api/vendors` | 24 vendor records | Provider names and provider filters |
 | `GET /api/games/catalog` | 3,528 active game records | Catalog, game cards, category filter, provider game lists |
-| `GET /api/games/catalog?vendor=<id>` | Backend-supported vendor filter | Available for a narrower catalog request; the current P4 hook requests the full catalog |
+| `GET /api/games/catalog?vendor=<id>` | Backend-supported vendor filter | Available for a narrower catalog request; the current hook requests the full catalog |
 | `GET /api/feed/latest-bets?limit=18&window=7d` | Latest settled bets for the public lobby | `Taruhan Terbaru` activity tab |
 | `GET /api/feed/big-wins?limit=18&window=7d` | Big-win activity for the public lobby | `Menang Besar` activity tab |
 | `GET /api/feed/leaderboard?limit=18&window=7d` | Ranked players with wager and win totals | `Top Pemain` activity tab |
@@ -154,7 +154,7 @@ All 24 vendors were `active` and `enabled: true` in this snapshot.
 ]
 ```
 
-## P4 integration decision
+## Frontend integration notes
 
 - The catalog category filter now builds its options from `games[].category`.
 - The existing **Top 5** selection remains unchanged. It is not replaced by a
@@ -185,9 +185,9 @@ The two bet feeds return `game`, masked `player`, `bet`, `payout`, `win`,
 `multiplier`, `vendor_id`, and `settled_at`. The leaderboard returns `rank`,
 masked `player`, `rounds`, `wager`, `payout`, and `win`.
 
-The P4 activity card now maps these responses to `Taruhan Terbaru`, `Menang
-Besar`, and `Top Pemain` without changing the surrounding lobby structure. The
-catalog activity panel uses the same feed data when the catalog view is open.
+The activity card maps these responses to `Taruhan Terbaru`, `Menang Besar`,
+and `Top Pemain` without changing the surrounding lobby structure. The catalog
+activity panel uses the same feed data when the catalog view is open.
 
 The current staging snapshot contained one row for each bet feed and two rows
 for the leaderboard. The values are live staging data and can change between
